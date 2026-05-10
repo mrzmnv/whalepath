@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Transaction, WhaleWallet, WatchlistEntry } from "@/lib/types";
+import whalesData from "../../../public/whales.json";
 import { truncateAddress, formatUSD, formatAmount, timeAgo } from "@/lib/format";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from "@/lib/storage";
 import TransactionCard from "@/components/TransactionCard";
@@ -47,6 +48,7 @@ export default function WalletDetailPage() {
 
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isDemo, setIsDemo] = useState(false);
   const [walletInfo, setWalletInfo] = useState<WhaleWallet | null>(null);
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [isWatched, setIsWatched] = useState(false);
@@ -54,10 +56,9 @@ export default function WalletDetailPage() {
 
   useEffect(() => {
     if (!address) return;
-    fetch("/whales.json").then((r) => r.json()).then((whales: WhaleWallet[]) => {
-      const found = whales.find((w) => w.address === address);
-      if (found) setWalletInfo(found);
-    }).catch(() => {});
+    const whales = whalesData as WhaleWallet[];
+    const found = whales.find((w) => w.address === address);
+    if (found) setWalletInfo(found);
     const wl = getWatchlist();
     setWatchlist(wl);
     setIsWatched(wl.some((w) => w.address === address));

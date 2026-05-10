@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { decrypt } from '@/lib/session';
 import prisma from '@/lib/db';
+import { revalidatePath } from 'next/cache';
 
 export async function POST(req: Request) {
   try {
@@ -34,6 +35,9 @@ export async function POST(req: Request) {
       });
     }
 
+    revalidatePath("/profile");
+    revalidatePath("/");
+    
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Toggle favorite error:", error);

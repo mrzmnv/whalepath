@@ -50,3 +50,32 @@ export async function removeWatchlistItem(id: string) {
   revalidatePath("/profile");
   revalidatePath("/");
 }
+
+export async function toggleFavoriteWhale(userId: string, address: string, label: string) {
+  if (!userId || !address) return { error: "Məlumat yoxdur" };
+  
+  try {
+    const existing = await prisma.watchlist.findFirst({
+      where: { userId, address, type: "favorite" }
+    });
+
+    if (existing) {
+      await prisma.watchlist.delete({ where: { id: existing.id } });
+    } else {
+      await prisma.watchlist.create({
+        data: {
+          userId,
+          address,
+          label: label || "Bilinməyən",
+          type: "favorite"
+        }
+      });
+    }
+    
+    revalidatePath("/");
+    revalidatePath("/profile");
+    return { success: true };
+  } catch (e: any) {
+    return { error: "Xəta baş verdi" };
+  }
+}

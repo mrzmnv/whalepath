@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Star, Trash2 } from "lucide-react";
 import { WhaleWallet, WatchlistEntry } from "@/lib/types";
 import { truncateAddress, timeAgo } from "@/lib/format";
 
@@ -10,6 +11,7 @@ interface WhaleTableProps {
   watchlist: WatchlistEntry[];
   onAddWallet: () => void;
   onRemoveWatchlist: (address: string) => void;
+  onToggleFavorite?: (address: string, label: string) => void;
   lastActivity: Record<string, number>;
 }
 
@@ -30,6 +32,7 @@ export default function WhaleTable({
   onAddWallet,
   onRemoveWatchlist,
   lastActivity,
+  onToggleFavorite,
 }: WhaleTableProps) {
   const [tab, setTab] = useState<"whales" | "watchlist">("whales");
   const [hoveredAddress, setHoveredAddress] = useState<string | null>(null);
@@ -182,9 +185,31 @@ export default function WhaleTable({
         {/* Last seen cell */}
         <div className="mono" style={{ display: "table-cell", padding: "12px 12px 12px 8px", verticalAlign: "middle", fontSize: 10, color: "var(--text-3)", textAlign: "right", borderBottom: "1px solid var(--border)", minWidth: 60 }}>
           {lastActivity[address] ? timeAgo(lastActivity[address]) : "—"}
+          {isHovered && !isCustom && onToggleFavorite && (
+            <button
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(address, label); }}
+              title={watchlist.some(w => w.address === address) ? "Remove Favorite" : "Add Favorite"}
+              style={{
+                float: "right",
+                width: 20,
+                height: 20,
+                marginLeft: 8,
+                borderRadius: 4,
+                border: "none",
+                backgroundColor: "transparent",
+                color: watchlist.some(w => w.address === address) ? "var(--amber)" : "var(--text-3)",
+                cursor: "pointer",
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <Star size={14} fill={watchlist.some(w => w.address === address) ? "var(--amber)" : "none"} />
+            </button>
+          )}
           {isCustom && isHovered && (
             <button
-              onClick={() => onRemoveWatchlist(address)}
+              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemoveWatchlist(address); }}
               title="Remove"
               style={{
                 float: "right",
@@ -199,10 +224,9 @@ export default function WhaleTable({
                 display: "inline-flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: 12,
               }}
             >
-              ✕
+              <Trash2 size={14} />
             </button>
           )}
         </div>

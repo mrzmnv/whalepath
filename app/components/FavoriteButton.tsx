@@ -2,6 +2,7 @@
 
 import { addFavoriteWhale } from "../actions/watchlist";
 import { useState } from "react";
+import { Star } from "lucide-react";
 
 export default function FavoriteButton({ userId, address }: { userId?: string, address: string }) {
   const [loading, setLoading] = useState(false);
@@ -17,11 +18,14 @@ export default function FavoriteButton({ userId, address }: { userId?: string, a
       }}
       disabled={loading}
       style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
         background: 'transparent',
         border: '1px solid var(--accent)',
         color: 'var(--accent)',
-        padding: '4px 12px',
-        borderRadius: 20,
+        padding: '6px 12px',
+        borderRadius: 4,
         fontSize: 12,
         fontWeight: 600,
         cursor: loading ? 'not-allowed' : 'pointer',
@@ -29,7 +33,8 @@ export default function FavoriteButton({ userId, address }: { userId?: string, a
         opacity: loading ? 0.5 : 1
       }}
     >
-      {loading ? '...' : '+ İzləyə Al'}
+      <Star size={14} />
+      {loading ? '...' : 'İzləyə Al'}
     </button>
   );
 }

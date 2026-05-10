@@ -24,9 +24,11 @@ export interface Transaction {
 }
 
 export interface WatchlistEntry {
+  id?: string;
   address: string;
   label: string;
   addedAt: number;
+  type?: string;
 }
 
 export interface StatsData {

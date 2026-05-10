@@ -1,3 +1,4 @@
+import { LogOut, Plus, Trash2 } from "lucide-react";
 import prisma from "@/lib/db";
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
@@ -32,27 +33,27 @@ export default async function ProfilePage() {
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
         <h1 style={{ fontSize: 28, fontWeight: 700, color: 'var(--text-1)' }}>Welcome,  <span style={{ color: 'var(--accent)' }}>{session.username as string}</span></h1>
         <form action={async () => { 'use server'; await logoutUser(); }}>
-          <button type="submit" style={{ padding: '8px 16px', borderRadius: 8, background: 'var(--red-bg)', color: 'var(--red)', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Logout</button>
+          <button type="submit" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 16px', borderRadius: 4, background: 'var(--red-bg)', color: 'var(--red)', border: 'none', fontWeight: 600, cursor: 'pointer' }}><LogOut size={16} /> Logout</button>
         </form>
       </div>
 
-      <div style={{ background: 'var(--surface-2)', padding: 24, borderRadius: 16, border: '1px solid var(--border)', marginBottom: 32 }}>
+      <div style={{ background: 'var(--surface-2)', padding: 24, borderRadius: 12, border: '1px solid var(--border)', marginBottom: 32 }}>
         <h2 style={{ fontSize: 18, color: 'var(--text-1)', marginBottom: 16 }}>Track Your Own Wallets</h2>
         <form action={handleAddWallet} style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <input name="address" placeholder="Solana Address" required style={{ flex: '1 1 250px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} className="mono" />
-          <input name="label" placeholder="Wallet Label (e.g. Main)" required style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} />
-          <button type="submit" style={{ padding: '10px 24px', borderRadius: 8, background: 'var(--accent)', color: 'black', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Add</button>
+          <input name="address" placeholder="Solana Address" required style={{ flex: '1 1 250px', padding: '10px 14px', borderRadius: 4, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} className="mono" />
+          <input name="label" placeholder="Wallet Label (e.g. Main)" required style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 4, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} />
+          <button type="submit" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 24px', borderRadius: 4, background: 'var(--accent)', color: 'black', border: 'none', fontWeight: 600, cursor: 'pointer' }}><Plus size={16} /> Add</button>
         </form>
 
         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
           {personalWallets.map(w => (
-            <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 16, background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)' }}>
+            <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 16, background: 'var(--bg)', borderRadius: 4, border: '1px solid var(--border)' }}>
               <div>
                 <div style={{ fontWeight: 600, color: 'var(--text-1)' }}>{w.label}</div>
                 <div style={{ fontSize: 12, color: 'var(--text-2)' }} className="mono">{w.address}</div>
               </div>
               <form action={async () => { 'use server'; await removeWatchlistItem(w.id)}}>
-                <button type="submit" style={{ background: 'none', border: 'none', color: 'var(--down)', cursor: 'pointer', fontSize: 18 }}>✕</button>
+                <button type="submit" style={{ background: 'none', border: 'none', color: 'var(--down)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={16} /></button>
               </form>
             </div>
           ))}
@@ -60,17 +61,17 @@ export default async function ProfilePage() {
         </div>
       </div>
 
-      <div style={{ background: 'var(--surface-2)', padding: 24, borderRadius: 16, border: '1px solid var(--border)' }}>
+      <div style={{ background: 'var(--surface-2)', padding: 24, borderRadius: 12, border: '1px solid var(--border)' }}>
         <h2 style={{ fontSize: 18, color: 'var(--text-1)', marginBottom: 16 }}>Favorite Whales</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {favoriteWhales.map(w => (
-            <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 16, background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)' }}>
+            <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 16, background: 'var(--bg)', borderRadius: 4, border: '1px solid var(--border)' }}>
               <div>
                 <div style={{ fontWeight: 600, color: 'var(--accent)' }}>{w.label}</div>
                 <div style={{ fontSize: 12, color: 'var(--text-2)' }} className="mono">{w.address}</div>
               </div>
               <form action={async () => { 'use server'; await removeWatchlistItem(w.id)}}>
-                <button type="submit" style={{ background: 'none', border: 'none', color: 'var(--down)', cursor: 'pointer', fontSize: 18 }}>✕</button>
+                <button type="submit" style={{ background: 'none', border: 'none', color: 'var(--down)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}><Trash2 size={16} /></button>
               </form>
             </div>
           ))}

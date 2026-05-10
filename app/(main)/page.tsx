@@ -44,6 +44,10 @@ export default function Dashboard() {
   useEffect(() => {
     setStats((s) => ({ ...s, totalWhales: whalesData.length }));
     
+    reloadWatchlist();
+  }, []);
+
+  const reloadWatchlist = useCallback(() => {
     fetch('/api/watchlist')
       .then(res => res.ok ? res.json() : null)
       .then(data => {
@@ -64,6 +68,32 @@ export default function Dashboard() {
         setWatchlist(getWatchlist());
       });
   }, []);
+
+  const handleToggleFavorite = useCallback(async (address: string, label: string) => {
+    const isLocal = !document.cookie.includes('session');
+    if (isLocal) {
+      // Local storage fallback
+      const current = getWatchlist();
+      const existing = current.find(w => w.address === address && w.type === 'favorite');
+      if (existing) {
+        setWatchlist(removeFromWatchlist(address));
+      } else {
+        setWatchlist(addToWatchlist({ address, label, type: 'favorite', addedAt: Date.now(), id: Math.random().toString() }));
+      }
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/watchlist/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address, label })
+      });
+      if (res.ok) reloadWatchlist();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [reloadWatchlist]);
 
   const handleAddWallet = useCallback((entry: WatchlistEntry) => {
     setWatchlist(addToWatchlist(entry));
@@ -148,6 +178,7 @@ export default function Dashboard() {
               watchlist={watchlist}
               onAddWallet={() => setModalOpen(true)}
               onRemoveWatchlist={handleRemoveWatchlist}
+              onToggleFavorite={handleToggleFavorite}
               lastActivity={lastActivity}
             />
           </div>

@@ -30,18 +30,18 @@ export default async function ProfilePage() {
   return (
     <div style={{ maxWidth: 800, margin: '40px auto', padding: '0 24px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 32 }}>
-        <h1 style={{ fontSize: 28, fontWeight: 700, color: 'var(--text-1)' }}>Xoş gəldiniz, <span style={{ color: 'var(--accent)' }}>{session.username as string}</span></h1>
+        <h1 style={{ fontSize: 28, fontWeight: 700, color: 'var(--text-1)' }}>Welcome,  <span style={{ color: 'var(--accent)' }}>{session.username as string}</span></h1>
         <form action={async () => { 'use server'; await logoutUser(); }}>
-          <button type="submit" style={{ padding: '8px 16px', borderRadius: 8, background: 'var(--red-bg)', color: 'var(--red)', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Çıxış</button>
+          <button type="submit" style={{ padding: '8px 16px', borderRadius: 8, background: 'var(--red-bg)', color: 'var(--red)', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Logout</button>
         </form>
       </div>
 
       <div style={{ background: 'var(--surface-2)', padding: 24, borderRadius: 16, border: '1px solid var(--border)', marginBottom: 32 }}>
-        <h2 style={{ fontSize: 18, color: 'var(--text-1)', marginBottom: 16 }}>Öz Cüzdanlarınızı İzləyin</h2>
+        <h2 style={{ fontSize: 18, color: 'var(--text-1)', marginBottom: 16 }}>Track Your Own Wallets</h2>
         <form action={handleAddWallet} style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <input name="address" placeholder="Solana adresi" required style={{ flex: '1 1 250px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} className="mono" />
-          <input name="label" placeholder="Cüzdan adı (məs: Əsas)" required style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} />
-          <button type="submit" style={{ padding: '10px 24px', borderRadius: 8, background: 'var(--accent)', color: 'black', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Əlavə Et</button>
+          <input name="address" placeholder="Solana Address" required style={{ flex: '1 1 250px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} className="mono" />
+          <input name="label" placeholder="Wallet Label (e.g. Main)" required style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text-1)' }} />
+          <button type="submit" style={{ padding: '10px 24px', borderRadius: 8, background: 'var(--accent)', color: 'black', border: 'none', fontWeight: 600, cursor: 'pointer' }}>Add</button>
         </form>
 
         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -56,12 +56,12 @@ export default async function ProfilePage() {
               </form>
             </div>
           ))}
-          {personalWallets.length === 0 && <div style={{ color: 'var(--text-3)', fontSize: 14 }}>Heç bir cüzdan əlavə edilməyib.</div>}
+          {personalWallets.length === 0 && <div style={{ color: 'var(--text-3)', fontSize: 14 }}>No personal wallets added.</div>}
         </div>
       </div>
 
       <div style={{ background: 'var(--surface-2)', padding: 24, borderRadius: 16, border: '1px solid var(--border)' }}>
-        <h2 style={{ fontSize: 18, color: 'var(--text-1)', marginBottom: 16 }}>Bəyəndiyiniz Balinalar (Whales)</h2>
+        <h2 style={{ fontSize: 18, color: 'var(--text-1)', marginBottom: 16 }}>Favorite Whales</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {favoriteWhales.map(w => (
             <div key={w.id} style={{ display: 'flex', justifyContent: 'space-between', padding: 16, background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)' }}>
@@ -74,7 +74,7 @@ export default async function ProfilePage() {
               </form>
             </div>
           ))}
-          {favoriteWhales.length === 0 && <div style={{ color: 'var(--text-3)', fontSize: 14 }}>Seçilmiş balina yoxdur. Platformadakı balinaları izləməyə başlayın.</div>}
+          {favoriteWhales.length === 0 && <div style={{ color: 'var(--text-3)', fontSize: 14 }}>No favorite whales. Start tracking from the platform.</div>}
         </div>
       </div>
     </div>

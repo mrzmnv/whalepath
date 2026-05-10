@@ -17,7 +17,7 @@ export default function RegisterPage() {
   return (
     <div style={{ maxWidth: 400, margin: '80px auto', backgroundColor: 'var(--surface-2)', padding: 32, borderRadius: 16, border: '1px solid var(--border)' }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)' }}>Qeydiyyat</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)' }}>Register</h1>
       </div>
       
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -34,7 +34,7 @@ export default function RegisterPage() {
         </div>
 
         <button type="submit" style={{ marginTop: 8, width: '100%', padding: '12px 16px', backgroundColor: 'var(--accent)', color: 'black', border: 'none', borderRadius: 8, fontWeight: 600, cursor: 'pointer' }}>
-          Qeydiyyatdan Keç
+          Create Account
         </button>
       </form>
       <p style={{ marginTop: 24, textAlign: 'center', fontSize: 14, color: 'var(--text-2)' }}>

@@ -22,8 +22,8 @@ export default async function AuthNav() {
 
   return (
     <div style={{ display: 'flex', gap: 12 }}>
-      <Link href="/login" style={{ padding: '6px 16px', color: 'var(--text-1)', textDecoration: 'none', fontWeight: 600 }}>Giriş</Link>
-      <Link href="/register" style={{ padding: '6px 16px', background: 'var(--accent)', color: 'black', borderRadius: 20, textDecoration: 'none', fontWeight: 600 }}>Qeydiyyat</Link>
+      <Link href="/login" style={{ padding: '6px 16px', color: 'var(--text-1)', textDecoration: 'none', fontWeight: 600 }}>Login</Link>
+      <Link href="/register" style={{ padding: '6px 16px', background: 'var(--accent)', color: 'black', borderRadius: 20, textDecoration: 'none', fontWeight: 600 }}>Register</Link>
     </div>
   );
 }

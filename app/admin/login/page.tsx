@@ -19,7 +19,7 @@ export default function LoginPage() {
     <div style={{ maxWidth: 400, margin: '80px auto', backgroundColor: 'var(--surface-2)', padding: 32, borderRadius: 16, border: '1px solid var(--border)' }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
         <div style={{ fontSize: 40, marginBottom: 16 }}>🐳</div>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)' }}>Admin Girişi</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)' }}>Admin Login</h1>
       </div>
       
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>

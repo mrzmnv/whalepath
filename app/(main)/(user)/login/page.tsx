@@ -17,7 +17,7 @@ export default function LoginPage() {
   return (
     <div style={{ maxWidth: 400, margin: '80px auto', backgroundColor: 'var(--surface-2)', padding: 32, borderRadius: 16, border: '1px solid var(--border)' }}>
       <div style={{ textAlign: 'center', marginBottom: 24 }}>
-        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)' }}>İstifadəçi Girişi</h1>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)' }}>User Login</h1>
       </div>
       
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -38,7 +38,7 @@ export default function LoginPage() {
         </button>
       </form>
       <p style={{ marginTop: 24, textAlign: 'center', fontSize: 14, color: 'var(--text-2)' }}>
-        Hesabınız yoxdur? <Link href="/register" style={{ color: 'var(--accent)' }}>Qeydiyyat</Link>
+        Don't have an account? <Link href="/register" style={{ color: 'var(--accent)' }}>Qeydiyyat</Link>
       </p>
     </div>
   );

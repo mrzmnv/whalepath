@@ -227,9 +227,11 @@ export default function WhaleTable({
           justifyContent: "space-between",
           marginBottom: 16,
           flexShrink: 0,
+          flexWrap: "wrap",
+          gap: "12px",
         }}
       >
-        <div style={{ display: "flex", gap: 8 }}>
+        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {tabBtn("whales", "WHALES", whales.length)}
           {tabBtn("watchlist", "MY WATCHLIST", watchlist.length)}
         </div>

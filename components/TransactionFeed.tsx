@@ -192,6 +192,8 @@ const fallbackMockData = [
           justifyContent: "space-between",
           marginBottom: 16,
           flexShrink: 0,
+          flexWrap: "wrap",
+          gap: "12px"
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>

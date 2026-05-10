@@ -4,11 +4,11 @@ import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Transaction, WhaleWallet, WatchlistEntry } from "@/lib/types";
-import whalesData from "../../../public/whales.json";
+import whalesData from "../../../../public/whales.json";
 import { truncateAddress, formatUSD, formatAmount, timeAgo } from "@/lib/format";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from "@/lib/storage";
 import TransactionCard from "@/components/TransactionCard";
-import Header from "@/components/Header";
+
 import AddWalletModal from "@/components/AddWalletModal";
 
 function VolumeChart({ transactions }: { transactions: Transaction[] }) {
@@ -98,7 +98,7 @@ export default function WalletDetailPage() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
-      <Header />
+      
 
       <main style={{ maxWidth: 1100, margin: "0 auto", padding: "24px 16px 48px" }}>
         {/* Breadcrumb */}

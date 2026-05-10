@@ -2,13 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { WhaleWallet, WatchlistEntry, StatsData } from "@/lib/types";
-import whalesData from "../public/whales.json";
+import whalesData from "../../public/whales.json";
 import {
   getWatchlist,
   addToWatchlist,
   removeFromWatchlist,
 } from "@/lib/storage";
-import Header from "@/components/Header";
+
 import StatsBar from "@/components/StatsBar";
 import TransactionFeed from "@/components/TransactionFeed";
 import WhaleTable from "@/components/WhaleTable";
@@ -75,7 +75,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
-      <Header />
+      
 
       <main
         style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 24px 48px" }}

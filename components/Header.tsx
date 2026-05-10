@@ -1,6 +1,5 @@
-"use client";
-
 import Link from "next/link";
+import AuthNav from "@/app/components/AuthNav";
 
 export default function Header() {
   return (
@@ -33,11 +32,14 @@ export default function Header() {
           </span>
         </Link>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div className="pulse-green" style={{ width: 6, height: 6, backgroundColor: "var(--green)", borderRadius: "50%" }} />
-          <span className="mono" style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
-            Updates every 60s
-          </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <div className="pulse-green" style={{ width: 6, height: 6, backgroundColor: "var(--green)", borderRadius: "50%" }} />
+            <span className="mono hide-on-mobile" style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
+              Updates every 60s
+            </span>
+          </div>
+          <AuthNav />
         </div>
       </div>
     </header>

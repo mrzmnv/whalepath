@@ -27,6 +27,36 @@ export default function TransactionFeed({
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newSigs, setNewSigs] = useState<Set<string>>(new Set());
   const [isDemo, setIsDemo] = useState(false);
+
+const fallbackMockData = [
+    {
+      signature: "mock_fail_1",
+      timestamp: Date.now() - 2 * 60 * 1000,
+      walletAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+      walletLabel: "Jump Trading Fallback",
+      type: "buy",
+      tokenSymbol: "SOL",
+      tokenName: "Solana",
+      amount: 15000,
+      usdValue: 2250000,
+      isAlert: true,
+      source: "preloaded"
+    },
+    {
+      signature: "mock_fail_2",
+      timestamp: Date.now() - 8 * 60 * 1000,
+      walletAddress: "GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ",
+      walletLabel: "Wintermute Fallback",
+      type: "sell",
+      tokenSymbol: "JUP",
+      tokenName: "Jupiter",
+      amount: 4500000,
+      usdValue: 810000,
+      isAlert: true,
+      source: "preloaded"
+    }
+  ];
+
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMounted = useRef(true);
 
@@ -54,12 +84,19 @@ export default function TransactionFeed({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ wallets }),
       });
-      if (!res.ok || !isMounted.current) return;
+      if (!res.ok || !isMounted.current) {
+        if (!res.ok && transactions.length === 0) {
+            setIsDemo(true);
+            setTransactions(fallbackMockData as Transaction[]);
+        }
+        return;
+      }
 
       const payload: { transactions: Transaction[]; demo: boolean } =
         await res.json();
       const data = payload.transactions ?? [];
       const isDemoResponse = payload.demo ?? false;
+      console.log('transactions API returned:', payload.transactions?.length, 'demo:', isDemoResponse);
       if (isMounted.current) setIsDemo(isDemoResponse);
 
       const seen = getSeenTxs();
@@ -82,27 +119,44 @@ export default function TransactionFeed({
 
       // Always trigger stats setup if it's fresh or first load
       // But only blink the new specific ones in fresh
-      const isFirstLoad = !isDemoResponse && transactions.length === 0;
-      if (fresh.length > 0 || isFirstLoad) {
-        if (fresh.length > 0) {
-          const sigs = new Set(fresh.map((t) => t.signature));
-          setNewSigs(sigs);
-          setTimeout(() => {
-            if (isMounted.current) setNewSigs(new Set());
-          }, 1500);
+      // Bypass the entire state logic if it's the very first render and we have data
+      if (transactions.length === 0 && data.length > 0) {
+        setTransactions(data);
+        if (onStatsUpdate) {
+            const biggest = data.reduce(
+              (m, t) => (t.usdValue > m.usdValue ? t : m),
+              data[0],
+            );
+            // On first load, we don't just pass the length, because the initial length could be
+            // huge, but passing length is fine for a 24h count mock.
+            onStatsUpdate(data.length, biggest.usdValue, biggest.tokenSymbol);
         }
+      } else if (fresh.length > 0) {
+        // Normal polling when already loaded
+        const sigs = new Set(fresh.map((t) => t.signature));
+        setNewSigs(sigs);
+        setTimeout(() => {
+          if (isMounted.current) setNewSigs(new Set());
+        }, 1500);
 
-        const relevantData = fresh.length > 0 ? fresh : data;
-        if (onStatsUpdate && relevantData.length > 0) {
-          const biggest = relevantData.reduce(
+        if (onStatsUpdate) {
+          const biggest = fresh.reduce(
             (m, t) => (t.usdValue > m.usdValue ? t : m),
-            relevantData[0],
+            fresh[0],
           );
-          onStatsUpdate(relevantData.length, biggest.usdValue, biggest.tokenSymbol);
+          onStatsUpdate(fresh.length, biggest.usdValue, biggest.tokenSymbol);
         }
       }
-    } catch {
-      /* silent */
+    } catch (err) {
+      console.error('fetchTransactions error:', err);
+      // Fallback to mock data if fetch fails entirely
+      if (transactions.length === 0) {
+        setIsDemo(true);
+        setTransactions(fallbackMockData as Transaction[]);
+        if (onStatsUpdate) {
+            onStatsUpdate(fallbackMockData.length, fallbackMockData[0].usdValue, fallbackMockData[0].tokenSymbol);
+        }
+      }
     } finally {
       if (isMounted.current) {
         setLoading(false);

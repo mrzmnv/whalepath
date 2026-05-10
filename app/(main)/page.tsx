@@ -40,6 +40,7 @@ export default function Dashboard() {
   const [lastActivity, setLastActivity] = useState<Record<string, number>>({});
   const [modalOpen, setModalOpen] = useState(false);
   const [statsLoading, setStatsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     setStats((s) => ({ ...s, totalWhales: whalesData.length }));
@@ -70,7 +71,7 @@ export default function Dashboard() {
   }, []);
 
   const handleToggleFavorite = useCallback(async (address: string, label: string) => {
-    const isLocal = !document.cookie.includes('session');
+    const isLocal = !isAuthenticated;
     if (isLocal) {
       // Local storage fallback
       const current = getWatchlist();

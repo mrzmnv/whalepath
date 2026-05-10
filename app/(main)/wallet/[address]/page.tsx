@@ -54,6 +54,7 @@ export default function WalletDetailPage() {
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [isWatched, setIsWatched] = useState(false);
   const [addModalOpen, setAddModalOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     if (!address) return;
@@ -69,9 +70,21 @@ export default function WalletDetailPage() {
       .catch(() => {});
     const found = whales.find((w) => w.address === address);
     if (found) setWalletInfo(found);
-    const wl = getWatchlist();
-    setWatchlist(wl);
-    setIsWatched(wl.some((w) => w.address === address));
+    fetch('/api/watchlist').then(res => res.ok ? res.json() : null).then(data => {
+      if(data?.authenticated) {
+        setIsAuthenticated(true);
+        setWatchlist(data.items || []);
+        setIsWatched((data.items || []).some((w: any) => w.address === address));
+      } else {
+        const wl = getWatchlist();
+        setWatchlist(wl);
+        setIsWatched(wl.some((w) => w.address === address));
+      }
+    }).catch(() => {
+        const wl = getWatchlist();
+        setWatchlist(wl);
+        setIsWatched(wl.some((w) => w.address === address));
+    });
     fetch("/api/wallet-history", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -84,7 +97,7 @@ export default function WalletDetailPage() {
 
   const handleToggleWatch = useCallback(async () => {
     const label = walletInfo?.label || watchlist.find((w) => w.address === address)?.label || address.slice(0,8);
-    const isLocal = !document.cookie.includes('session');
+    const isLocal = !isAuthenticated;
     
     if (isLocal) {
       if (isWatched) {

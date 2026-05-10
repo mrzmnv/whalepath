@@ -120,6 +120,7 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
         borderRadius: "var(--radius)",
         boxShadow: "var(--shadow)",
         overflow: "hidden",
+        flexShrink: 0,
       }}
     >
       <div style={{ padding: "16px" }}>

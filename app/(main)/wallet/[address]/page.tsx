@@ -81,10 +81,34 @@ export default function WalletDetailPage() {
       .catch(() => setLoading(false));
   }, [address]);
 
-  const handleToggleWatch = useCallback(() => {
-    if (isWatched) { setWatchlist(removeFromWatchlist(address)); setIsWatched(false); }
-    else setAddModalOpen(true);
-  }, [isWatched, address]);
+  const handleToggleWatch = useCallback(async () => {
+    const label = walletInfo?.label || watchlist.find((w) => w.address === address)?.label || address.slice(0,8);
+    const isLocal = !document.cookie.includes('session');
+    
+    if (isLocal) {
+      if (isWatched) {
+        setWatchlist(removeFromWatchlist(address));
+        setIsWatched(false);
+      } else {
+        setWatchlist(addToWatchlist({ address, label, type: 'favorite', addedAt: Date.now(), id: Math.random().toString() }));
+        setIsWatched(true);
+      }
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/watchlist/toggle', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ address, label })
+      });
+      if (res.ok) {
+        setIsWatched(!isWatched);
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [isWatched, address, walletInfo, watchlist]);
 
   const handleAddWallet = useCallback((entry: WatchlistEntry) => {
     setWatchlist(addToWatchlist(entry)); setIsWatched(true);
@@ -144,13 +168,14 @@ export default function WalletDetailPage() {
                 Solscan ↗
               </a>
               <button onClick={handleToggleWatch} style={{
-                padding: "7px 14px", borderRadius: 8, cursor: "pointer",
+                display: "flex", alignItems: "center", gap: 6,
+                padding: "7px 14px", borderRadius: 4, cursor: "pointer",
                 border: `1px solid ${isWatched ? "rgba(248,113,113,0.3)" : "rgba(99,102,241,0.3)"}`,
                 backgroundColor: isWatched ? "var(--red-bg)" : "var(--surface-3)",
                 color: isWatched ? "var(--red)" : "var(--accent)",
                 fontSize: 13, fontWeight: 500,
               }}>
-                {isWatched ? "Unwatch" : "+ Watch"}
+                {isWatched ? "✕ İzləmədən çıxar" : <><Star size={14} /> İzləyə Al</>}
               </button>
             </div>
           </div>
@@ -202,7 +227,7 @@ export default function WalletDetailPage() {
         </div>
       </main>
 
-      <AddWalletModal open={addModalOpen} onClose={() => setAddModalOpen(false)} onAdd={handleAddWallet} existingAddresses={watchlist.map((w) => w.address)} />
+      
     </div>
   );
 }

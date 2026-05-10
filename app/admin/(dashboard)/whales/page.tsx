@@ -26,7 +26,7 @@ export default async function AdminWhales() {
             <option value="Fund">Fund/VC</option>
             <option value="Bot">Bot/MEV</option>
           </select> 
-          <input name="tags" placeholder="Tağlar (məs: solana, memecoin, holder)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
+          <input name="tags" placeholder="Tağlar (məs: solana, memecoin, holder)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
           <button type="submit" style={{ backgroundColor: 'var(--accent)', color: 'white', padding: '10px 24px', borderRadius: 8, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}>Add Whale</button>
         </form>
       </div>

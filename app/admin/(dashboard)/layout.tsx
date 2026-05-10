@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import LogoutButton from './LogoutButton';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,6 +20,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <Link href="/" style={{ textDecoration: 'none', color: 'var(--text-3)', fontWeight: 600, padding: '8px 12px', borderRadius: 8, marginTop: 'auto' }}>
             ← Back to App
           </Link>
+          <LogoutButton />
         </nav>
       </aside>
 

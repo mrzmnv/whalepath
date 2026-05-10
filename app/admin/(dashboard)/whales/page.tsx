@@ -1,5 +1,6 @@
 import prisma from '@/lib/db';
-import { addWhale, deleteWhale } from '../actions/whale';
+import { addWhale, deleteWhale } from '../../actions/whale';
+import Link from 'next/link';
 
 export const revalidate = 0;
 
@@ -17,8 +18,15 @@ export default async function AdminWhales() {
         <form action={addWhale} style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <input name="address" placeholder="Solana Address" required style={{ flex: '1 1 300px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} className="mono" />
           <input name="label" placeholder="Display Label (e.g. Binance Hot Wallet)" required style={{ flex: '1 1 200px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
-          <input name="category" placeholder="Category (optional)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
-          <input name="tags" placeholder="Tags (comma separated)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
+          <select name="category" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14, backgroundColor: 'var(--bg)' }}>
+            <option value="">Kateqoriya seçin</option>
+            <option value="DEX">DEX</option>
+            <option value="CEX">CEX</option>
+            <option value="Whale">Whale</option>
+            <option value="Fund">Fund/VC</option>
+            <option value="Bot">Bot/MEV</option>
+          </select> 
+          <input name="tags" placeholder="Tağlar (məs: solana, memecoin, holder)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
           <button type="submit" style={{ backgroundColor: 'var(--accent)', color: 'white', padding: '10px 24px', borderRadius: 8, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}>Add Whale</button>
         </form>
       </div>
@@ -41,6 +49,7 @@ export default async function AdminWhales() {
                 <td style={{ padding: '12px 16px', fontSize: 14, color: 'var(--text-2)' }}>{w.category || '-'}</td>
                 <td style={{ padding: '12px 16px', textAlign: 'right' }}>
                   <form action={async () => { 'use server'; await deleteWhale(w.address); }}>
+                    <Link href={`/admin/whales/${w.id}`} style={{ display: 'inline-block', marginRight: 8, color: 'var(--accent)', textDecoration: 'none', fontSize: 12, fontWeight: 600 }}>Edit</Link>
                     <button type="submit" style={{ color: 'var(--red)', background: 'var(--red-bg)', border: 'none', padding: '6px 12px', borderRadius: 6, fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>Delete</button>
                   </form>
                 </td>

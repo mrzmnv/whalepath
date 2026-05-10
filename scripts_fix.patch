@@ -1,0 +1,46 @@
+--- components/TransactionFeed.tsx
++++ components/TransactionFeed.tsx
+@@ -48,15 +48,18 @@
+         setTransactions(data);
+-      } else if (fresh.length > 0) {
+-        markTxsSeen(fresh.map((t) => t.signature));
+-        setTransactions((prev) => {
+-          const merged = [...fresh, ...prev];
+-          return Array.from(
+-            new Map(merged.map((t) => [t.signature, t])).values(),
+-          ).slice(0, 100);
+-        });
+-      }
+-
+-      if (fresh.length > 0) {
+-        const sigs = new Set(fresh.map((t) => t.signature));
+-        setNewSigs(sigs);
+-        setTimeout(() => {
+-          if (isMounted.current) setNewSigs(new Set());
+-        }, 1500);
+-
+-        if (onStatsUpdate && data.length > 0) {
++      } else {
++        if (fresh.length > 0) {
++          markTxsSeen(fresh.map((t) => t.signature));
++        }
++        setTransactions((prev) => {
++          if (prev.length === 0) return data;
++          const merged = [...fresh, ...prev];
++          return Array.from(
++            new Map(merged.map((t) => [t.signature, t])).values(),
++          ).slice(0, 100);
++        });
++      }
++
++      // Always trigger highlight/stats if it's fresh or first load
++      if (fresh.length > 0 || (transactions.length === 0 && data.length > 0)) {
++        if (fresh.length > 0) {
++          const sigs = new Set(fresh.map((t) => t.signature));
++          setNewSigs(sigs);
++          setTimeout(() => {
++            if (isMounted.current) setNewSigs(new Set());
++          }, 1500);
++        }
++
++        if (onStatsUpdate && data.length > 0) {

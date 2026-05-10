@@ -69,9 +69,10 @@ export default function TransactionFeed({
 
       if (isDemoResponse) {
         setTransactions(data);
-      } else if (fresh.length > 0) {
-        markTxsSeen(fresh.map((t) => t.signature));
+      } else {
+        if (fresh.length > 0) markTxsSeen(fresh.map((t) => t.signature));
         setTransactions((prev) => {
+          if (prev.length === 0) return data;
           const merged = [...fresh, ...prev];
           return Array.from(
             new Map(merged.map((t) => [t.signature, t])).values(),
@@ -79,19 +80,25 @@ export default function TransactionFeed({
         });
       }
 
-      if (fresh.length > 0) {
-        const sigs = new Set(fresh.map((t) => t.signature));
-        setNewSigs(sigs);
-        setTimeout(() => {
-          if (isMounted.current) setNewSigs(new Set());
-        }, 1500);
+      // Always trigger stats setup if it's fresh or first load
+      // But only blink the new specific ones in fresh
+      const isFirstLoad = !isDemoResponse && transactions.length === 0;
+      if (fresh.length > 0 || isFirstLoad) {
+        if (fresh.length > 0) {
+          const sigs = new Set(fresh.map((t) => t.signature));
+          setNewSigs(sigs);
+          setTimeout(() => {
+            if (isMounted.current) setNewSigs(new Set());
+          }, 1500);
+        }
 
-        if (onStatsUpdate && data.length > 0) {
-          const biggest = data.reduce(
+        const relevantData = fresh.length > 0 ? fresh : data;
+        if (onStatsUpdate && relevantData.length > 0) {
+          const biggest = relevantData.reduce(
             (m, t) => (t.usdValue > m.usdValue ? t : m),
-            data[0],
+            relevantData[0],
           );
-          onStatsUpdate(data.length, biggest.usdValue, biggest.tokenSymbol);
+          onStatsUpdate(relevantData.length, biggest.usdValue, biggest.tokenSymbol);
         }
       }
     } catch {

@@ -73,6 +73,8 @@ export async function POST(req: NextRequest) {
 
     const parsedTxs: Transaction[] = dbTxs.map(t => ({
       ...t,
+      type: t.type as any,
+      source: t.source as any,
       walletLabel: t.walletLabel || "",
       timestamp: Number(t.timestamp)
     }));

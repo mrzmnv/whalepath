@@ -56,7 +56,16 @@ export default function WalletDetailPage() {
 
   useEffect(() => {
     if (!address) return;
-    const whales = whalesData as WhaleWallet[];
+    let whales = whalesData as WhaleWallet[];
+    fetch('/api/whales')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          const fetchedFound = data.find((w: any) => w.address === address);
+          if (fetchedFound) setWalletInfo(fetchedFound);
+        }
+      })
+      .catch(() => {});
     const found = whales.find((w) => w.address === address);
     if (found) setWalletInfo(found);
     const wl = getWatchlist();

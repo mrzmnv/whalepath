@@ -16,6 +16,19 @@ import AddWalletModal from "@/components/AddWalletModal";
 
 export default function Dashboard() {
   const [whales, setWhales] = useState<WhaleWallet[]>(whalesData as WhaleWallet[]);
+  
+  // Fetch dynamic whales from DB on mount
+  useEffect(() => {
+    fetch('/api/whales')
+      .then(res => res.ok ? res.json() : null)
+      .then(data => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setWhales(data);
+          setStats((s) => ({ ...s, totalWhales: data.length }));
+        }
+      })
+      .catch(() => {});
+  }, []);
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [stats, setStats] = useState<StatsData>({
     totalWhales: 0,

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchWalletTransactions } from "@/lib/helius";
 import { Transaction } from "@/lib/types";
+import prisma from "@/lib/db";
 
 interface WalletInput {
   address: string;
@@ -41,14 +42,48 @@ export async function POST(req: NextRequest) {
     const uniqueTxs = Array.from(new Map(allTxs.map(tx => [tx.signature, tx])).values());
     uniqueTxs.sort((a, b) => b.timestamp - a.timestamp);
 
-    // Fall back to demo data if Helius returned nothing
-    if (uniqueTxs.length === 0) {
+    // Save new ones to DB
+    for (const tx of uniqueTxs) {
+      try {
+        await prisma.transaction.upsert({
+          where: { signature: tx.signature },
+          update: {},
+          create: {
+            signature: tx.signature,
+            timestamp: BigInt(tx.timestamp),
+            walletAddress: tx.walletAddress,
+            walletLabel: tx.walletLabel,
+            type: tx.type,
+            tokenSymbol: tx.tokenSymbol,
+            tokenName: tx.tokenName,
+            amount: tx.amount,
+            usdValue: tx.usdValue,
+            isAlert: tx.isAlert,
+            source: tx.source,
+          }
+        });
+      } catch (e) {}
+    }
+
+    // Fetch latest 100 from DB
+    const dbTxs = await prisma.transaction.findMany({
+      orderBy: { timestamp: 'desc' },
+      take: 100
+    });
+
+    const parsedTxs: Transaction[] = dbTxs.map(t => ({
+      ...t,
+      walletLabel: t.walletLabel || "",
+      timestamp: Number(t.timestamp)
+    }));
+
+    if (parsedTxs.length === 0) {
       return NextResponse.json({ transactions: getMockTransactions(), demo: true });
     }
 
-    return NextResponse.json({ transactions: uniqueTxs, demo: false });
+    return NextResponse.json({ transactions: parsedTxs, demo: false });
   } catch (error) {
-    console.error("Transactions API error:", error);
+    console.error("Transactions API CRITICAL ERROR:", error);
     return NextResponse.json({
       transactions: getMockTransactions(),
       demo: true,

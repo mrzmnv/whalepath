@@ -1,65 +1,153 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useState, useEffect, useCallback } from "react";
+import { WhaleWallet, WatchlistEntry, StatsData } from "@/lib/types";
+import {
+  getWatchlist,
+  addToWatchlist,
+  removeFromWatchlist,
+} from "@/lib/storage";
+import Header from "@/components/Header";
+import StatsBar from "@/components/StatsBar";
+import TransactionFeed from "@/components/TransactionFeed";
+import WhaleTable from "@/components/WhaleTable";
+import AddWalletModal from "@/components/AddWalletModal";
+
+export default function Dashboard() {
+  const [whales, setWhales] = useState<WhaleWallet[]>([]);
+  const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
+  const [stats, setStats] = useState<StatsData>({
+    totalWhales: 0,
+    transactions24h: 0,
+    largestMoveToday: 0,
+    largestMoveToken: "",
+  });
+  const [lastActivity, setLastActivity] = useState<Record<string, number>>({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [statsLoading, setStatsLoading] = useState(true);
+
+  useEffect(() => {
+    fetch("/whales.json")
+      .then((r) => r.json())
+      .then((data: WhaleWallet[]) => {
+        setWhales(data);
+        setStats((s) => ({ ...s, totalWhales: data.length }));
+        setStatsLoading(false);
+      })
+      .catch(() => setStatsLoading(false));
+    setWatchlist(getWatchlist());
+  }, []);
+
+  const handleAddWallet = useCallback((entry: WatchlistEntry) => {
+    setWatchlist(addToWatchlist(entry));
+  }, []);
+
+  const handleRemoveWatchlist = useCallback((address: string) => {
+    setWatchlist(removeFromWatchlist(address));
+  }, []);
+
+  const handleStatsUpdate = useCallback(
+    (txCount: number, largestMove: number, largestToken: string) => {
+      setStats((s) => ({
+        ...s,
+        transactions24h: s.transactions24h + txCount,
+        largestMoveToday: Math.max(s.largestMoveToday, largestMove),
+        largestMoveToken:
+          largestMove > s.largestMoveToday ? largestToken : s.largestMoveToken,
+      }));
+      setLastActivity((prev) => ({ ...prev, _lastPoll: Date.now() }));
+    },
+    [],
+  );
+
+  const allAddresses = [
+    ...whales.map((w) => w.address),
+    ...watchlist.map((w) => w.address),
+  ];
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
+      <Header />
+
+      <main
+        style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 24px 48px" }}
+      >
+        {/* Stats */}
+        <div style={{ marginBottom: 24 }} className="fade-up">
+          <StatsBar stats={stats} loading={statsLoading} />
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* Two-column layout */}
+        <div className="fade-up-1 dashboard-grid">
+          {/* Feed */}
+          <div
+            style={{
+              backgroundColor: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius)",
+              padding: "24px",
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+              boxShadow: "var(--shadow)",
+              maxHeight: "calc(100vh - 200px)",
+              overflow: "hidden",
+            }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+            <TransactionFeed
+              preloadedWhales={whales}
+              watchlist={watchlist}
+              onStatsUpdate={handleStatsUpdate}
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+          </div>
+
+          {/* Whale list */}
+          <div
+            style={{
+              backgroundColor: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius)",
+              padding: "24px",
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+              boxShadow: "var(--shadow)",
+              maxHeight: "calc(100vh - 200px)",
+              overflow: "hidden",
+            }}
           >
-            Documentation
-          </a>
+            <WhaleTable
+              whales={whales}
+              watchlist={watchlist}
+              onAddWallet={() => setModalOpen(true)}
+              onRemoveWatchlist={handleRemoveWatchlist}
+              lastActivity={lastActivity}
+            />
+          </div>
         </div>
       </main>
+
+      <footer
+        className="mono"
+        style={{
+          borderTop: "1px solid var(--border)",
+          padding: "24px",
+          textAlign: "center",
+          color: "var(--text-3)",
+          fontSize: 10,
+          letterSpacing: "0.05em",
+          textTransform: "uppercase"
+        }}
+      >
+        WhalePath · Solana Frontier Hackathon 2026 · Built by Hajikhalaf Zamanov
+      </footer>
+
+      <AddWalletModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onAdd={handleAddWallet}
+        existingAddresses={allAddresses}
+      />
     </div>
   );
 }

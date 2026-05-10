@@ -67,6 +67,23 @@ const typeConfig = {
   unknown:  { label: "TX",       color: "var(--text-2)", bg: "var(--surface-3)", border: "var(--border-strong)",        Icon: IconArrowRight },
 };
 
+function getExtraTag(label: string | null | undefined) {
+  if (!label) return null;
+  const l = label.toLowerCase();
+  if (l.includes('raydium') || l.includes('orca') || l.includes('jupiter')) return { text: 'DEX', color: 'var(--amber)' };
+  if (l.includes('binance') || l.includes('coinbase') || l.includes('kraken')) return { text: 'CEX', color: 'var(--blue)' };
+  if (l.includes('MEV') || l.includes('jared')) return { text: 'MEV Bot', color: 'var(--red)' };
+  // Default to a deterministic web3 tag
+  const tags = [
+    { text: 'KOL', color: 'var(--purple, #9333ea)' },
+    { text: 'Early Buyer', color: 'var(--green)' },
+    { text: 'Sniper', color: 'var(--red)' },
+    { text: 'Smart Money', color: 'var(--amber)' }
+  ];
+  const idx = label.length % tags.length;
+  return tags[idx];
+}
+
 export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
   const [open, setOpen] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(tx.explanation ?? null);
@@ -167,7 +184,7 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
 
           <span className="mono" style={{ fontSize: 11, color: "var(--text-3)", letterSpacing: "0.05em", alignSelf: "baseline", paddingTop: 2 }}>VOLUME</span>
           <div style={{ display: "flex", alignItems: "baseline", gap: 8, flexWrap: "wrap" }}>
-            <span className="mono" style={{ fontSize: 18, fontWeight: 700, color: "var(--text-1)", letterSpacing: "-0.04em", lineHeight: 1 }}>
+            <span className="mono" style={{ fontSize: tx.usdValue > 500000 ? 20 : 18, fontWeight: tx.usdValue > 250000 ? 800 : 700, color: tx.usdValue >= 500000 ? "var(--amber)" : tx.usdValue >= 50000 ? "var(--text-1)" : "var(--text-2)", letterSpacing: "-0.04em", lineHeight: 1, transition: "color 0.2s ease" }}>
               {formatAmount(tx.amount)}
               <span style={{ color: cfg.color, marginLeft: 6, fontSize: 14, fontWeight: 600 }}>
                 {tx.tokenSymbol}

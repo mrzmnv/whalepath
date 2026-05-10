@@ -34,9 +34,9 @@ export default function Header() {
 
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div className="pulse-green" style={{ width: 6, height: 6, backgroundColor: "var(--green)", borderRadius: "50%" }} />
-            <span className="mono hide-on-mobile" style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 500 }}>
-              Updates every 60s
+            <div className="pulse-green" style={{ width: 8, height: 8, backgroundColor: "var(--green)", borderRadius: "50%", boxShadow: "0 0 8px var(--green)" }} />
+            <span className="mono hide-on-mobile" style={{ fontSize: 11, color: "var(--green)", fontWeight: 700, letterSpacing: "0.05em" }}>
+              LIVE SIGNAL
             </span>
           </div>
           <AuthNav />

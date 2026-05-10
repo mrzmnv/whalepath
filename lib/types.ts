@@ -36,4 +36,6 @@ export interface StatsData {
   transactions24h: number;
   largestMoveToday: number;
   largestMoveToken: string;
+  largestMoveAddress?: string;
+  largestMoveLabel?: string;
 }

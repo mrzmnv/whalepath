@@ -1,16 +1,13 @@
-"use client";
+const fs = require('fs');
+const file = 'components/StatsBar.tsx';
+let data = fs.readFileSync(file, 'utf8');
 
-import { StatsData } from "@/lib/types";
-import { formatUSD, formatNumber, truncateAddress } from "@/lib/format";
-import Link from "next/link";
+data = data.replace(
+  'import { formatUSD, formatNumber } from "@/lib/format";',
+  'import { formatUSD, formatNumber, truncateAddress } from "@/lib/format";\nimport Link from "next/link";'
+);
 
-interface StatsBarProps {
-  stats: StatsData;
-  loading?: boolean;
-}
-
-export default function StatsBar({ stats, loading }: StatsBarProps) {
-  const items = [
+const newItemsLogic = `  const items = [
     {
       label: "TRACKED WALLETS",
       value: formatNumber(stats.totalWhales),
@@ -26,20 +23,21 @@ export default function StatsBar({ stats, loading }: StatsBarProps) {
     {
       label: "PEAK TRANSFER",
       value: formatUSD(stats.largestMoveToday),
-      sub: stats.largestMoveToken ? `Asset: ${stats.largestMoveToken}` : "—",
+      sub: stats.largestMoveToken ? \`Asset: \${stats.largestMoveToken}\` : "—",
       delay: "fade-up-2",
       highlight: true,
       address: stats.largestMoveAddress,
       walletLabel: stats.largestMoveLabel
     },
-  ];
+  ];`;
 
-  return (
-    <div className="stats-bar-grid">
+data = data.replace(/  const items = \[\s*\{[\s\S]*?\},?\s*\];/, newItemsLogic);
+
+const renderLogic = `    <div className="stats-bar-grid">
       {items.map((item) => {
         const content = (
           <div
-            className={`${item.delay} card-hover`}
+            className={\`\${item.delay} card-hover\`}
             style={{
               backgroundColor: "var(--surface)",
               border: "1px solid var(--border)",
@@ -85,13 +83,15 @@ export default function StatsBar({ stats, loading }: StatsBarProps) {
         );
 
         return item.address ? (
-          <Link key={item.label} href={`/wallet/${item.address}`} style={{ textDecoration: 'none' }}>
+          <Link key={item.label} href={\`/wallet/\${item.address}\`} style={{ textDecoration: 'none' }}>
             {content}
           </Link>
         ) : (
           <div key={item.label} style={{ height: "100%" }}>{content}</div>
         );
       })}
-    </div>
-  );
-}
+    </div>`;
+
+data = data.replace(/    <div className="stats-bar-grid">[\s\S]*?<\/div>/, renderLogic);
+
+fs.writeFileSync(file, data);

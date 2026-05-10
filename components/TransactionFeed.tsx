@@ -12,6 +12,8 @@ interface TransactionFeedProps {
     txCount: number,
     largestMove: number,
     largestToken: string,
+    largestAddress: string,
+    largestLabel: string
   ) => void;
 }
 
@@ -129,7 +131,7 @@ const fallbackMockData = [
             );
             // On first load, we don't just pass the length, because the initial length could be
             // huge, but passing length is fine for a 24h count mock.
-            onStatsUpdate(data.length, biggest.usdValue, biggest.tokenSymbol);
+            onStatsUpdate(data.length, biggest.usdValue, biggest.tokenSymbol, biggest.walletAddress, biggest.walletLabel);
         }
       } else if (fresh.length > 0) {
         // Normal polling when already loaded
@@ -144,7 +146,7 @@ const fallbackMockData = [
             (m, t) => (t.usdValue > m.usdValue ? t : m),
             fresh[0],
           );
-          onStatsUpdate(fresh.length, biggest.usdValue, biggest.tokenSymbol);
+          onStatsUpdate(fresh.length, biggest.usdValue, biggest.tokenSymbol, biggest.walletAddress, biggest.walletLabel);
         }
       }
     } catch (err) {
@@ -154,7 +156,7 @@ const fallbackMockData = [
         setIsDemo(true);
         setTransactions(fallbackMockData as Transaction[]);
         if (onStatsUpdate) {
-            onStatsUpdate(fallbackMockData.length, fallbackMockData[0].usdValue, fallbackMockData[0].tokenSymbol);
+            onStatsUpdate(fallbackMockData.length, fallbackMockData[0].usdValue, fallbackMockData[0].tokenSymbol, fallbackMockData[0].walletAddress, fallbackMockData[0].walletLabel);
         }
       }
     } finally {

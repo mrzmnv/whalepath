@@ -104,13 +104,14 @@ export default function Dashboard() {
   }, []);
 
   const handleStatsUpdate = useCallback(
-    (txCount: number, largestMove: number, largestToken: string) => {
+    (txCount: number, largestMove: number, largestToken: string, largestAddress: string, largestLabel: string) => {
       setStats((s) => ({
         ...s,
         transactions24h: s.transactions24h + txCount,
         largestMoveToday: Math.max(s.largestMoveToday, largestMove),
-        largestMoveToken:
-          largestMove > s.largestMoveToday ? largestToken : s.largestMoveToken,
+        largestMoveToken: largestMove > s.largestMoveToday ? largestToken : s.largestMoveToken,
+        largestMoveAddress: largestMove > s.largestMoveToday ? largestAddress : s.largestMoveAddress,
+        largestMoveLabel: largestMove > s.largestMoveToday ? largestLabel : s.largestMoveLabel,
       }));
       setLastActivity((prev) => ({ ...prev, _lastPoll: Date.now() }));
     },

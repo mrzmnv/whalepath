@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
+import { Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Transaction, WhaleWallet, WatchlistEntry } from "@/lib/types";

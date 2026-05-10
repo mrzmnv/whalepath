@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { WhaleWallet, WatchlistEntry, StatsData } from "@/lib/types";
+import whalesData from "../public/whales.json";
 import {
   getWatchlist,
   addToWatchlist,
@@ -14,7 +15,7 @@ import WhaleTable from "@/components/WhaleTable";
 import AddWalletModal from "@/components/AddWalletModal";
 
 export default function Dashboard() {
-  const [whales, setWhales] = useState<WhaleWallet[]>([]);
+  const [whales, setWhales] = useState<WhaleWallet[]>(whalesData as WhaleWallet[]);
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [stats, setStats] = useState<StatsData>({
     totalWhales: 0,
@@ -24,17 +25,10 @@ export default function Dashboard() {
   });
   const [lastActivity, setLastActivity] = useState<Record<string, number>>({});
   const [modalOpen, setModalOpen] = useState(false);
-  const [statsLoading, setStatsLoading] = useState(true);
+  const [statsLoading, setStatsLoading] = useState(false);
 
   useEffect(() => {
-    fetch("/whales.json")
-      .then((r) => r.json())
-      .then((data: WhaleWallet[]) => {
-        setWhales(data);
-        setStats((s) => ({ ...s, totalWhales: data.length }));
-        setStatsLoading(false);
-      })
-      .catch(() => setStatsLoading(false));
+    setStats((s) => ({ ...s, totalWhales: whalesData.length }));
     setWatchlist(getWatchlist());
   }, []);
 

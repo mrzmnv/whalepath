@@ -1,39 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  /* Precision Fintech Light Theme */
-  --bg: #F4F4F5;          /* Neutral 100 - Page background */
-  --surface: #FFFFFF;     /* Pure white - Cards and main components */
-  --surface-2: #FAFAFA;   /* Neutral 50 - Nested cards, subtle hovers */
-  --surface-3: #F4F4F5;   /* Neutral 100 - Deeper hovers, disabled states */
+  /* Warm & Soft Appealing Light Theme (İçini isidən rənglər) */
+  --bg: #FDFBFA;          /* Very warm cream/off-white background */
+  --surface: #FFFFFF;     /* Pure white for cards to pop gently */
+  --surface-2: #F8F5F2;   /* Soft warm gray/cream for hovers */
+  --surface-3: #F0ECE8;   /* Slightly deeper warm cream for accents */
 
-  /* Borders: Sharp & Subtle */
-  --border: #E5E5E5;        /* Neutral 200 */
-  --border-strong: #D4D4D4; /* Neutral 300 */
-  --border-focus: #0A0A0A;  /* Neutral 950 */
+  /* Borders: Soft & Warm */
+  --border: #ECEAЕ6;        /* Very gentle warm border */
+  --border-strong: #DED8D3; /* Slightly stronger warm gray/brown */
+  --border-focus: #C45F4B;  /* A soft coral focus color instead of black */
 
-  /* Accents */
-  --accent: #0A0A0A;        /* Pitch black for primary actions */
-  --accent-light: #F4F4F5;  /* Subtle grey for secondary buttons */
+  /* Accents - Attractive, warm coral/sunset */
+  --accent: #E76F51;        /* Warm Sunset Coral / Terracotta */
+  --accent-light: #FCE8E3;  /* Subtly tinted background for coral */
+  --accent-hover: #F4A261;  /* Sandy orange for hover */
   
-  /* Semantic Colors - High Contrast */
-  --green: #15803D;         /* Green 700 - Buy/Success */
-  --green-bg: #DCFCE7;      /* Green 100 */
-  --red: #B91C1C;           /* Red 700 - Sell/Danger */
-  --red-bg: #FEE2E2;        /* Red 100 */
-  --amber: #B45309;         /* Amber 700 - Alert/Warning */
-  --amber-bg: #FEF3C7;      /* Amber 100 */
+  /* Semantic Colors - Softened and warmer */
+  --green: #2A9D8F;         /* Teal/warm green instead of harsh green */
+  --green-bg: #E3F2F0;      /* Gentle teal background */
+  --red: #D62828;           /* Terracotta red instead of pure red */
+  --red-bg: #FCEAEA;        /* Soft red background */
+  --amber: #E9C46A;         /* Warm golden amber */
+  --amber-bg: #FDF5DF;      /* Soft golden background */
 
-  /* Typography */
-  --text-1: #0A0A0A; /* Primary */
-  --text-2: #525252; /* Secondary */
-  --text-3: #737373; /* Tertiary / Metadata */
+  /* Typography - Softer contrast */
+  --text-1: #383330; /* Primary - Warm dark brown/black instead of #000 */
+  --text-2: #6A625E; /* Secondary - Calm taupe/gray */
+  --text-3: #958B86; /* Tertiary - Gentle faded taupe */
 
-  /* Structure */
-  --radius: 8px;
-  --radius-lg: 12px;
-  --shadow: 0 1px 2px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.02);
-  --shadow-hover: 0 4px 12px rgba(0,0,0,0.08), 0 12px 24px rgba(0,0,0,0.04);
+  /* Structure - Rounder and softer */
+  --radius: 12px;
+  --radius-lg: 16px;
+  --shadow: 0 4px 14px rgba(66, 56, 48, 0.05), 0 1px 3px rgba(66, 56, 48, 0.03);
+  --shadow-hover: 0 10px 24px rgba(66, 56, 48, 0.08), 0 4px 8px rgba(66, 56, 48, 0.04);
 }
 
 * {
@@ -56,21 +57,21 @@ body {
   font-size: 14px;
   line-height: 1.5;
   overflow-x: hidden;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 .mono {
   font-family: var(--font-geist-mono), ui-monospace, Menlo, Monaco, monospace;
   font-feature-settings: "tnum";
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 4px; height: 4px; }
+/* Custom Scrollbar - Warm */
+::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #D4D4D4; border-radius: 99px; }
-::-webkit-scrollbar-thumb:hover { background: #A3A3A3; }
+::-webkit-scrollbar-thumb { background: #DED8D3; border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: #C5BCB6; }
 
 /* Micro-interactions & Animations */
 @keyframes slideDown {
@@ -92,16 +93,16 @@ body {
 .explain-body {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: grid-template-rows 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .explain-body.open { grid-template-rows: 1fr; }
 .explain-body > div { overflow: hidden; }
 
 /* Live Data Pulse */
 @keyframes pulseGreen {
-  0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
-  70% { box-shadow: 0 0 0 4px rgba(22, 163, 74, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+  0% { box-shadow: 0 0 0 0 rgba(42, 157, 143, 0.3); }
+  70% { box-shadow: 0 0 0 6px rgba(42, 157, 143, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(42, 157, 143, 0); }
 }
 .pulse-green { animation: pulseGreen 2s infinite; }
 
@@ -111,18 +112,18 @@ body {
   to   { background-position: 200% 0; }
 }
 .skeleton {
-  background: linear-gradient(90deg, var(--surface-2) 25%, var(--border) 50%, var(--surface-2) 75%);
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--surface-3) 50%, var(--surface-2) 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 /* Sub-components & Utility classes */
 .card-hover {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .card-hover:hover {
-  transform: translateY(-1px);
+  transform: translateY(-2px);
   box-shadow: var(--shadow-hover);
 }
 
@@ -130,7 +131,7 @@ body {
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 340px;
-  gap: 16px;
+  gap: 20px;
   height: calc(100vh - 240px);
   min-height: 600px;
 }
@@ -138,7 +139,7 @@ body {
 .stats-bar-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
 
 .wallet-stats-grid {
@@ -159,10 +160,10 @@ body {
 
 /* Mobile Breakpoint */
 @media (max-width: 640px) {
-  .dashboard-grid > div { height: 500px; padding: 12px !important; }
-  .stats-bar-grid { grid-template-columns: 1fr; gap: 8px; }
+  .dashboard-grid > div { height: 500px; padding: 16px !important; }
+  .stats-bar-grid { grid-template-columns: 1fr; gap: 12px; }
   .tx-card-row1 { flex-wrap: wrap; }
   
   /* Reduce padding on mobile */
-  .mobile-px { padding-left: 12px !important; padding-right: 12px !important; }
+  .mobile-px { padding-left: 16px !important; padding-right: 16px !important; }
 }

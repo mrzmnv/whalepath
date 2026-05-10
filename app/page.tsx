@@ -15,6 +15,7 @@ import WhaleTable from "@/components/WhaleTable";
 import AddWalletModal from "@/components/AddWalletModal";
 
 export default function Dashboard() {
+  // User ID will be fetched client side later if needed
   const [whales, setWhales] = useState<WhaleWallet[]>(whalesData as WhaleWallet[]);
   
   // Fetch dynamic whales from DB on mount

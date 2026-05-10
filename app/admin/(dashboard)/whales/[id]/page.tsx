@@ -2,8 +2,10 @@ import prisma from '@/lib/db';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 
-export default async function EditWhalePage({ params }: { params: { id: string } }) {
-  const whale = await prisma.whale.findUnique({ where: { id: params.id } });
+export default async function EditWhalePage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const { id } = resolvedParams;
+  const whale = await prisma.whale.findUnique({ where: { id } });
   if (!whale) return redirect('/admin/whales');
 
   async function updateWhale(formData: FormData) {
@@ -13,7 +15,7 @@ export default async function EditWhalePage({ params }: { params: { id: string }
     const tags = (formData.get('tags') as string).split(',').map(t => t.trim()).filter(Boolean);
 
     await prisma.whale.update({
-      where: { id: params.id },
+      where: { id },
       data: { label, category, tags }
     });
 

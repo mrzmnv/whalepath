@@ -29,7 +29,7 @@ export async function login(formData: FormData) {
     sameSite: "lax",
   });
 
-  redirect("/admin");
+  return { success: true };
 }
 
 export async function logout() {

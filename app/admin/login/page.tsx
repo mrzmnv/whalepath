@@ -2,9 +2,11 @@
 
 import { login } from "../actions/auth";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -12,6 +14,8 @@ export default function LoginPage() {
     const res = await login(formData);
     if (res?.error) {
       setError(res.error);
+    } else if (res?.success) {
+      router.push("/admin");
     }
   };
 

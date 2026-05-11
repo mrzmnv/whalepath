@@ -38,7 +38,7 @@ export default function TransactionFeed({
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newSigs, setNewSigs] = useState<Set<string>>(new Set());
-  const [range, setRange] = useState<RangeOption>(RANGE_OPTIONS[0]);
+  const [range, setRange] = useState<RangeOption>(RANGE_OPTIONS[4]); // All
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMounted = useRef(true);

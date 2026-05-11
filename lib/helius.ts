@@ -242,7 +242,7 @@ export async function fetchWalletTransactionHistory(
   walletAddress: string,
   walletLabel: string,
   apiKey: string,
-  limit = 50,
+  limit = 20,
 ): Promise<Transaction[]> {
   const url = `${HELIUS_BASE}/addresses/${walletAddress}/transactions?api-key=${apiKey}&limit=${limit}`;
   const solPrice = await getSolPrice();

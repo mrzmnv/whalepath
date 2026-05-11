@@ -15,7 +15,6 @@ interface HeaderClientProps {
 const navLinks = [
   { href: "/", label: "Dashboard" },
   { href: "/tokens", label: "🔥 Heat Map" },
-  { href: "/profile", label: "Profile" },
 ];
 
 export default function HeaderClient({

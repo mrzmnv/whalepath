@@ -1,6 +1,9 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# Force dev deps regardless of what Coolify injects at build time
+ENV NODE_ENV=development
+
 COPY package*.json ./
 COPY prisma ./prisma/
 RUN npm ci

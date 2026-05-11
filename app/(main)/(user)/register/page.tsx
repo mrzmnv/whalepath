@@ -15,7 +15,10 @@ export default function RegisterPage() {
     const formData = new FormData(e.currentTarget);
     const res = await registerUser(formData);
     if (res?.error) setError(res.error);
-    else if (res?.success) router.push("/");
+    else if (res?.success) {
+      router.refresh();
+      router.push("/");
+    }
   };
 
   return (

@@ -15,7 +15,10 @@ export default function LoginPage() {
     const formData = new FormData(e.currentTarget);
     const res = await loginUser(formData);
     if (res?.error) setError(res.error);
-    else if (res?.success) router.push("/");
+    else if (res?.success) {
+      router.refresh();
+      router.push("/");
+    }
   };
 
   return (

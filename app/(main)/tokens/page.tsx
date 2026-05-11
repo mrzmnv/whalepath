@@ -62,7 +62,7 @@ export default async function TokensPage() {
   const totalBuyTxs = buyAggs.reduce((s, r) => s + r._count.id, 0);
 
   return (
-    <main style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
+    <main className="page-container" style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
         <div
@@ -108,7 +108,7 @@ export default async function TokensPage() {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
           gap: 16,
           marginBottom: 32,
         }}
@@ -165,26 +165,24 @@ export default async function TokensPage() {
       >
         {/* Table header */}
         <div
+          className="heatmap-grid"
           style={{
-            display: "grid",
-            gridTemplateColumns: "40px 120px 1fr 120px 100px 100px 80px",
-            gap: 0,
             padding: "10px 20px",
             borderBottom: "2px solid var(--border-strong)",
           }}
         >
           {[
-            "#",
-            "TOKEN",
-            "BUY PRESSURE",
-            "BUY VOL",
-            "SELL VOL",
-            "NET FLOW",
-            "WHALES",
-          ].map((h) => (
+            { label: "#", className: "" },
+            { label: "TOKEN", className: "" },
+            { label: "BUY PRESSURE", className: "heatmap-col-hide" },
+            { label: "BUY VOL", className: "" },
+            { label: "SELL VOL", className: "heatmap-col-hide" },
+            { label: "NET FLOW", className: "heatmap-col-hide" },
+            { label: "WHALES", className: "" },
+          ].map(({ label, className }) => (
             <span
-              key={h}
-              className="mono"
+              key={label}
+              className={`mono ${className}`}
               style={{
                 fontSize: 10,
                 fontWeight: 700,
@@ -192,7 +190,7 @@ export default async function TokensPage() {
                 letterSpacing: "0.08em",
               }}
             >
-              {h}
+              {label}
             </span>
           ))}
         </div>
@@ -213,11 +211,8 @@ export default async function TokensPage() {
               style={{ textDecoration: "none", color: "inherit" }}
             >
             <div
-              className="token-row"
+              className="token-row heatmap-grid"
               style={{
-                display: "grid",
-                gridTemplateColumns: "40px 120px 1fr 120px 100px 100px 80px",
-                gap: 0,
                 padding: "14px 20px",
                 borderBottom: "1px solid var(--border)",
                 alignItems: "center",
@@ -263,7 +258,7 @@ export default async function TokensPage() {
               </div>
 
               {/* Bar */}
-              <div style={{ paddingRight: 24 }}>
+              <div className="heatmap-col-hide" style={{ paddingRight: 24 }}>
                 <div
                   style={{
                     height: 6,
@@ -299,7 +294,7 @@ export default async function TokensPage() {
 
               {/* Sell vol */}
               <span
-                className="mono"
+                className="mono heatmap-col-hide"
                 style={{ fontSize: 13, fontWeight: 700, color: "var(--red)" }}
               >
                 {sellVol > 0 ? formatUSD(sellVol) : "—"}
@@ -307,7 +302,7 @@ export default async function TokensPage() {
 
               {/* Net flow */}
               <span
-                className="mono"
+                className="mono heatmap-col-hide"
                 style={{
                   fontSize: 12,
                   fontWeight: 700,

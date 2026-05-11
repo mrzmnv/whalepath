@@ -411,6 +411,22 @@ body {
   background: var(--surface-2) !important;
 }
 
+.heatmap-grid {
+  display: grid;
+  grid-template-columns: 40px 120px 1fr 120px 100px 100px 80px;
+  gap: 0;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .heatmap-grid {
+    grid-template-columns: 32px 1fr 90px 52px;
+  }
+  .heatmap-col-hide {
+    display: none !important;
+  }
+}
+
 .whale-card-row {
   transition: border-color 0.2s;
 }

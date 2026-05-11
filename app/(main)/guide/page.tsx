@@ -604,27 +604,27 @@ export default function GuidePage() {
       </Section>
 
       {/* 9. FAQ */}
-      <Section icon="❓" title="Tez-tez Soruşulanlar">
+      <Section icon="❓" title="FAQ">
         {[
           {
-            q: "Məlumatlar nə qədər tez-tez yenilənir?",
-            a: "Canlı lent hər 15 dəqiqədə, balina detay səhifəsi isə 10 dəqiqəlik cache ilə yenilənir.",
+            q: "How often does the live feed update?",
+            a: "Free plan: every 15 minutes. Pro & Enterprise plans: every 1 minute — near real-time whale tracking.",
           },
           {
-            q: "Balina siyahısı haradan gəlir?",
-            a: "Platforma admin tərəfindən əl ilə seçilmiş, tarixli hərəkət göstərmiş Solana cüzdanlarından ibarətdir.",
+            q: "Where does the whale list come from?",
+            a: "Wallets are manually curated by the WhalePath team — only addresses with a verified history of large on-chain moves are added.",
           },
           {
-            q: "Öz cüzdanım ilə balina fərqi nədir?",
-            a: "'Favorite' — siz bir balina cüzdanını izləyirsiniz. 'Personal' — öz şəxsi cüzdanınızı əlavə edirsiniz.",
+            q: "What's the difference between Favorite and Personal wallet?",
+            a: "'Favorite' — you follow a whale wallet that WhalePath tracks. 'Personal' — you add your own Solana wallet to monitor your own activity.",
           },
           {
-            q: "Şifrəmi unutduqda nə etməliyəm?",
-            a: "Hazırda şifrə sıfırlama funksiyası yoxdur. Yeni hesab yaradın.",
+            q: "Can I track any Solana wallet, not just listed whales?",
+            a: "Yes. Use 'Add Wallet' from the dashboard to track any Solana address. Your plan determines how many you can add simultaneously.",
           },
           {
-            q: "Mobil versiyada hər şey işləyirmi?",
-            a: "Bəli — bütün səhifələr mobil üçün optimallaşdırılıb. Burger menyudan bütün bölmələrə keçid var.",
+            q: "What do the transaction tags mean?",
+            a: "BUY / SELL = token purchased or sold. SWAP = token exchanged for another. TRANSFER = wallet-to-wallet move. ⚡ ALERT = transaction exceeds $100K.",
           },
         ].map(({ q, a }) => (
           <div

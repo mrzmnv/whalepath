@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Star, Trash2 } from "lucide-react";
 import { WhaleWallet, WatchlistEntry } from "@/lib/types";
 import { truncateAddress, timeAgo } from "@/lib/format";
@@ -36,6 +36,7 @@ export default function WhaleTable({
 }: WhaleTableProps) {
   const [tab, setTab] = useState<"whales" | "watchlist">("whales");
   const [hoveredAddress, setHoveredAddress] = useState<string | null>(null);
+  const router = useRouter();
 
   const isRecent = (address: string) => {
     const ts = lastActivity[address];
@@ -103,10 +104,12 @@ export default function WhaleTable({
         key={address}
         onMouseEnter={() => setHoveredAddress(address)}
         onMouseLeave={() => setHoveredAddress(null)}
+        onClick={() => router.push(`/wallet/${address}`)}
         style={{
           display: "table-row",
           backgroundColor: isHovered ? "var(--surface-2)" : "transparent",
           transition: "background-color 0.12s",
+          cursor: "pointer",
         }}
       >
         {/* Activity dot cell */}
@@ -124,28 +127,21 @@ export default function WhaleTable({
         </div>
 
         {/* Label + address cell */}
-        <div style={{ display: "table-cell", padding: "12px 8px", verticalAlign: "middle", borderBottom: "1px solid var(--border)" }}>
-          <Link
-            href={`/wallet/${address}`}
+        <div style={{ display: "table-cell", padding: "12px 8px", verticalAlign: "middle", borderBottom: "1px solid var(--border)", overflow: "hidden" }}>
+          <span
             style={{
               display: "block",
               fontSize: 13,
               fontWeight: 600,
-              color: "var(--text-1)",
-              textDecoration: "none",
+              color: isHovered ? "var(--accent)" : "var(--text-1)",
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
+              transition: "color 0.12s",
             }}
-            onMouseEnter={(e) =>
-              (e.currentTarget.style.color = "var(--accent)")
-            }
-            onMouseLeave={(e) =>
-              (e.currentTarget.style.color = "var(--text-1)")
-            }
           >
             {label}
-          </Link>
+          </span>
           <span
             className="mono"
             style={{ fontSize: 11, color: "var(--text-3)", display: "block", marginTop: 4 }}
@@ -215,7 +211,7 @@ export default function WhaleTable({
           {lastActivity[address] ? timeAgo(lastActivity[address]) : "—"}
           {isHovered && !isCustom && onToggleFavorite && (
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(address, label); }}
+              onClick={(e) => { e.stopPropagation(); onToggleFavorite(address, label); }}
               title={watchlist.some(w => w.address === address) ? "Remove Favorite" : "Add Favorite"}
               style={{
                 float: "right",
@@ -237,7 +233,7 @@ export default function WhaleTable({
           )}
           {isCustom && isHovered && (
             <button
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onRemoveWatchlist(address); }}
+              onClick={(e) => { e.stopPropagation(); onRemoveWatchlist(address); }}
               title="Remove"
               style={{
                 float: "right",

@@ -27,6 +27,7 @@ export default function RegisterPage() {
 
   return (
     <div
+      className="auth-container"
       style={{
         maxWidth: 400,
         margin: "80px auto",

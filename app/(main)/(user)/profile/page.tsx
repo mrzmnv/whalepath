@@ -1,15 +1,15 @@
-import { LogOut, Plus, Trash2 } from "lucide-react";
+import { LogOut, Plus } from "lucide-react";
 import prisma from "@/lib/db";
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
 import { redirect } from "next/navigation";
 import {
   addPersonalWallet,
-  removeWatchlistItem,
 } from "@/app/actions/watchlist";
 import { logoutUser } from "@/app/actions/userAuth";
 import { formatUSD } from "@/lib/format";
 import Link from "next/link";
+import RemoveWatchlistButton from "@/components/RemoveWatchlistButton";
 
 export default async function ProfilePage() {
   const cookieStore = await cookies();
@@ -50,8 +50,9 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div style={{ maxWidth: 800, margin: "40px auto", padding: "0 24px" }}>
+    <div style={{ maxWidth: 800, margin: "0 auto", padding: "40px 24px 48px" }}>
       <div
+        className="profile-header-row"
         style={{
           display: "flex",
           justifyContent: "space-between",
@@ -184,26 +185,7 @@ export default async function ProfilePage() {
                   {w.address}
                 </div>
               </div>
-              <form
-                action={async () => {
-                  "use server";
-                  await removeWatchlistItem(w.id);
-                }}
-              >
-                <button
-                  type="submit"
-                  style={{
-                    background: "none",
-                    border: "none",
-                    color: "var(--down)",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  <Trash2 size={16} />
-                </button>
-              </form>
+              <RemoveWatchlistButton id={w.id} label={w.label ?? w.address.slice(0, 8)} type="personal" />
             </div>
           ))}
           {personalWallets.length === 0 && (
@@ -235,7 +217,7 @@ export default async function ProfilePage() {
                 style={{ textDecoration: "none" }}
               >
                 <div
-                  className="whale-card-row"
+                  className="whale-card-row profile-whale-row"
                   style={{
                     display: "flex",
                     justifyContent: "space-between",
@@ -329,29 +311,7 @@ export default async function ProfilePage() {
                       </span>
                     </div>
 
-                    <form
-                      action={async () => {
-                        "use server";
-                        await removeWatchlistItem(w.id);
-                      }}
-                    >
-                      <button
-                        type="submit"
-                        className="whale-delete-btn"
-                        style={{
-                          background: "var(--surface-3)",
-                          padding: 8,
-                          borderRadius: 6,
-                          border: "1px solid var(--border-strong)",
-                          color: "var(--red)",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </form>
+                    <RemoveWatchlistButton id={w.id} label={w.label ?? w.address.slice(0, 8)} type="whale" />
                   </div>
                 </div>
               </Link>

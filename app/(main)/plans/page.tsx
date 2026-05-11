@@ -66,6 +66,7 @@ export default function PlansPage() {
 
       {/* Plan cards */}
       <div
+        className="plans-grid"
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",

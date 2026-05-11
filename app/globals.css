@@ -424,3 +424,55 @@ body {
 .whale-delete-btn:hover {
   background-color: var(--red-bg) !important;
 }
+
+/* ─── Full Mobile Responsiveness ───────────────────────────── */
+@media (max-width: 768px) {
+  /* Page containers */
+  .page-container {
+    padding: 0 16px 48px !important;
+    margin-top: 24px !important;
+  }
+
+  /* Wallet stats: 2x2 on mobile */
+  .wallet-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 10px !important;
+  }
+
+  /* Profile page header row */
+  .profile-header-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+
+  /* Profile wallet card row */
+  .profile-whale-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+  .profile-whale-stats {
+    flex-direction: row !important;
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+
+  /* Plans grid: single column */
+  .plans-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Auth pages: full width with proper padding */
+  .auth-container {
+    margin: 40px 16px !important;
+    padding: 24px !important;
+  }
+
+  /* Wallet detail header */
+  .wallet-header-actions {
+    width: 100% !important;
+    justify-content: flex-start !important;
+  }
+}

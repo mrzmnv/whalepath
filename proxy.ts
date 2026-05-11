@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { decrypt } from "./lib/session";
 
-export async function middleware(req: NextRequest) {
+export async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = path.startsWith('/admin') && path !== '/admin/login';
 
@@ -14,8 +14,6 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  // Rate Limiting (Bot protection mockup)
-  // Check headers etc in a fully fledged logic
   return NextResponse.next();
 }
 

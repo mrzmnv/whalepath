@@ -7,7 +7,12 @@ import { revalidatePath } from 'next/cache';
 export async function POST(req: Request) {
   try {
     const { address, label } = await req.json();
-    if (!address) return NextResponse.json({ error: "Missing address" }, { status: 400 });
+    if (!address || typeof address !== "string") {
+      return NextResponse.json({ error: "Missing address" }, { status: 400 });
+    }
+    if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
+      return NextResponse.json({ error: "Invalid address" }, { status: 400 });
+    }
 
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get('session')?.value;

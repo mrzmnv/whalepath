@@ -62,8 +62,9 @@ export async function POST(req: NextRequest) {
             source: tx.source,
           }
         });
-      } catch (e) {}
-    }
+      } catch (e) {
+        console.error("TX upsert failed:", (e as Error).message);
+      }    }
 
     // Fetch latest 100 from DB
     const dbTxs = await prisma.transaction.findMany({

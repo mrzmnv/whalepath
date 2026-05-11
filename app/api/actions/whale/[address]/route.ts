@@ -17,7 +17,7 @@ const CORS_HEADERS = {
 };
 
 const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "https://whalepath.halef.dev";
+  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 const RPC_URL =
   process.env.HELIUS_RPC_URL ||
   `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`;

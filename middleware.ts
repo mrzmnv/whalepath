@@ -9,7 +9,7 @@ export async function middleware(req: NextRequest) {
     const cookie = req.cookies.get('session')?.value;
     const session = await decrypt(cookie);
 
-    if (!session?.userId) {
+    if (!session?.userId || session?.role !== 'admin') {
       return NextResponse.redirect(new URL('/admin/login', req.nextUrl));
     }
   }

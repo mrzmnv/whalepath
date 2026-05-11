@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
 
     const txDate = new Date(timestamp).toLocaleString();
     const formattedUSD = formatCompactUsd(usdValue);
-    const apiKey = process.env.ANTHROPIC_API_KEY;
+    const apiKey = process.env.SIGNAL_API_KEY;
     const fallback = buildLocalExplanation(body);
 
     if (!apiKey) {

@@ -22,7 +22,12 @@ export async function login(formData: FormData) {
   const session = await encrypt({ userId: user.id, username: user.username, role: user.role });
   
   const cookieStore = await cookies();
-  cookieStore.set("session", session, { expires, httpOnly: true });
+  cookieStore.set("session", session, {
+    expires,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+  });
 
   redirect("/admin");
 }

@@ -297,9 +297,55 @@ export default function HeaderClient({
           </nav>
 
           {/* Live counter */}
-          <div style={{ marginBottom: 32 }}>
-            <LiveTxCounter />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              padding: "16px",
+              backgroundColor: "rgba(0,255,128,0.04)",
+              border: "1px solid rgba(0,255,128,0.14)",
+              borderRadius: 12,
+              marginBottom: 20,
+              textAlign: "center",
+            }}
+          >
+            <span
+              className="mono"
+              style={{
+                fontSize: 10,
+                color: "var(--text-3)",
+                fontWeight: 700,
+                letterSpacing: "0.12em",
+                marginBottom: 6,
+              }}
+            >
+              TRACKED TXS
+            </span>
+            <LiveTxCounter counterOnly />
           </div>
+
+          {/* Plans banner */}
+          <Link
+            href="/plans"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              padding: "14px",
+              background: "linear-gradient(135deg, var(--accent) 0%, #f4a261 100%)",
+              borderRadius: 10,
+              color: "#fff",
+              textDecoration: "none",
+              fontWeight: 700,
+              fontSize: 15,
+              marginBottom: 20,
+              letterSpacing: "0.02em",
+            }}
+          >
+            💎 View Plans
+          </Link>
 
           {/* Auth buttons */}
           <div

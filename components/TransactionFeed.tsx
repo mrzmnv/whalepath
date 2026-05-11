@@ -19,6 +19,16 @@ interface TransactionFeedProps {
 
 const POLL_INTERVAL = 60_000;
 
+const RANGE_OPTIONS = [
+  { label: "$50 – $5K", min: 50, max: 5_000 },
+  { label: "$5K – $50K", min: 5_000, max: 50_000 },
+  { label: "$50K – $500K", min: 50_000, max: 500_000 },
+  { label: "$500K+", min: 500_000, max: Infinity },
+  { label: "All", min: 0, max: Infinity },
+] as const;
+
+type RangeOption = (typeof RANGE_OPTIONS)[number];
+
 export default function TransactionFeed({
   preloadedWhales,
   watchlist,
@@ -28,9 +38,14 @@ export default function TransactionFeed({
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newSigs, setNewSigs] = useState<Set<string>>(new Set());
+  const [range, setRange] = useState<RangeOption>(RANGE_OPTIONS[0]);
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMounted = useRef(true);
+
+  const filtered = transactions.filter(
+    (tx) => tx.usdValue >= range.min && tx.usdValue < range.max,
+  );
 
   const fetchTransactions = useCallback(async () => {
     const wallets = [
@@ -165,7 +180,7 @@ export default function TransactionFeed({
           >
             LIVE FEED
           </span>
-          {transactions.length > 0 && (
+          {filtered.length > 0 && (
             <span
               className="mono"
               style={{
@@ -178,10 +193,35 @@ export default function TransactionFeed({
                 border: "1px solid var(--border)",
               }}
             >
-              {transactions.length}
+              {filtered.length}
             </span>
           )}
         </div>
+
+        {/* Range filter */}
+        <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+          {RANGE_OPTIONS.map((opt) => (
+            <button
+              key={opt.label}
+              onClick={() => setRange(opt)}
+              style={{
+                padding: "4px 10px",
+                borderRadius: 6,
+                fontSize: 11,
+                fontWeight: 600,
+                cursor: "pointer",
+                border: "1px solid",
+                borderColor: range.label === opt.label ? "var(--accent)" : "var(--border)",
+                backgroundColor: range.label === opt.label ? "rgba(99,102,241,0.15)" : "var(--surface-2)",
+                color: range.label === opt.label ? "var(--accent)" : "var(--text-3)",
+                transition: "all 0.15s ease",
+              }}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+
         {lastUpdated && (
           <span
             className="mono"
@@ -198,6 +238,8 @@ export default function TransactionFeed({
               second: "2-digit",
             })}
           </span>
+        )}
+      </div>
         )}
       </div>
 
@@ -233,7 +275,7 @@ export default function TransactionFeed({
               <div className="skeleton" style={{ height: 12, width: "40%" }} />
             </div>
           ))
-        ) : transactions.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <div
             style={{
               flex: 1,
@@ -263,7 +305,7 @@ export default function TransactionFeed({
                 letterSpacing: "0.05em",
               }}
             >
-              SCANNING MEMPOOL
+              {transactions.length > 0 ? "NO MATCHES" : "SCANNING MEMPOOL"}
             </p>
             <p
               style={{
@@ -273,11 +315,13 @@ export default function TransactionFeed({
                 maxWidth: 260,
               }}
             >
-              No high-net transfers detected.
+              {transactions.length > 0
+                ? `No transfers in the ${range.label} range.`
+                : "No high-net transfers detected."}
             </p>
           </div>
         ) : (
-          transactions.map((tx) => (
+          filtered.map((tx) => (
             <TransactionCard
               key={tx.signature}
               tx={tx}

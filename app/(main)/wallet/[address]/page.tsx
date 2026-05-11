@@ -189,7 +189,7 @@ export default function WalletDetailPage() {
                 color: isWatched ? "var(--red)" : "var(--accent)",
                 fontSize: 13, fontWeight: 500,
               }}>
-                {isWatched ? "✕ İzləmədən çıxar" : <><Star size={14} /> İzləyə Al</>}
+                {isWatched ? "✕ Unwatch" : <><Star size={14} /> Watch</>}
               </button>
             </div>
           </div>

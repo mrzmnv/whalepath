@@ -11,11 +11,11 @@ export async function registerUser(formData: FormData) {
   const password = formData.get("password") as string;
 
   if (!username || !password || password.length < 6) {
-    return { error: "İstifadəçi adı daxil edin və şifrə minimum 6 simvol olmalıdır." };
+    return { error: "Please enter a username and a password of at least 6 characters." };
   }
 
   const existing = await prisma.user.findUnique({ where: { username } });
-  if (existing) return { error: "Bu istifadəçi adı artıq mövcuddur." };
+  if (existing) return { error: "This username is already taken." };
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
@@ -30,13 +30,13 @@ export async function loginUser(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
-  if (!username || !password) return { error: "Xanaları doldurun" };
+  if (!username || !password) return { error: "Please fill in all fields." };
 
   const user = await prisma.user.findUnique({ where: { username } });
-  if (!user) return { error: "Belə bir istifadəçi yoxdur" };
+  if (!user) return { error: "No account found with that username." };
 
   const isValid = await bcrypt.compare(password, user.password);
-  if (!isValid) return { error: "Şifrə və ya login səhvdir" };
+  if (!isValid) return { error: "Incorrect username or password." };
 
   await createSession(user);
   redirect("/");

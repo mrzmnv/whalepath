@@ -4,7 +4,7 @@ import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
 
 export async function addPersonalWallet(userId: string, address: string, label: string) {
-  if (!userId || !address) return { error: "Xanalar boş ola bilməz" };
+  if (!userId || !address) return { error: "Missing required fields." };
   
   try {
     await prisma.watchlist.create({
@@ -18,13 +18,13 @@ export async function addPersonalWallet(userId: string, address: string, label: 
     revalidatePath("/profile");
     return { success: true };
   } catch (e: any) {
-    if (e.code === 'P2002') return { error: "Bu cüzdan artıq siyahınızdadır" };
-    return { error: "Xəta baş verdi" };
+    if (e.code === 'P2002') return { error: "This wallet is already in your list." };
+    return { error: "Something went wrong." };
   }
 }
 
 export async function addFavoriteWhale(userId: string, address: string) {
-  if (!userId || !address) return { error: "Məlumat yoxdur" };
+  if (!userId || !address) return { error: "Missing required fields." };
   
   try {
     const whale = await prisma.whale.findUnique({ where: { address } });
@@ -32,7 +32,7 @@ export async function addFavoriteWhale(userId: string, address: string) {
       data: {
         userId,
         address,
-        label: whale?.label || "Bilinməyən",
+        label: whale?.label || "Unknown",
         type: "favorite"
       }
     });
@@ -40,8 +40,8 @@ export async function addFavoriteWhale(userId: string, address: string) {
     revalidatePath("/profile");
     return { success: true };
   } catch (e: any) {
-    if (e.code === 'P2002') return { error: "Artıq sevimlilərdədir" };
-    return { error: "Xəta baş verdi" };
+    if (e.code === 'P2002') return { error: "Already in favorites." };
+    return { error: "Something went wrong." };
   }
 }
 
@@ -52,7 +52,7 @@ export async function removeWatchlistItem(id: string) {
 }
 
 export async function toggleFavoriteWhale(userId: string, address: string, label: string) {
-  if (!userId || !address) return { error: "Məlumat yoxdur" };
+  if (!userId || !address) return { error: "Missing required fields." };
   
   try {
     const existing = await prisma.watchlist.findFirst({
@@ -66,7 +66,7 @@ export async function toggleFavoriteWhale(userId: string, address: string, label
         data: {
           userId,
           address,
-          label: label || "Bilinməyən",
+          label: label || "Unknown",
           type: "favorite"
         }
       });
@@ -76,6 +76,6 @@ export async function toggleFavoriteWhale(userId: string, address: string, label
     revalidatePath("/profile");
     return { success: true };
   } catch (e: any) {
-    return { error: "Xəta baş verdi" };
+    return { error: "Something went wrong." };
   }
 }

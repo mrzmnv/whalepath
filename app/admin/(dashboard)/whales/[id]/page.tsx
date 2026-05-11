@@ -29,7 +29,7 @@ export default async function EditWhalePage({ params }: { params: Promise<{ id: 
       <form action={updateWhale} style={{ display: 'flex', flexDirection: 'column', gap: 16, maxWidth: 400 }}>
         <input name="label" defaultValue={whale.label} placeholder="Label" required style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)' }} />
         <select name="category" defaultValue={whale.category || ""} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', backgroundColor: 'var(--bg)' }}>
-          <option value="">Kateqoriya seçin</option>
+          <option value="">Select Category</option>
           <option value="DEX">DEX</option>
           <option value="CEX">CEX</option>
           <option value="Whale">Whale</option>

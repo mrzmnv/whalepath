@@ -130,7 +130,7 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
       const data = await res.json() as { explanation: string };
       setExplanation(data.explanation);
     } catch {
-      setExplanation("Analiz hazır deyil. Bir az sonra yenidən yoxla.");
+      setExplanation("Analysis unavailable. Please try again later.");
     } finally {
       setLoading(false);
     }

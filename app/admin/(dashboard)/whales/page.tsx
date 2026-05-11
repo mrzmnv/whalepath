@@ -19,14 +19,14 @@ export default async function AdminWhales() {
           <input name="address" placeholder="Solana Address" required style={{ flex: '1 1 300px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} className="mono" />
           <input name="label" placeholder="Display Label (e.g. Binance Hot Wallet)" required style={{ flex: '1 1 200px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
           <select name="category" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14, backgroundColor: 'var(--bg)' }}>
-            <option value="">Kateqoriya seçin</option>
+            <option value="">Select Category</option>
             <option value="DEX">DEX</option>
             <option value="CEX">CEX</option>
             <option value="Whale">Whale</option>
             <option value="Fund">Fund/VC</option>
             <option value="Bot">Bot/MEV</option>
           </select> 
-          <input name="tags" placeholder="Tağlar (məs: solana, memecoin, holder)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
+          <input name="tags" placeholder="Tags (e.g. solana, memecoin, holder)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
           <button type="submit" style={{ backgroundColor: 'var(--accent)', color: 'white', padding: '10px 24px', borderRadius: 8, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}>Add Whale</button>
         </form>
       </div>

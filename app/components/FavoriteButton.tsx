@@ -34,7 +34,7 @@ export default function FavoriteButton({ userId, address }: { userId?: string, a
       }}
     >
       <Star size={14} />
-      {loading ? '...' : 'İzləyə Al'}
+      {loading ? '...' : 'Watch'}
     </button>
   );
 }

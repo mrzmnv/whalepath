@@ -10,13 +10,13 @@ export async function login(formData: FormData) {
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
 
-  if (!username || !password) return { error: "Bütün xanaları doldurun" };
+  if (!username || !password) return { error: "Please fill in all fields." };
 
   const user = await prisma.user.findUnique({ where: { username } });
-  if (!user) return { error: "Belə bir istifadəçi yoxdur" };
+  if (!user) return { error: "No account found with that username." };
 
   const isValid = await bcrypt.compare(password, user.password);
-  if (!isValid) return { error: "Şifrə və ya login səhvdir" };
+  if (!isValid) return { error: "Incorrect username or password." };
 
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ userId: user.id, username: user.username, role: user.role });

@@ -12,7 +12,7 @@ export default function LogoutButton() {
         textAlign: 'left'
       }}
     >
-      🚪 Çıxış Et
+      🚪 Logout
     </button>
   );
 }

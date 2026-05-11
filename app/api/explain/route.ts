@@ -38,40 +38,40 @@ function buildLocalExplanation(body: ExplainBody) {
   const amount =
     typeof body.amount === "number"
       ? formatAmount(body.amount)
-      : "naməlum həcmdə";
+      : "unknown amount";
   const usdValue =
     typeof body.usdValue === "number"
       ? formatCompactUsd(body.usdValue)
-      : "naməlum məbləğdə";
+      : "unknown value";
   const actionMap = {
-    buy: "alış edib",
-    sell: "satış edib",
-    transfer: "transfer edib",
-    unknown: "əməliyyat edib",
+    buy: "bought",
+    sell: "sold",
+    transfer: "transferred",
+    unknown: "transacted",
   } as const;
   const action = actionMap[body.type ?? "unknown"];
 
   let meaning =
-    "Bu tək əməliyyatla qəti nəticə çıxarmaq olmaz, amma wallet aktivdir və bazarda hərəkət göstərir.";
+    "A single transaction is not conclusive, but this wallet is active and showing movement in the market.";
   if (body.type === "buy") {
     meaning =
-      "Bu adətən yığım siqnalıdır: wallet həmin aktivdə mövqe artırır. Məbləğ böyükdürsə, bazarda marağın artdığını göstərə bilər.";
+      "Typically an accumulation signal: the wallet is increasing its position in this asset. A large amount may indicate growing market interest.";
   } else if (body.type === "sell") {
     meaning =
-      "Bu adətən çıxış və ya mənfəət realizasiyası siqnalıdır. Xüsusən böyük məbləğdirsə, qısamüddətli təzyiq yarada bilər.";
+      "Typically an exit or profit-taking signal. A large amount could create short-term selling pressure.";
   } else if (body.type === "transfer") {
     meaning =
-      "Bu birbaşa alış-satış demək deyil. Çox vaxt walletlərarası köçürmə, birjaya giriş/çıxış və ya daxili balans yerdəyişməsi olur.";
+      "This is not necessarily a buy or sell. It could be an inter-wallet transfer, an exchange deposit/withdrawal, or an internal balance move.";
   }
 
   const sizeNote = body.isAlert
-    ? "Bu əməliyyat böyük həcmli olduğu üçün ayrıca diqqətə dəyər."
-    : "Həcm orta səviyyədədir, ona görə kontekstə birlikdə baxmaq lazımdır.";
+    ? "This transaction is large and warrants close attention."
+    : "Volume is moderate — best viewed in context with other activity.";
 
   return [
-    `Nə baş verdi: ${walletName} ${amount} ${tokenLabel} üzrə ${action}. Təxmini dəyər ${usdValue}-dir.`,
-    `Bu nə demək ola bilər: ${meaning}`,
-    `Qısa nəticə: ${sizeNote}`,
+    `What happened: ${walletName} ${action} ${amount} ${tokenLabel}. Estimated value: ${usdValue}.`,
+    `What it may mean: ${meaning}`,
+    `Quick take: ${sizeNote}`,
   ].join("\n");
 }
 
@@ -117,30 +117,29 @@ export async function POST(req: NextRequest) {
     }
 
     const client = new Anthropic({ apiKey });
-    const prompt = `Sən Solana whale transaction-larını sadə dildə izah edən analitiksən.
+    const prompt = `You are a concise analyst explaining Solana whale transactions in plain English.
 
-İstifadəçi texniki deyil. Qarışıq termin işlətmə. Cavabı sadə Azərbaycan dilində yaz.
-3 qısa sətir yaz və bu formatı qoruyaraq cavab ver:
-Nə baş verdi: ...
-Bu nə demək ola bilər: ...
-Qısa nəticə: ...
+The user is non-technical. Avoid jargon. Write exactly 3 short lines using this format:
+What happened: ...
+What it may mean: ...
+Quick take: ...
 
-Qaydalar:
-- Konkret ol, ümumi boş cümlələr yazma.
-- Tokeni, həcmi, USD dəyərini və əməliyyat növünü mütləq qeyd et.
-- Əgər bu transferdirsə, bunu alış/satış kimi təqdim etmə.
-- Əgər əməliyyat böyükdürsə, bunun niyə diqqətə dəyər olduğunu de.
-- Əmin olmadığın şeyi fakt kimi yazma; "ola bilər" de.
-- Maksimum 75 söz.
+Rules:
+- Be specific, avoid generic filler sentences.
+- Always mention the token, amount, USD value, and transaction type.
+- If it's a transfer, do not present it as a buy or sell.
+- If the transaction is large, explain why it deserves attention.
+- Do not state uncertain things as facts; use "may" or "could".
+- Maximum 75 words.
 
-Əməliyyat məlumatı:
+Transaction data:
 - Wallet: ${walletLabel || walletAddress}
-- Ünvan: ${walletAddress}
-- Növ: ${type}
+- Address: ${walletAddress}
+- Type: ${type}
 - Token: ${tokenName || tokenSymbol} (${tokenSymbol})
-- Miqdar: ${formatAmount(amount)} ${tokenSymbol}
-- USD dəyəri: ${formattedUSD}
-- Vaxt: ${txDate}
+- Amount: ${formatAmount(amount)} ${tokenSymbol}
+- USD value: ${formattedUSD}
+- Time: ${txDate}
 - Large alert: ${isAlert ? "yes" : "no"}
 - From: ${fromAddress || "unknown"}
 - To: ${toAddress || "unknown"}`;
@@ -164,7 +163,7 @@ Qaydalar:
   } catch (error) {
     console.error("Explain API error:", error instanceof Error ? error.message : error);
     return NextResponse.json(
-      { explanation: "Analiz qurula bilmədi.", source: "error" },
+      { explanation: "Analysis unavailable. Please try again later." },
       { status: 500 },
     );
   }

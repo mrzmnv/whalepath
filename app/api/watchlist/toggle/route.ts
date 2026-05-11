@@ -34,7 +34,7 @@ export async function POST(req: Request) {
         data: {
           userId,
           address,
-          label: label || "Bilinməyən",
+          label: label || "Unknown",
           type: "favorite"
         }
       });

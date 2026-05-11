@@ -7,7 +7,8 @@ import { getPlanLimit } from "@/lib/plans";
 
 export async function POST(req: Request) {
   try {
-    const { address, label } = await req.json();
+    const { address, label, type: walletType } = await req.json();
+    const entryType = walletType === "personal" ? "personal" : "favorite";
     if (!address || typeof address !== "string") {
       return NextResponse.json({ error: "Missing address" }, { status: 400 });
     }
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
     const userId = session.userId as string;
 
     const existing = await prisma.watchlist.findFirst({
-      where: { userId, address, type: "favorite" },
+      where: { userId, address, type: entryType },
     });
 
     if (existing) {
@@ -51,7 +52,7 @@ export async function POST(req: Request) {
           userId,
           address,
           label: label || "Unknown",
-          type: "favorite",
+          type: entryType,
         },
       });
     }

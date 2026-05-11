@@ -106,9 +106,24 @@ export default function Dashboard() {
     [isAuthenticated, reloadWatchlist],
   );
 
-  const handleAddWallet = useCallback((entry: WatchlistEntry) => {
-    setWatchlist(addToWatchlist(entry));
-  }, []);
+  const handleAddWallet = useCallback(async (entry: WatchlistEntry) => {
+    try {
+      const res = await fetch("/api/watchlist/toggle", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ address: entry.address, label: entry.label, type: "personal" }),
+      });
+      if (res.ok) {
+        reloadWatchlist();
+      } else if (res.status === 401) {
+        setPlanModal("login");
+      } else if (res.status === 403) {
+        setPlanModal("upgrade");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }, [reloadWatchlist]);
 
   const handleRemoveWatchlist = useCallback((address: string) => {
     setWatchlist(removeFromWatchlist(address));
@@ -197,7 +212,10 @@ export default function Dashboard() {
             <WhaleTable
               whales={whales}
               watchlist={watchlist}
-              onAddWallet={() => setModalOpen(true)}
+              onAddWallet={() => {
+                if (!isAuthenticated) { setPlanModal("login"); return; }
+                setModalOpen(true);
+              }}
               onRemoveWatchlist={handleRemoveWatchlist}
               onToggleFavorite={handleToggleFavorite}
               lastActivity={lastActivity}

@@ -7,7 +7,7 @@ import { WatchlistEntry } from "@/lib/types";
 interface AddWalletModalProps {
   open: boolean;
   onClose: () => void;
-  onAdd: (entry: WatchlistEntry) => void;
+  onAdd: (entry: WatchlistEntry) => Promise<void>;
   existingAddresses: string[];
 }
 
@@ -15,22 +15,25 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
   const [address, setAddress] = useState("");
   const [label, setLabel] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (open) {
-      setAddress(""); setLabel(""); setError("");
+      setAddress(""); setLabel(""); setError(""); setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 60);
     }
   }, [open]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = address.trim();
     if (!trimmed) { setError("PLEASE ENTER A WALLET ADDRESS"); return; }
     if (!isValidSolanaAddress(trimmed)) { setError("INVALID SOLANA ADDRESS FORMAT"); return; }
     if (existingAddresses.includes(trimmed)) { setError("WALLET ALREADY IN WATCHLIST"); return; }
-    onAdd({ address: trimmed, label: label.trim() || trimmed.slice(0, 8), addedAt: Date.now() });
+    setLoading(true);
+    await onAdd({ address: trimmed, label: label.trim() || trimmed.slice(0, 8), addedAt: Date.now() });
+    setLoading(false);
     onClose();
   };
 
@@ -178,20 +181,21 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
             <button
               type="submit"
               className="mono"
+              disabled={loading}
               style={{
                 flex: 1,
                 padding: "10px 0",
                 borderRadius: 4,
                 border: "1px solid var(--border-focus)",
-                backgroundColor: "var(--accent)",
+                backgroundColor: loading ? "var(--border)" : "var(--accent)",
                 color: "var(--surface)",
                 fontSize: 11,
                 fontWeight: 600,
                 letterSpacing: "0.05em",
-                cursor: "pointer",
+                cursor: loading ? "not-allowed" : "pointer",
               }}
             >
-              ADD TO LIST
+              {loading ? "ADDING..." : "ADD TO LIST"}
             </button>
           </div>
         </form>

@@ -379,12 +379,8 @@ export default async function AdminWhales() {
                   {w.category || "-"}
                 </td>
                 <td style={{ padding: "12px 16px", textAlign: "right" }}>
-                  <form
-                    action={async () => {
-                      "use server";
-                      await deleteWhale(w.address);
-                    }}
-                  >
+                  <form action={deleteWhale}>
+                    <input type="hidden" name="address" value={w.address} />
                     <Link
                       href={`/admin/whales/${w.id}`}
                       style={{

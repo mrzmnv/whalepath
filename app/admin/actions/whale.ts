@@ -2,6 +2,7 @@
 
 import prisma from "@/lib/db";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
 
@@ -34,8 +35,11 @@ export async function addWhale(formData: FormData) {
   revalidatePath("/");
 }
 
-export async function deleteWhale(address: string) {
+export async function deleteWhale(formData: FormData) {
   await requireAdmin();
+
+  const address = formData.get("address") as string;
+  if (!address) throw new Error("Missing address");
 
   await prisma.whale.delete({
     where: { address },
@@ -137,6 +141,7 @@ export async function updateWhale(formData: FormData) {
 
   revalidatePath("/admin/whales");
   revalidatePath("/");
+  redirect("/admin/whales");
 }
 
 export async function clearAllTags() {

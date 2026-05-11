@@ -1,6 +1,6 @@
 import prisma from "@/lib/db";
 import { redirect } from "next/navigation";
-import { revalidatePath } from "next/cache";
+import { updateWhale } from "@/app/admin/actions/whale";
 
 export default async function EditWhalePage({
   params,
@@ -11,24 +11,6 @@ export default async function EditWhalePage({
   const { id } = resolvedParams;
   const whale = await prisma.whale.findUnique({ where: { id } });
   if (!whale) return redirect("/admin/whales");
-
-  async function updateWhale(formData: FormData) {
-    "use server";
-    const label = formData.get("label") as string;
-    const category = formData.get("category") as string;
-    const tags = (formData.get("tags") as string)
-      .split(",")
-      .map((t) => t.trim())
-      .filter(Boolean);
-
-    await prisma.whale.update({
-      where: { id },
-      data: { label, category, tags },
-    });
-
-    revalidatePath("/admin/whales");
-    redirect("/admin/whales");
-  }
 
   return (
     <div>
@@ -51,8 +33,8 @@ export default async function EditWhalePage({
           maxWidth: 400,
         }}
       >
+        <input type="hidden" name="id" value={whale.id} />
         <input
-          name="label"
           defaultValue={whale.label}
           placeholder="Label"
           required

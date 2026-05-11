@@ -136,7 +136,6 @@ export async function POST(req: NextRequest) {
   }
 }
 
-    if (!apiKey) {
       // No API key — return whatever is already in DB
       const dbTxs = await prisma.transaction.findMany({
         orderBy: { timestamp: "desc" },

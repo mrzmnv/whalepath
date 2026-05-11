@@ -11,7 +11,9 @@ export default function LoginPage() {
   useEffect(() => {
     fetch("/api/user/plan")
       .then((r) => r.json())
-      .then((d) => { if (d?.authenticated) window.location.href = "/"; })
+      .then((d) => {
+        if (d?.authenticated) window.location.href = "/";
+      })
       .catch(() => {});
   }, []);
 

@@ -3,9 +3,7 @@ import prisma from "@/lib/db";
 import { cookies } from "next/headers";
 import { decrypt } from "@/lib/session";
 import { redirect } from "next/navigation";
-import {
-  addPersonalWallet,
-} from "@/app/actions/watchlist";
+import { addPersonalWallet } from "@/app/actions/watchlist";
 import { logoutUser } from "@/app/actions/userAuth";
 import { formatUSD } from "@/lib/format";
 import Link from "next/link";
@@ -185,7 +183,11 @@ export default async function ProfilePage() {
                   {w.address}
                 </div>
               </div>
-              <RemoveWatchlistButton id={w.id} label={w.label ?? w.address.slice(0, 8)} type="personal" />
+              <RemoveWatchlistButton
+                id={w.id}
+                label={w.label ?? w.address.slice(0, 8)}
+                type="personal"
+              />
             </div>
           ))}
           {personalWallets.length === 0 && (
@@ -311,7 +313,11 @@ export default async function ProfilePage() {
                       </span>
                     </div>
 
-                    <RemoveWatchlistButton id={w.id} label={w.label ?? w.address.slice(0, 8)} type="whale" />
+                    <RemoveWatchlistButton
+                      id={w.id}
+                      label={w.label ?? w.address.slice(0, 8)}
+                      type="whale"
+                    />
                   </div>
                 </div>
               </Link>

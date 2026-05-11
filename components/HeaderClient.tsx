@@ -312,8 +312,27 @@ export default function HeaderClient({
           >
             {userId ? (
               <>
-                <Link
-                  href="/profile"
+                {/* Username display (non-clickable) */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                    padding: "10px 14px",
+                    background: "var(--surface-3)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 10,
+                    color: "var(--text-3)",
+                    fontSize: 13,
+                    fontWeight: 600,
+                  }}
+                >
+                  <User size={15} />
+                  {username}
+                </div>
+                {/* Profile button */}
+                <button
+                  onClick={() => { window.location.href = "/profile"; }}
                   style={{
                     display: "flex",
                     alignItems: "center",
@@ -324,14 +343,15 @@ export default function HeaderClient({
                     border: "1px solid var(--border)",
                     borderRadius: 10,
                     color: "var(--text-1)",
-                    textDecoration: "none",
                     fontWeight: 600,
                     fontSize: 16,
+                    cursor: "pointer",
+                    width: "100%",
                   }}
                 >
                   <User size={18} />
-                  {username}
-                </Link>
+                  Profile
+                </button>
                 <Link
                   href="/api/auth/logout"
                   style={{

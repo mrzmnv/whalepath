@@ -44,15 +44,7 @@ function Section({
   );
 }
 
-function Step({
-  n,
-  text,
-  sub,
-}: {
-  n: number;
-  text: string;
-  sub?: string;
-}) {
+function Step({ n, text, sub }: { n: number; text: string; sub?: string }) {
   return (
     <div
       style={{
@@ -81,11 +73,20 @@ function Step({
         {n}
       </div>
       <div>
-        <p style={{ fontSize: 14, color: "var(--text-1)", fontWeight: 600, margin: 0 }}>
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-1)",
+            fontWeight: 600,
+            margin: 0,
+          }}
+        >
           {text}
         </p>
         {sub && (
-          <p style={{ fontSize: 13, color: "var(--text-3)", margin: "4px 0 0" }}>
+          <p
+            style={{ fontSize: 13, color: "var(--text-3)", margin: "4px 0 0" }}
+          >
             {sub}
           </p>
         )}
@@ -104,7 +105,14 @@ function Tag({
   desc: string;
 }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: 10,
+        marginBottom: 10,
+      }}
+    >
       <span
         style={{
           padding: "3px 12px",
@@ -125,7 +133,9 @@ function Tag({
 
 export default function GuidePage() {
   return (
-    <main style={{ maxWidth: 780, margin: "0 auto", padding: "40px 16px 64px" }}>
+    <main
+      style={{ maxWidth: 780, margin: "0 auto", padding: "40px 16px 64px" }}
+    >
       {/* Header */}
       <div style={{ marginBottom: 36 }}>
         <Link
@@ -174,7 +184,13 @@ export default function GuidePage() {
             >
               WhalePath — Necə İstifadə Etmək
             </h1>
-            <p style={{ fontSize: 14, color: "var(--text-3)", margin: "4px 0 0" }}>
+            <p
+              style={{
+                fontSize: 14,
+                color: "var(--text-3)",
+                margin: "4px 0 0",
+              }}
+            >
               Solana-da böyük kapital hərəkətlərini real-vaxtda izləyin
             </p>
           </div>
@@ -183,15 +199,31 @@ export default function GuidePage() {
 
       {/* 1. Platform nədir */}
       <Section icon="🔭" title="WhalePath nədir?">
-        <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7, marginBottom: 12 }}>
-          WhalePath — Solana blockchain-ində böyük kapital hərəkəti edən "balina" adlandırılan
-          cüzdanları real-vaxtda izləyən analitik platformdur. Bir balina böyük həcmli token
-          alıb-satdıqda siz bunu dərhal görürsünüz.
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-2)",
+            lineHeight: 1.7,
+            marginBottom: 12,
+          }}
+        >
+          WhalePath — Solana blockchain-ində böyük kapital hərəkəti edən
+          "balina" adlandırılan cüzdanları real-vaxtda izləyən analitik
+          platformdur. Bir balina böyük həcmli token alıb-satdıqda siz bunu
+          dərhal görürsünüz.
         </p>
         <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7 }}>
           Platform aşağıdakı istifadəçilər üçün nəzərdə tutulub:
         </p>
-        <ul style={{ paddingLeft: 20, marginTop: 8, display: "flex", flexDirection: "column", gap: 6 }}>
+        <ul
+          style={{
+            paddingLeft: 20,
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
           {[
             "Kripto trader-lər — böyük oyunçuların hərəkətindən əvvəl mövqe almaq üçün",
             "Araşdırmacılar — on-chain data analizi üçün",
@@ -206,7 +238,14 @@ export default function GuidePage() {
 
       {/* 2. Dashboard */}
       <Section icon="📊" title="Ana Səhifə (Dashboard)">
-        <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7, marginBottom: 16 }}>
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-2)",
+            lineHeight: 1.7,
+            marginBottom: 16,
+          }}
+        >
           Ana səhifə iki hissədən ibarətdir:
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -218,13 +257,23 @@ export default function GuidePage() {
               border: "1px solid var(--border)",
             }}
           >
-            <p style={{ fontWeight: 700, fontSize: 14, color: "var(--text-1)", marginBottom: 4 }}>
+            <p
+              style={{
+                fontWeight: 700,
+                fontSize: 14,
+                color: "var(--text-1)",
+                marginBottom: 4,
+              }}
+            >
               📡 Canlı Lent (Sol panel)
             </p>
-            <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.6 }}>
-              İzlənilən balinaların son əməliyyatları burada göstərilir. Hər 15 dəqiqədə
-              avtomatik yenilənir. USD filtrindən istifadə edərək yalnız müəyyən həcmli
-              əməliyyatları görə bilərsiniz ($50–$5K, $5K–$50K, $50K+ və s.).
+            <p
+              style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.6 }}
+            >
+              İzlənilən balinaların son əməliyyatları burada göstərilir. Hər 15
+              dəqiqədə avtomatik yenilənir. USD filtrindən istifadə edərək
+              yalnız müəyyən həcmli əməliyyatları görə bilərsiniz ($50–$5K,
+              $5K–$50K, $50K+ və s.).
             </p>
           </div>
           <div
@@ -235,13 +284,23 @@ export default function GuidePage() {
               border: "1px solid var(--border)",
             }}
           >
-            <p style={{ fontWeight: 700, fontSize: 14, color: "var(--text-1)", marginBottom: 4 }}>
+            <p
+              style={{
+                fontWeight: 700,
+                fontSize: 14,
+                color: "var(--text-1)",
+                marginBottom: 4,
+              }}
+            >
               🐳 Balina Siyahısı (Sağ panel)
             </p>
-            <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.6 }}>
-              Sistemdə qeydiyyatda olan bütün izlənilən balinaların siyahısı. ★ düyməsi
-              ilə öz seçkilərinizə əlavə edə bilərsiniz (giriş tələb olunur). Hər balinaya
-              toxunaraq detaylı səhifəsinə keçə bilərsiniz.
+            <p
+              style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.6 }}
+            >
+              Sistemdə qeydiyyatda olan bütün izlənilən balinaların siyahısı. ★
+              düyməsi ilə öz seçkilərinizə əlavə edə bilərsiniz (giriş tələb
+              olunur). Hər balinaya toxunaraq detaylı səhifəsinə keçə
+              bilərsiniz.
             </p>
           </div>
         </div>
@@ -253,18 +312,44 @@ export default function GuidePage() {
           Hər əməliyyat kartında rəngli işarələr var:
         </p>
         <Tag color="#2a9d8f" label="BUY" desc="Token alınıb — bullish signal" />
-        <Tag color="#d62828" label="SELL" desc="Token satılıb — bearish signal" />
-        <Tag color="#e9c46a" label="SWAP" desc="Token dəyişdirilir (token A → token B)" />
+        <Tag
+          color="#d62828"
+          label="SELL"
+          desc="Token satılıb — bearish signal"
+        />
+        <Tag
+          color="#e9c46a"
+          label="SWAP"
+          desc="Token dəyişdirilir (token A → token B)"
+        />
         <Tag color="#e76f51" label="TRANSFER" desc="Cüzdanlar arası köçürmə" />
-        <Tag color="#e9c46a" label="⚡ ALERT" desc="$100K+ həcmli böyük hərəkət — xüsusi diqqət" />
-        <p style={{ fontSize: 13, color: "var(--text-3)", marginTop: 8, lineHeight: 1.6 }}>
+        <Tag
+          color="#e9c46a"
+          label="⚡ ALERT"
+          desc="$100K+ həcmli böyük hərəkət — xüsusi diqqət"
+        />
+        <p
+          style={{
+            fontSize: 13,
+            color: "var(--text-3)",
+            marginTop: 8,
+            lineHeight: 1.6,
+          }}
+        >
           Əməliyyat kartına toxunaraq Solscan-da tam detalları görə bilərsiniz.
         </p>
       </Section>
 
       {/* 4. Balina detayı */}
       <Section icon="🔍" title="Balina Detay Səhifəsi">
-        <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7, marginBottom: 16 }}>
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-2)",
+            lineHeight: 1.7,
+            marginBottom: 16,
+          }}
+        >
           Hər balinaya kliklədikdə onun detay səhifəsi açılır. Burada:
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -335,9 +420,16 @@ export default function GuidePage() {
 
       {/* 6. ADD WALLET */}
       <Section icon="➕" title="Öz Cüzdanınızı Əlavə Etmək">
-        <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7, marginBottom: 12 }}>
-          Dashboard-da sağ paneldə <strong>"+ Add Wallet"</strong> düyməsinə klikləyin.
-          Solana cüzdan ünvanınızı (32-44 simvol, Base58) daxil edin.
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-2)",
+            lineHeight: 1.7,
+            marginBottom: 12,
+          }}
+        >
+          Dashboard-da sağ paneldə <strong>"+ Add Wallet"</strong> düyməsinə
+          klikləyin. Solana cüzdan ünvanınızı (32-44 simvol, Base58) daxil edin.
         </p>
         <div
           style={{
@@ -347,28 +439,54 @@ export default function GuidePage() {
             border: "1px solid var(--amber)",
           }}
         >
-          <p style={{ fontSize: 13, color: "var(--text-2)", lineHeight: 1.6, margin: 0 }}>
-            ⚠️ <strong>Qeyd:</strong> ADD WALLET funksiyası yalnız giriş etmiş istifadəçilər
-            üçün aktivdir. Giriş etmədən bu düyməyə basan kimi login modal açılır.
-            Plan limitinizə çatdıqda isə Upgrade modal göstərilir.
+          <p
+            style={{
+              fontSize: 13,
+              color: "var(--text-2)",
+              lineHeight: 1.6,
+              margin: 0,
+            }}
+          >
+            ⚠️ <strong>Qeyd:</strong> ADD WALLET funksiyası yalnız giriş etmiş
+            istifadəçilər üçün aktivdir. Giriş etmədən bu düyməyə basan kimi
+            login modal açılır. Plan limitinizə çatdıqda isə Upgrade modal
+            göstərilir.
           </p>
         </div>
       </Section>
 
       {/* 7. 🔥 Heat Map */}
       <Section icon="🔥" title="Token Heat Map">
-        <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7, marginBottom: 12 }}>
-          <strong>Heat Map</strong> səhifəsi (yuxarı menüdə "🔥 Heat Map") son 24 saatda
-          ən çox aktivlik göstərən tokenləri vizual olaraq göstərir.
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-2)",
+            lineHeight: 1.7,
+            marginBottom: 12,
+          }}
+        >
+          <strong>Heat Map</strong> səhifəsi (yuxarı menüdə "🔥 Heat Map") son
+          24 saatda ən çox aktivlik göstərən tokenləri vizual olaraq göstərir.
         </p>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {[
-            ["Sıra", "Token həcminə görə sıralanır — ən yuxarıdakı ən aktivdir"],
+            [
+              "Sıra",
+              "Token həcminə görə sıralanır — ən yuxarıdakı ən aktivdir",
+            ],
             ["Rəng intensivliyi", "Daha tünd rəng = daha yüksək dövriyyə"],
             ["Cüzdan sayı", "Həmin tokeni neçə balina alıb/satıb"],
           ].map(([k, v]) => (
             <div key={k} style={{ display: "flex", gap: 8, fontSize: 13 }}>
-              <span style={{ fontWeight: 700, color: "var(--accent)", minWidth: 120 }}>{k}</span>
+              <span
+                style={{
+                  fontWeight: 700,
+                  color: "var(--accent)",
+                  minWidth: 120,
+                }}
+              >
+                {k}
+              </span>
               <span style={{ color: "var(--text-2)" }}>{v}</span>
             </div>
           ))}
@@ -377,7 +495,14 @@ export default function GuidePage() {
 
       {/* 8. Planlar */}
       <Section icon="💎" title="Planlar">
-        <p style={{ fontSize: 14, color: "var(--text-2)", lineHeight: 1.7, marginBottom: 14 }}>
+        <p
+          style={{
+            fontSize: 14,
+            color: "var(--text-2)",
+            lineHeight: 1.7,
+            marginBottom: 14,
+          }}
+        >
           WhalePath üç planda mövcuddur:
         </p>
         {[
@@ -385,13 +510,21 @@ export default function GuidePage() {
             name: "Free",
             price: "$0",
             color: "var(--text-2)",
-            features: ["5 wallet izlənə bilər", "Canlı lent", "Balina detayları"],
+            features: [
+              "5 wallet izlənə bilər",
+              "Canlı lent",
+              "Balina detayları",
+            ],
           },
           {
             name: "Pro",
             price: "$9/ay",
             color: "var(--accent)",
-            features: ["25 wallet izlənə bilər", "Bütün Free xüsusiyyətlər", "Priority data"],
+            features: [
+              "25 wallet izlənə bilər",
+              "Bütün Free xüsusiyyətlər",
+              "Priority data",
+            ],
           },
           {
             name: "Enterprise",
@@ -432,7 +565,14 @@ export default function GuidePage() {
               >
                 {p.price}
               </span>
-              <div style={{ marginTop: 6, display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <div
+                style={{
+                  marginTop: 6,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 6,
+                }}
+              >
                 {p.features.map((f) => (
                   <span
                     key={f}
@@ -453,7 +593,10 @@ export default function GuidePage() {
         ))}
         <p style={{ fontSize: 13, color: "var(--text-3)", marginTop: 8 }}>
           Plan dəyişikliyi üçün{" "}
-          <Link href="/plans" style={{ color: "var(--accent)", textDecoration: "none" }}>
+          <Link
+            href="/plans"
+            style={{ color: "var(--accent)", textDecoration: "none" }}
+          >
             /plans
           </Link>{" "}
           səhifəsinə keçin.
@@ -492,10 +635,24 @@ export default function GuidePage() {
               marginBottom: 14,
             }}
           >
-            <p style={{ fontWeight: 700, fontSize: 14, color: "var(--text-1)", marginBottom: 4 }}>
+            <p
+              style={{
+                fontWeight: 700,
+                fontSize: 14,
+                color: "var(--text-1)",
+                marginBottom: 4,
+              }}
+            >
               {q}
             </p>
-            <p style={{ fontSize: 13, color: "var(--text-3)", lineHeight: 1.6, margin: 0 }}>
+            <p
+              style={{
+                fontSize: 13,
+                color: "var(--text-3)",
+                lineHeight: 1.6,
+                margin: 0,
+              }}
+            >
               {a}
             </p>
           </div>

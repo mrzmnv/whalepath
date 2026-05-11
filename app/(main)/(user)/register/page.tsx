@@ -11,7 +11,9 @@ export default function RegisterPage() {
   useEffect(() => {
     fetch("/api/user/plan")
       .then((r) => r.json())
-      .then((d) => { if (d?.authenticated) window.location.href = "/"; })
+      .then((d) => {
+        if (d?.authenticated) window.location.href = "/";
+      })
       .catch(() => {});
   }, []);
 

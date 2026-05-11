@@ -14,7 +14,9 @@ export async function registerUser(formData: FormData) {
     return { error: "Username must be 3–20 characters." };
   }
   if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-    return { error: "Username can only contain letters, numbers and underscores." };
+    return {
+      error: "Username can only contain letters, numbers and underscores.",
+    };
   }
   if (!password || password.length < 8) {
     return { error: "Password must be at least 8 characters." };

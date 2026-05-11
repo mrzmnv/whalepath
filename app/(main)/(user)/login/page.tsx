@@ -2,17 +2,20 @@
 
 import { loginUser } from "@/app/actions/userAuth";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from 'next/link';
 import { LogIn } from "lucide-react";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const res = await loginUser(formData);
     if (res?.error) setError(res.error);
+    else if (res?.success) router.push("/");
   };
 
   return (
@@ -35,11 +38,11 @@ export default function LoginPage() {
         </div>
 
         <button type="submit" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 8, width: '100%', padding: '12px 16px', backgroundColor: 'var(--accent)', color: 'black', border: 'none', borderRadius: 4, fontWeight: 600, cursor: 'pointer' }}>
-          <LogIn size={18} /> Daxil ol
+          <LogIn size={18} /> Sign In
         </button>
       </form>
       <p style={{ marginTop: 24, textAlign: 'center', fontSize: 14, color: 'var(--text-2)' }}>
-        Don't have an account? <Link href="/register" style={{ color: 'var(--accent)' }}>Qeydiyyat</Link>
+        Don't have an account? <Link href="/register" style={{ color: 'var(--accent)' }}>Register</Link>
       </p>
     </div>
   );

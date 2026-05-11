@@ -51,6 +51,7 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
         }}
       >
         <div
+          className="header-inner"
           style={{
             maxWidth: 1400,
             margin: "0 auto",

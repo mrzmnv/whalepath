@@ -159,7 +159,7 @@ body {
 }
 
 /* Mobile Breakpoint */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .dashboard-grid > div { height: 500px; padding: 16px !important; }
   .stats-bar-grid { grid-template-columns: 1fr; gap: 12px; }
   .tx-card-row1 { flex-wrap: wrap; }
@@ -170,9 +170,10 @@ body {
   /* Header responsive */
   .hide-on-mobile { display: none !important; }
   .show-on-mobile { display: flex !important; }
+  .header-inner { display: flex !important; justify-content: space-between !important; }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 769px) {
   .show-on-mobile { display: none !important; }
 }
 

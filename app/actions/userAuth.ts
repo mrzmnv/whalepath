@@ -23,7 +23,7 @@ export async function registerUser(formData: FormData) {
   });
 
   await createSession(user);
-  redirect("/");
+  return { success: true };
 }
 
 export async function loginUser(formData: FormData) {
@@ -39,7 +39,7 @@ export async function loginUser(formData: FormData) {
   if (!isValid) return { error: "Incorrect username or password." };
 
   await createSession(user);
-  redirect("/");
+  return { success: true };
 }
 
 async function createSession(user: any) {

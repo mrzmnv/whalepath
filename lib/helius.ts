@@ -1,8 +1,8 @@
 import { Transaction } from "./types";
 
 const HELIUS_BASE = "https://api-mainnet.helius-rpc.com/v0";
-const THRESHOLD_USD = 50_000;
-const ALERT_THRESHOLD_USD = 500_000;
+const THRESHOLD_USD = 5_000;
+const ALERT_THRESHOLD_USD = 100_000;
 
 interface HeliusTokenTransfer {
   mint: string;

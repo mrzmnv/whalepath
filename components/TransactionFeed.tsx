@@ -17,7 +17,8 @@ interface TransactionFeedProps {
   ) => void;
 }
 
-const POLL_INTERVAL = 60_000;
+const POLL_INTERVAL = 5 * 60_000; // 5 minutes — preserve Helius quota
+const WALLETS_PER_POLL = 10;    // rotate through whales instead of all at once
 
 const RANGE_OPTIONS = [
   { label: "$50 – $5K", min: 50, max: 5_000 },
@@ -47,8 +48,10 @@ export default function TransactionFeed({
     (tx) => tx.usdValue >= range.min && tx.usdValue < range.max,
   );
 
+  const pollOffsetRef = useRef(0);
+
   const fetchTransactions = useCallback(async () => {
-    const wallets = [
+    const allWallets = [
       ...preloadedWhales.map((w) => ({
         address: w.address,
         label: w.label,
@@ -60,10 +63,15 @@ export default function TransactionFeed({
         source: "watchlist" as const,
       })),
     ];
-    if (wallets.length === 0) {
+    if (allWallets.length === 0) {
       setLoading(false);
       return;
     }
+
+    // Rotate through wallets to stay within API quota
+    const offset = pollOffsetRef.current % allWallets.length;
+    const wallets = allWallets.slice(offset, offset + WALLETS_PER_POLL);
+    pollOffsetRef.current = (offset + WALLETS_PER_POLL) % allWallets.length;
 
     try {
       const res = await fetch("/api/transactions", {

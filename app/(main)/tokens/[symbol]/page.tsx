@@ -57,7 +57,7 @@ export default async function TokenDetailPage({ params }: Props) {
   for (const tx of transactions) {
     if (!whaleMap[tx.walletAddress]) {
       whaleMap[tx.walletAddress] = {
-        label: tx.walletLabel,
+        label: tx.walletLabel ?? truncate(tx.walletAddress),
         buys: 0,
         sells: 0,
         buyVol: 0,

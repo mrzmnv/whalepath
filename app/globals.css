@@ -188,3 +188,24 @@ body {
   color: var(--amber) !important;
   border-color: rgba(245,158,11,0.3) !important;
 }
+
+.token-row {
+  transition: background 0.15s;
+}
+.token-row:hover {
+  background: var(--surface-2) !important;
+}
+
+.whale-card-row {
+  transition: border-color 0.2s;
+}
+.whale-card-row:hover {
+  border-color: var(--accent) !important;
+}
+
+.whale-delete-btn {
+  transition: background-color 0.2s;
+}
+.whale-delete-btn:hover {
+  background-color: var(--red-bg) !important;
+}

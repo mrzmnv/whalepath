@@ -87,7 +87,6 @@ function getExtraTag(label: string | null | undefined) {
 export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
   const [open, setOpen] = useState(false);
   const [explanation, setExplanation] = useState<string | null>(tx.explanation ?? null);
-  const [explanationSource, setExplanationSource] = useState<"anthropic" | "local" | "unknown">("unknown");
   const [loading, setLoading] = useState(false);
   const [blinkCopied, setBlinkCopied] = useState(false);
 
@@ -128,12 +127,10 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
         }),
       });
       if (!res.ok) throw new Error();
-      const data = await res.json() as { explanation: string; source?: "anthropic" | "local" };
+      const data = await res.json() as { explanation: string };
       setExplanation(data.explanation);
-      setExplanationSource(data.source ?? "unknown");
     } catch {
       setExplanation("Analiz hazır deyil. Bir az sonra yenidən yoxla.");
-      setExplanationSource("unknown");
     } finally {
       setLoading(false);
     }
@@ -294,7 +291,7 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
                   <span style={{ color: "var(--accent)", display: "flex" }}><IconSparkle /></span>
                   <span className="mono" style={{ fontSize: 10, fontWeight: 700, color: "var(--text-2)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                    {explanationSource === "anthropic" ? "AI Analysis" : "Quick Analysis"}
+                    Signal Analysis
                   </span>
                 </div>
                 <p style={{ fontSize: 14, color: "var(--text-1)", lineHeight: 1.6, margin: 0, whiteSpace: "pre-line" }}>

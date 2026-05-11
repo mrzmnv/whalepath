@@ -98,7 +98,6 @@ const fallbackMockData = [
         await res.json();
       const data = payload.transactions ?? [];
       const isDemoResponse = payload.demo ?? false;
-      console.log('transactions API returned:', payload.transactions?.length, 'demo:', isDemoResponse);
       if (isMounted.current) setIsDemo(isDemoResponse);
 
       const seen = getSeenTxs();

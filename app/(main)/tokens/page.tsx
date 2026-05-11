@@ -162,6 +162,7 @@ export default async function TokensPage() {
           return (
             <div
               key={row.tokenSymbol}
+              className="token-row"
               style={{
                 display: "grid",
                 gridTemplateColumns: "40px 120px 1fr 120px 100px 100px 80px",
@@ -169,14 +170,7 @@ export default async function TokensPage() {
                 padding: "14px 20px",
                 borderBottom: "1px solid var(--border)",
                 alignItems: "center",
-                transition: "background 0.15s",
               }}
-              onMouseEnter={(e) =>
-                (e.currentTarget.style.background = "var(--surface-2)")
-              }
-              onMouseLeave={(e) =>
-                (e.currentTarget.style.background = "transparent")
-              }
             >
               {/* Rank */}
               <span

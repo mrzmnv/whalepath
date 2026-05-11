@@ -86,7 +86,7 @@ export default async function ProfilePage() {
             const stats = txStats[w.address] || { volume: 0, count: 0 };
             return (
             <Link href={ `/wallet/${w.address}` } key={w.id} style={{ textDecoration: 'none' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 20, background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)', transition: 'border-color 0.2s', cursor: 'pointer' }} onMouseEnter={(e) => e.currentTarget.style.borderColor = "var(--accent)"} onMouseLeave={(e) => e.currentTarget.style.borderColor = "var(--border)"}>
+              <div className="whale-card-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 20, background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)', cursor: 'pointer' }}>
                 <div>
                   <div style={{ fontWeight: 700, color: 'var(--text-1)', fontSize: 16, marginBottom: 4 }}>{w.label}</div>
                   <div style={{ fontSize: 12, color: 'var(--text-3)' }} className="mono">{w.address}</div>
@@ -106,8 +106,8 @@ export default async function ProfilePage() {
                     </span>
                   </div>
 
-                  <form action={async (e) => { 'use server'; await removeWatchlistItem(w.id); }} onClick={(e) => e.stopPropagation()}>
-                    <button type="submit" style={{ background: 'var(--surface-3)', padding: 8, borderRadius: 6, border: '1px solid var(--border-strong)', color: 'var(--red)', cursor: 'pointer', display: 'flex', alignItems: 'center', transition: 'background-color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--red-bg)"} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "var(--surface-3)"}>
+                  <form action={async () => { 'use server'; await removeWatchlistItem(w.id); }}>
+                    <button type="submit" className="whale-delete-btn" style={{ background: 'var(--surface-3)', padding: 8, borderRadius: 6, border: '1px solid var(--border-strong)', color: 'var(--red)', cursor: 'pointer', display: 'flex', alignItems: 'center' }}>
                       <Trash2 size={16} />
                     </button>
                   </form>

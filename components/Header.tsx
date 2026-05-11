@@ -1,5 +1,6 @@
 import Link from "next/link";
 import AuthNav from "@/app/components/AuthNav";
+import LiveTxCounter from "@/components/LiveTxCounter";
 
 export default function Header() {
   return (
@@ -42,18 +43,9 @@ export default function Header() {
           </Link>
         </div>
 
-        {/* Center: Live Signal */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, padding: "6px 20px", backgroundColor: "rgba(0, 255, 128, 0.03)", borderRadius: 99, border: "1px solid rgba(0, 255, 128, 0.15)", backdropFilter: "blur(4px)" }}>
-          <div style={{ position: 'relative', width: 10, height: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            {/* Core dot */}
-            <div style={{ width: 6, height: 6, backgroundColor: "var(--green)", borderRadius: "50%", zIndex: 2, boxShadow: "0 0 10px var(--green)" }} />
-            {/* Ripples */}
-            <div className="sonar-wave" style={{ position: 'absolute', width: '100%', height: '100%', borderRadius: "50%", zIndex: 1 }} />
-            <div className="sonar-wave" style={{ position: 'absolute', width: '100%', height: '100%', borderRadius: "50%", zIndex: 1, animationDelay: '0.75s' }} />
-          </div>
-          <span className="mono hide-on-mobile text-glow" style={{ fontSize: 11, color: "var(--green)", fontWeight: 800, letterSpacing: "0.15em", transform: "translateY(1px)" }}>
-            WHALE SONAR
-          </span>
+        {/* Center: Live TX Counter */}
+        <div className="hide-on-mobile">
+          <LiveTxCounter />
         </div>
 
         {/* Right: Auth */}

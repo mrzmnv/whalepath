@@ -157,16 +157,12 @@ Qaydalar:
           ? message.content[0].text.trim()
           : fallback;
 
-      return NextResponse.json({ explanation, source: "anthropic" });
-    } catch (error) {
-      console.error(
-        "Anthropic generation failed, using local fallback:",
-        error,
-      );
-      return NextResponse.json({ explanation: fallback, source: "local" });
+      return NextResponse.json({ explanation });
+    } catch {
+      return NextResponse.json({ explanation: fallback });
     }
   } catch (error) {
-    console.error("Explain API error:", error);
+    console.error("Explain API error:", error instanceof Error ? error.message : error);
     return NextResponse.json(
       { explanation: "Analiz qurula bilmədi.", source: "error" },
       { status: 500 },

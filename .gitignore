@@ -49,3 +49,4 @@ AGENTS.md
 CLAUDE.md
 .claude/
 *.patch
+.env.example

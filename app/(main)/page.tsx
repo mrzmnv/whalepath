@@ -16,12 +16,12 @@ import AddWalletModal from "@/components/AddWalletModal";
 export default function Dashboard() {
   // User ID will be fetched client side later if needed
   const [whales, setWhales] = useState<WhaleWallet[]>([]);
-  
+
   // Fetch dynamic whales from DB on mount
   useEffect(() => {
-    fetch('/api/whales')
-      .then(res => res.ok ? res.json() : null)
-      .then(data => {
+    fetch("/api/whales")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
         if (data && Array.isArray(data) && data.length > 0) {
           setWhales(data);
           setStats((s) => ({ ...s, totalWhales: data.length }));
@@ -46,16 +46,16 @@ export default function Dashboard() {
   }, []);
 
   const reloadWatchlist = useCallback(() => {
-    fetch('/api/watchlist')
-      .then(res => res.ok ? res.json() : null)
-      .then(data => {
+    fetch("/api/watchlist")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
         if (data?.authenticated && data?.items) {
           const formatted = data.items.map((item: any) => ({
             id: item.id,
             address: item.address,
             label: item.label,
             type: item.type,
-            addedAt: new Date(item.createdAt).getTime()
+            addedAt: new Date(item.createdAt).getTime(),
           }));
           setWatchlist(formatted);
         } else {
@@ -67,31 +67,44 @@ export default function Dashboard() {
       });
   }, []);
 
-  const handleToggleFavorite = useCallback(async (address: string, label: string) => {
-    const isLocal = !isAuthenticated;
-    if (isLocal) {
-      // Local storage fallback
-      const current = getWatchlist();
-      const existing = current.find(w => w.address === address && w.type === 'favorite');
-      if (existing) {
-        setWatchlist(removeFromWatchlist(address));
-      } else {
-        setWatchlist(addToWatchlist({ address, label, type: 'favorite', addedAt: Date.now(), id: Math.random().toString() }));
+  const handleToggleFavorite = useCallback(
+    async (address: string, label: string) => {
+      const isLocal = !isAuthenticated;
+      if (isLocal) {
+        // Local storage fallback
+        const current = getWatchlist();
+        const existing = current.find(
+          (w) => w.address === address && w.type === "favorite",
+        );
+        if (existing) {
+          setWatchlist(removeFromWatchlist(address));
+        } else {
+          setWatchlist(
+            addToWatchlist({
+              address,
+              label,
+              type: "favorite",
+              addedAt: Date.now(),
+              id: Math.random().toString(),
+            }),
+          );
+        }
+        return;
       }
-      return;
-    }
 
-    try {
-      const res = await fetch('/api/watchlist/toggle', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ address, label })
-      });
-      if (res.ok) reloadWatchlist();
-    } catch (e) {
-      console.error(e);
-    }
-  }, [reloadWatchlist]);
+      try {
+        const res = await fetch("/api/watchlist/toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ address, label }),
+        });
+        if (res.ok) reloadWatchlist();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [reloadWatchlist],
+  );
 
   const handleAddWallet = useCallback((entry: WatchlistEntry) => {
     setWatchlist(addToWatchlist(entry));
@@ -102,14 +115,25 @@ export default function Dashboard() {
   }, []);
 
   const handleStatsUpdate = useCallback(
-    (txCount: number, largestMove: number, largestToken: string, largestAddress: string, largestLabel: string) => {
+    (
+      txCount: number,
+      largestMove: number,
+      largestToken: string,
+      largestAddress: string,
+      largestLabel: string,
+    ) => {
       setStats((s) => ({
         ...s,
         transactions24h: s.transactions24h + txCount,
         largestMoveToday: Math.max(s.largestMoveToday, largestMove),
-        largestMoveToken: largestMove > s.largestMoveToday ? largestToken : s.largestMoveToken,
-        largestMoveAddress: largestMove > s.largestMoveToday ? largestAddress : s.largestMoveAddress,
-        largestMoveLabel: largestMove > s.largestMoveToday ? largestLabel : s.largestMoveLabel,
+        largestMoveToken:
+          largestMove > s.largestMoveToday ? largestToken : s.largestMoveToken,
+        largestMoveAddress:
+          largestMove > s.largestMoveToday
+            ? largestAddress
+            : s.largestMoveAddress,
+        largestMoveLabel:
+          largestMove > s.largestMoveToday ? largestLabel : s.largestMoveLabel,
       }));
       setLastActivity((prev) => ({ ...prev, _lastPoll: Date.now() }));
     },
@@ -123,8 +147,6 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
-      
-
       <main
         style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 24px 48px" }}
       >
@@ -193,7 +215,7 @@ export default function Dashboard() {
           color: "var(--text-3)",
           fontSize: 10,
           letterSpacing: "0.05em",
-          textTransform: "uppercase"
+          textTransform: "uppercase",
         }}
       >
         WhalePath · Solana Frontier Hackathon 2026 · Built by Hajikhalaf Zamanov

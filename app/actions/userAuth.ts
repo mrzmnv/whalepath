@@ -11,7 +11,9 @@ export async function registerUser(formData: FormData) {
   const password = formData.get("password") as string;
 
   if (!username || !password || password.length < 6) {
-    return { error: "Please enter a username and a password of at least 6 characters." };
+    return {
+      error: "Please enter a username and a password of at least 6 characters.",
+    };
   }
 
   const existing = await prisma.user.findUnique({ where: { username } });
@@ -19,7 +21,7 @@ export async function registerUser(formData: FormData) {
 
   const hashedPassword = await bcrypt.hash(password, 10);
   const user = await prisma.user.create({
-    data: { username, password: hashedPassword, role: "user" }
+    data: { username, password: hashedPassword, role: "user" },
   });
 
   await createSession(user);
@@ -44,7 +46,11 @@ export async function loginUser(formData: FormData) {
 
 async function createSession(user: any) {
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ userId: user.id, username: user.username, role: user.role });
+  const session = await encrypt({
+    userId: user.id,
+    username: user.username,
+    role: user.role,
+  });
   const cookieStore = await cookies();
   cookieStore.set("session", session, {
     expires,

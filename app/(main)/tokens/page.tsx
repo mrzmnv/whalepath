@@ -46,7 +46,7 @@ export default async function TokensPage() {
         distinct: ["walletAddress"],
       });
       return { tokenSymbol: row.tokenSymbol, uniqueWhales: unique.length };
-    })
+    }),
   );
   const uniqueMap: Record<string, number> = {};
   for (const u of uniqueWalletRows) {
@@ -55,29 +55,52 @@ export default async function TokensPage() {
 
   const maxVolume = buyAggs[0]?._sum.usdValue || 1;
 
-  const totalBuyVolume = buyAggs.reduce((s, r) => s + (r._sum.usdValue || 0), 0);
+  const totalBuyVolume = buyAggs.reduce(
+    (s, r) => s + (r._sum.usdValue || 0),
+    0,
+  );
   const totalBuyTxs = buyAggs.reduce((s, r) => s + r._count.id, 0);
 
   return (
     <main style={{ maxWidth: 900, margin: "0 auto", padding: "32px 24px" }}>
       {/* Header */}
       <div style={{ marginBottom: 32 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 12 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 16,
+            marginBottom: 12,
+          }}
+        >
           <Link
             href="/"
-            style={{ color: "var(--text-3)", textDecoration: "none", fontSize: 12, fontWeight: 600 }}
+            style={{
+              color: "var(--text-3)",
+              textDecoration: "none",
+              fontSize: 12,
+              fontWeight: 600,
+            }}
           >
             ← Back
           </Link>
         </div>
         <h1
           className="mono"
-          style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-0.03em", margin: 0, marginBottom: 8, color: "var(--text-1)" }}
+          style={{
+            fontSize: 24,
+            fontWeight: 800,
+            letterSpacing: "-0.03em",
+            margin: 0,
+            marginBottom: 8,
+            color: "var(--text-1)",
+          }}
         >
           TOKEN HEAT MAP
         </h1>
         <p style={{ color: "var(--text-3)", fontSize: 14, margin: 0 }}>
-          Tokens being accumulated by tracked whales — ranked by total buy volume
+          Tokens being accumulated by tracked whales — ranked by total buy
+          volume
         </p>
       </div>
 
@@ -106,13 +129,24 @@ export default async function TokensPage() {
           >
             <div
               className="mono"
-              style={{ fontSize: 10, color: "var(--text-3)", fontWeight: 600, letterSpacing: "0.08em", marginBottom: 8 }}
+              style={{
+                fontSize: 10,
+                color: "var(--text-3)",
+                fontWeight: 600,
+                letterSpacing: "0.08em",
+                marginBottom: 8,
+              }}
             >
               {stat.label}
             </div>
             <div
               className="mono"
-              style={{ fontSize: 22, fontWeight: 800, color: "var(--text-1)", letterSpacing: "-0.03em" }}
+              style={{
+                fontSize: 22,
+                fontWeight: 800,
+                color: "var(--text-1)",
+                letterSpacing: "-0.03em",
+              }}
             >
               {stat.value}
             </div>
@@ -139,11 +173,24 @@ export default async function TokensPage() {
             borderBottom: "2px solid var(--border-strong)",
           }}
         >
-          {["#", "TOKEN", "BUY PRESSURE", "BUY VOL", "SELL VOL", "NET FLOW", "WHALES"].map((h) => (
+          {[
+            "#",
+            "TOKEN",
+            "BUY PRESSURE",
+            "BUY VOL",
+            "SELL VOL",
+            "NET FLOW",
+            "WHALES",
+          ].map((h) => (
             <span
               key={h}
               className="mono"
-              style={{ fontSize: 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.08em" }}
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                color: "var(--text-3)",
+                letterSpacing: "0.08em",
+              }}
             >
               {h}
             </span>
@@ -175,7 +222,11 @@ export default async function TokensPage() {
               {/* Rank */}
               <span
                 className="mono"
-                style={{ fontSize: 11, color: "var(--text-3)", fontWeight: 600 }}
+                style={{
+                  fontSize: 11,
+                  color: "var(--text-3)",
+                  fontWeight: 600,
+                }}
               >
                 {i + 1}
               </span>
@@ -195,7 +246,12 @@ export default async function TokensPage() {
                 </span>
                 <span
                   className="mono"
-                  style={{ fontSize: 10, color: "var(--text-3)", display: "block", marginTop: 2 }}
+                  style={{
+                    fontSize: 10,
+                    color: "var(--text-3)",
+                    display: "block",
+                    marginTop: 2,
+                  }}
                 >
                   {buyCnt} buys
                 </span>
@@ -219,8 +275,8 @@ export default async function TokensPage() {
                         barWidth > 70
                           ? "var(--amber)"
                           : barWidth > 40
-                          ? "var(--green)"
-                          : "var(--accent)",
+                            ? "var(--green)"
+                            : "var(--accent)",
                       borderRadius: 3,
                       transition: "width 0.5s ease",
                     }}
@@ -285,7 +341,8 @@ export default async function TokensPage() {
           fontStyle: "italic",
         }}
       >
-        Data sourced from tracked whale wallets via Helius RPC. Updates every 2 minutes.
+        Data sourced from tracked whale wallets via Helius RPC. Updates every 2
+        minutes.
       </p>
     </main>
   );

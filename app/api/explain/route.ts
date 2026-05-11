@@ -161,7 +161,10 @@ Transaction data:
       return NextResponse.json({ explanation: fallback });
     }
   } catch (error) {
-    console.error("Explain API error:", error instanceof Error ? error.message : error);
+    console.error(
+      "Explain API error:",
+      error instanceof Error ? error.message : error,
+    );
     return NextResponse.json(
       { explanation: "Analysis unavailable. Please try again later." },
       { status: 500 },

@@ -16,8 +16,7 @@ const CORS_HEADERS = {
     "Content-Type, Authorization, Content-Encoding, Accept-Encoding",
 };
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
 const RPC_URL =
   process.env.HELIUS_RPC_URL ||
   `https://mainnet.helius-rpc.com/?api-key=${process.env.HELIUS_API_KEY}`;
@@ -44,7 +43,7 @@ export async function OPTIONS() {
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: Promise<{ address: string }> }
+  { params }: { params: Promise<{ address: string }> },
 ) {
   const { address } = await params;
 
@@ -68,8 +67,8 @@ export async function GET(
     v >= 1_000_000
       ? `$${(v / 1_000_000).toFixed(1)}M`
       : v >= 1_000
-      ? `$${(v / 1_000).toFixed(0)}K`
-      : `$${v.toFixed(0)}`;
+        ? `$${(v / 1_000).toFixed(0)}K`
+        : `$${v.toFixed(0)}`;
 
   const actionLabel =
     txType === "buy"
@@ -123,7 +122,7 @@ export async function GET(
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: Promise<{ address: string }> }
+  { params }: { params: Promise<{ address: string }> },
 ) {
   try {
     const { address } = await params;
@@ -137,7 +136,7 @@ export async function POST(
     if (!userAccount) {
       return NextResponse.json(
         { message: "Missing account in request body" },
-        { status: 400, headers: CORS_HEADERS }
+        { status: 400, headers: CORS_HEADERS },
       );
     }
 
@@ -147,7 +146,7 @@ export async function POST(
     } catch {
       return NextResponse.json(
         { message: "Invalid wallet address" },
-        { status: 400, headers: CORS_HEADERS }
+        { status: 400, headers: CORS_HEADERS },
       );
     }
 
@@ -164,7 +163,9 @@ export async function POST(
     let transaction: Transaction;
     try {
       const quoteUrl = `https://quote-api.jup.ag/v6/quote?inputMint=${inputMint}&outputMint=${outputMint}&amount=${inputAmount}&slippageBps=100`;
-      const quoteRes = await fetch(quoteUrl, { signal: AbortSignal.timeout(5000) });
+      const quoteRes = await fetch(quoteUrl, {
+        signal: AbortSignal.timeout(5000),
+      });
 
       if (quoteRes.ok) {
         const quoteData = await quoteRes.json();
@@ -193,7 +194,7 @@ export async function POST(
               transaction: swapData.swapTransaction,
               message: `Mirroring whale trade — buying ${tokenSymbol} with $${amountUSD} USDC via Jupiter`,
             },
-            { headers: CORS_HEADERS }
+            { headers: CORS_HEADERS },
           );
         }
       }
@@ -205,14 +206,14 @@ export async function POST(
     const { blockhash } = await connection.getLatestBlockhash("confirmed");
     const lamports = Math.max(
       Math.round((amountUSD / 1000) * LAMPORTS_PER_SOL * 0.001),
-      5000
+      5000,
     );
 
     const memoInstruction = new TransactionInstruction({
       keys: [],
       programId: new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr"),
       data: Buffer.from(
-        `whalepath:mirror:${address.slice(0, 8)}:${tokenSymbol}:${amountUSD}usd`
+        `whalepath:mirror:${address.slice(0, 8)}:${tokenSymbol}:${amountUSD}usd`,
       ),
     });
 
@@ -231,13 +232,13 @@ export async function POST(
         transaction: serialized.toString("base64"),
         message: `WhalePath: Intent to mirror ${tokenSymbol} trade recorded on-chain`,
       },
-      { headers: CORS_HEADERS }
+      { headers: CORS_HEADERS },
     );
   } catch (err) {
     console.error("[actions/whale] POST error:", err);
     return NextResponse.json(
       { message: "Failed to build transaction" },
-      { status: 500, headers: CORS_HEADERS }
+      { status: 500, headers: CORS_HEADERS },
     );
   }
 }

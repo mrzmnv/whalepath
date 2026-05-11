@@ -42,7 +42,13 @@ export default function LiveTxCounter() {
         backdropFilter: "blur(4px)",
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "flex-start",
+        }}
+      >
         <span
           className="mono"
           style={{

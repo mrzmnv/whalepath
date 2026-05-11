@@ -15,15 +15,15 @@ export async function POST(req: NextRequest) {
     if (!apiKey) {
       // No API key — return whatever is already in DB
       const dbTxs = await prisma.transaction.findMany({
-        orderBy: { timestamp: 'desc' },
-        take: 100
+        orderBy: { timestamp: "desc" },
+        take: 100,
       });
-      const parsed: Transaction[] = dbTxs.map(t => ({
+      const parsed: Transaction[] = dbTxs.map((t) => ({
         ...t,
         type: t.type as any,
         source: t.source as any,
         walletLabel: t.walletLabel || "",
-        timestamp: Number(t.timestamp)
+        timestamp: Number(t.timestamp),
       }));
       return NextResponse.json({ transactions: parsed, demo: false });
     }
@@ -40,7 +40,9 @@ export async function POST(req: NextRequest) {
     for (let i = 0; i < wallets.length; i += BATCH) {
       const batch = wallets.slice(i, i + BATCH);
       const batchResults = await Promise.allSettled(
-        batch.map((w) => fetchWalletTransactions(w.address, w.label, w.source, apiKey)),
+        batch.map((w) =>
+          fetchWalletTransactions(w.address, w.label, w.source, apiKey),
+        ),
       );
       batchResults.forEach((r) => {
         if (r.status === "fulfilled") allTxs.push(...r.value);
@@ -48,7 +50,9 @@ export async function POST(req: NextRequest) {
     }
 
     // Sort by timestamp descending
-    const uniqueTxs = Array.from(new Map(allTxs.map(tx => [tx.signature, tx])).values());
+    const uniqueTxs = Array.from(
+      new Map(allTxs.map((tx) => [tx.signature, tx])).values(),
+    );
     uniqueTxs.sort((a, b) => b.timestamp - a.timestamp);
 
     // Save new ones to DB
@@ -69,24 +73,25 @@ export async function POST(req: NextRequest) {
             usdValue: tx.usdValue,
             isAlert: tx.isAlert,
             source: tx.source,
-          }
+          },
         });
       } catch (e) {
         console.error("TX upsert failed:", (e as Error).message);
-      }    }
+      }
+    }
 
     // Fetch latest 100 from DB
     const dbTxs = await prisma.transaction.findMany({
-      orderBy: { timestamp: 'desc' },
-      take: 100
+      orderBy: { timestamp: "desc" },
+      take: 100,
     });
 
-    const parsedTxs: Transaction[] = dbTxs.map(t => ({
+    const parsedTxs: Transaction[] = dbTxs.map((t) => ({
       ...t,
       type: t.type as any,
       source: t.source as any,
       walletLabel: t.walletLabel || "",
-      timestamp: Number(t.timestamp)
+      timestamp: Number(t.timestamp),
     }));
 
     if (parsedTxs.length === 0) {
@@ -97,8 +102,17 @@ export async function POST(req: NextRequest) {
   } catch (error) {
     console.error("Transactions API CRITICAL ERROR:", error);
     try {
-      const dbTxs = await prisma.transaction.findMany({ orderBy: { timestamp: 'desc' }, take: 100 });
-      const parsed: Transaction[] = dbTxs.map(t => ({ ...t, type: t.type as any, source: t.source as any, walletLabel: t.walletLabel || "", timestamp: Number(t.timestamp) }));
+      const dbTxs = await prisma.transaction.findMany({
+        orderBy: { timestamp: "desc" },
+        take: 100,
+      });
+      const parsed: Transaction[] = dbTxs.map((t) => ({
+        ...t,
+        type: t.type as any,
+        source: t.source as any,
+        walletLabel: t.walletLabel || "",
+        timestamp: Number(t.timestamp),
+      }));
       return NextResponse.json({ transactions: parsed, demo: false });
     } catch {
       return NextResponse.json({ transactions: [], demo: false });

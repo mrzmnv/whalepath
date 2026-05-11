@@ -19,8 +19,12 @@ export async function login(formData: FormData) {
   if (!isValid) return { error: "Incorrect username or password." };
 
   const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-  const session = await encrypt({ userId: user.id, username: user.username, role: user.role });
-  
+  const session = await encrypt({
+    userId: user.id,
+    username: user.username,
+    role: user.role,
+  });
+
   const cookieStore = await cookies();
   cookieStore.set("session", session, {
     expires,

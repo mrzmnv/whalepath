@@ -1,8 +1,8 @@
-import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { decrypt } from '@/lib/session';
-import prisma from '@/lib/db';
-import { revalidatePath } from 'next/cache';
+import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { decrypt } from "@/lib/session";
+import prisma from "@/lib/db";
+import { revalidatePath } from "next/cache";
 
 export async function POST(req: Request) {
   try {
@@ -15,16 +15,18 @@ export async function POST(req: Request) {
     }
 
     const cookieStore = await cookies();
-    const sessionCookie = cookieStore.get('session')?.value;
-    if (!sessionCookie) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    const sessionCookie = cookieStore.get("session")?.value;
+    if (!sessionCookie)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const session = await decrypt(sessionCookie);
-    if (!session?.userId) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    if (!session?.userId)
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const userId = session.userId as string;
 
     const existing = await prisma.watchlist.findFirst({
-      where: { userId, address, type: "favorite" }
+      where: { userId, address, type: "favorite" },
     });
 
     if (existing) {
@@ -35,17 +37,20 @@ export async function POST(req: Request) {
           userId,
           address,
           label: label || "Unknown",
-          type: "favorite"
-        }
+          type: "favorite",
+        },
       });
     }
 
     revalidatePath("/profile");
     revalidatePath("/");
-    
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Toggle favorite error:", error);
-    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 },
+    );
   }
 }

@@ -13,7 +13,7 @@ interface TransactionFeedProps {
     largestMove: number,
     largestToken: string,
     largestAddress: string,
-    largestLabel: string
+    largestLabel: string,
   ) => void;
 }
 
@@ -79,11 +79,17 @@ export default function TransactionFeed({
       if (transactions.length === 0 && data.length > 0) {
         setTransactions(data);
         if (onStatsUpdate) {
-            const biggest = data.reduce(
-              (m, t) => (t.usdValue > m.usdValue ? t : m),
-              data[0],
-            );
-            onStatsUpdate(data.length, biggest.usdValue, biggest.tokenSymbol, biggest.walletAddress, biggest.walletLabel);
+          const biggest = data.reduce(
+            (m, t) => (t.usdValue > m.usdValue ? t : m),
+            data[0],
+          );
+          onStatsUpdate(
+            data.length,
+            biggest.usdValue,
+            biggest.tokenSymbol,
+            biggest.walletAddress,
+            biggest.walletLabel,
+          );
         }
       } else if (fresh.length > 0) {
         const sigs = new Set(fresh.map((t) => t.signature));
@@ -97,11 +103,17 @@ export default function TransactionFeed({
             (m, t) => (t.usdValue > m.usdValue ? t : m),
             fresh[0],
           );
-          onStatsUpdate(fresh.length, biggest.usdValue, biggest.tokenSymbol, biggest.walletAddress, biggest.walletLabel);
+          onStatsUpdate(
+            fresh.length,
+            biggest.usdValue,
+            biggest.tokenSymbol,
+            biggest.walletAddress,
+            biggest.walletLabel,
+          );
         }
       }
     } catch (err) {
-      console.error('fetchTransactions error:', err);
+      console.error("fetchTransactions error:", err);
     } finally {
       if (isMounted.current) {
         setLoading(false);
@@ -138,13 +150,18 @@ export default function TransactionFeed({
           marginBottom: 16,
           flexShrink: 0,
           flexWrap: "wrap",
-          gap: "12px"
+          gap: "12px",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
             className="mono"
-            style={{ fontWeight: 700, fontSize: 13, color: "var(--text-1)", letterSpacing: "0.05em" }}
+            style={{
+              fontWeight: 700,
+              fontSize: 13,
+              color: "var(--text-1)",
+              letterSpacing: "0.05em",
+            }}
           >
             LIVE FEED
           </span>
@@ -166,8 +183,15 @@ export default function TransactionFeed({
           )}
         </div>
         {lastUpdated && (
-          <span className="mono" style={{ fontSize: 10, color: "var(--text-3)", letterSpacing: "0.05em" }}>
-            SYNC {" "}
+          <span
+            className="mono"
+            style={{
+              fontSize: 10,
+              color: "var(--text-3)",
+              letterSpacing: "0.05em",
+            }}
+          >
+            SYNC{" "}
             {lastUpdated.toLocaleTimeString([], {
               hour: "2-digit",
               minute: "2-digit",
@@ -204,18 +228,9 @@ export default function TransactionFeed({
                 gap: 12,
               }}
             >
-              <div
-                className="skeleton"
-                style={{ height: 14, width: "30%" }}
-              />
-              <div
-                className="skeleton"
-                style={{ height: 20, width: "70%" }}
-              />
-              <div
-                className="skeleton"
-                style={{ height: 12, width: "40%" }}
-              />
+              <div className="skeleton" style={{ height: 14, width: "30%" }} />
+              <div className="skeleton" style={{ height: 20, width: "70%" }} />
+              <div className="skeleton" style={{ height: 12, width: "40%" }} />
             </div>
           ))
         ) : transactions.length === 0 ? (
@@ -230,10 +245,23 @@ export default function TransactionFeed({
               paddingTop: 60,
             }}
           >
-            <div style={{ width: 16, height: 16, border: "2px solid var(--border-strong)", borderRadius: 4, marginBottom: 8 }} />
+            <div
+              style={{
+                width: 16,
+                height: 16,
+                border: "2px solid var(--border-strong)",
+                borderRadius: 4,
+                marginBottom: 8,
+              }}
+            />
             <p
               className="mono"
-              style={{ fontSize: 12, fontWeight: 600, color: "var(--text-2)", letterSpacing: "0.05em" }}
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: "var(--text-2)",
+                letterSpacing: "0.05em",
+              }}
             >
               SCANNING MEMPOOL
             </p>

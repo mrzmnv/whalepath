@@ -6,11 +6,17 @@ export async function POST(req: NextRequest) {
     const { address } = await req.json();
 
     if (!address || typeof address !== "string") {
-      return NextResponse.json({ error: "Missing wallet address" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing wallet address" },
+        { status: 400 },
+      );
     }
 
     if (!/^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(address)) {
-      return NextResponse.json({ error: "Invalid Solana address" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid Solana address" },
+        { status: 400 },
+      );
     }
 
     const rows = await prisma.transaction.findMany({

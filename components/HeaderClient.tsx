@@ -18,7 +18,11 @@ const navLinks = [
   { href: "/profile", label: "Profile" },
 ];
 
-export default function HeaderClient({ userId, username, role }: HeaderClientProps) {
+export default function HeaderClient({
+  userId,
+  username,
+  role,
+}: HeaderClientProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
@@ -34,7 +38,9 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   return (
@@ -64,9 +70,31 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
         >
           {/* Left: Logo */}
           <div style={{ display: "flex", alignItems: "center" }}>
-            <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{ width: 16, height: 16, backgroundColor: "var(--accent)", borderRadius: 4 }} />
-              <span style={{ fontSize: 18, fontWeight: 800, letterSpacing: "-0.04em", color: "var(--text-1)" }}>
+            <Link
+              href="/"
+              style={{
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <div
+                style={{
+                  width: 16,
+                  height: 16,
+                  backgroundColor: "var(--accent)",
+                  borderRadius: 4,
+                }}
+              />
+              <span
+                style={{
+                  fontSize: 18,
+                  fontWeight: 800,
+                  letterSpacing: "-0.04em",
+                  color: "var(--text-1)",
+                }}
+              >
                 WhalePath
               </span>
             </Link>
@@ -78,7 +106,14 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
           </div>
 
           {/* Right: Nav + Auth (desktop) + Burger (mobile) */}
-          <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 12 }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+              gap: 12,
+            }}
+          >
             {/* Desktop nav */}
             <Link
               href="/tokens"
@@ -99,27 +134,78 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
             </Link>
 
             {/* Desktop auth */}
-            <div className="hide-on-mobile" style={{ display: "flex", gap: 12, alignItems: "center" }}>
+            <div
+              className="hide-on-mobile"
+              style={{ display: "flex", gap: 12, alignItems: "center" }}
+            >
               {userId ? (
                 <>
                   {role === "admin" && (
-                    <Link href="/admin" style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--accent)", fontWeight: 600, textDecoration: "none" }}>
+                    <Link
+                      href="/admin"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6,
+                        color: "var(--accent)",
+                        fontWeight: 600,
+                        textDecoration: "none",
+                      }}
+                    >
                       <Shield size={16} />
                       Admin
                     </Link>
                   )}
-                  <Link href="/profile" style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 16px", background: "var(--surface-2)", borderRadius: 4, color: "var(--text-1)", textDecoration: "none", border: "1px solid var(--border)", fontWeight: 600 }}>
+                  <Link
+                    href="/profile"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      padding: "6px 16px",
+                      background: "var(--surface-2)",
+                      borderRadius: 4,
+                      color: "var(--text-1)",
+                      textDecoration: "none",
+                      border: "1px solid var(--border)",
+                      fontWeight: 600,
+                    }}
+                  >
                     <User size={16} />
                     {username}
                   </Link>
                 </>
               ) : (
                 <>
-                  <Link href="/login" style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 16px", color: "var(--text-1)", textDecoration: "none", fontWeight: 600 }}>
+                  <Link
+                    href="/login"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      padding: "6px 16px",
+                      color: "var(--text-1)",
+                      textDecoration: "none",
+                      fontWeight: 600,
+                    }}
+                  >
                     <LogIn size={16} />
                     Login
                   </Link>
-                  <Link href="/register" style={{ display: "flex", alignItems: "center", gap: 6, padding: "6px 16px", background: "var(--accent)", color: "black", borderRadius: 4, textDecoration: "none", fontWeight: 600 }}>
+                  <Link
+                    href="/register"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 6,
+                      padding: "6px 16px",
+                      background: "var(--accent)",
+                      color: "black",
+                      borderRadius: 4,
+                      textDecoration: "none",
+                      fontWeight: 600,
+                    }}
+                  >
                     <UserPlus size={16} />
                     Register
                   </Link>
@@ -165,7 +251,14 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
           }}
         >
           {/* Nav links */}
-          <nav style={{ display: "flex", flexDirection: "column", gap: 4, marginBottom: 32 }}>
+          <nav
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 4,
+              marginBottom: 32,
+            }}
+          >
             {navLinks.map((link) => (
               <Link
                 key={link.href}
@@ -173,7 +266,8 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
                 style={{
                   fontSize: 22,
                   fontWeight: 700,
-                  color: pathname === link.href ? "var(--accent)" : "var(--text-1)",
+                  color:
+                    pathname === link.href ? "var(--accent)" : "var(--text-1)",
                   textDecoration: "none",
                   padding: "14px 0",
                   borderBottom: "1px solid var(--border)",
@@ -189,7 +283,9 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
                 style={{
                   fontSize: 22,
                   fontWeight: 700,
-                  color: pathname?.startsWith("/admin") ? "var(--accent)" : "var(--text-1)",
+                  color: pathname?.startsWith("/admin")
+                    ? "var(--accent)"
+                    : "var(--text-1)",
                   textDecoration: "none",
                   padding: "14px 0",
                   borderBottom: "1px solid var(--border)",
@@ -206,7 +302,14 @@ export default function HeaderClient({ userId, username, role }: HeaderClientPro
           </div>
 
           {/* Auth buttons */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: "auto" }}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: 12,
+              marginTop: "auto",
+            }}
+          >
             {userId ? (
               <>
                 <Link

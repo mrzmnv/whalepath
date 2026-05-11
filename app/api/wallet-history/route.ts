@@ -2,6 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
 import { fetchWalletTransactionHistory } from "@/lib/helius";
 
+// In-memory cache: address → last fetch timestamp
+const fetchCache = new Map<string, number>();
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
 export async function POST(req: NextRequest) {
   try {
     const { address } = await req.json();
@@ -21,13 +25,15 @@ export async function POST(req: NextRequest) {
     }
 
     const apiKey = process.env.HELIUS_API_KEY;
+    const lastFetch = fetchCache.get(address) ?? 0;
+    const cacheHit = Date.now() - lastFetch < CACHE_TTL_MS;
 
-    // Try Helius first if API key exists
-    if (apiKey) {
+    // Only call Helius if cache is stale
+    if (apiKey && !cacheHit) {
       try {
         const whale = await prisma.whale.findUnique({ where: { address } });
         const label = whale?.label ?? address.slice(0, 8);
-        const hTxs = await fetchWalletTransactionHistory(address, label, apiKey, 50);
+        const hTxs = await fetchWalletTransactionHistory(address, label, apiKey, 20);
 
         // Upsert new txs into DB
         for (const tx of hTxs) {
@@ -53,6 +59,7 @@ export async function POST(req: NextRequest) {
             // ignore duplicate key errors
           }
         }
+        fetchCache.set(address, Date.now());
       } catch (e) {
         console.error("[wallet-history] Helius fetch failed:", e);
       }

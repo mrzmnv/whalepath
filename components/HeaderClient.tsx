@@ -15,6 +15,7 @@ interface HeaderClientProps {
 const navLinks = [
   { href: "/", label: "Dashboard" },
   { href: "/tokens", label: "🔥 Heat Map" },
+  { href: "/compare", label: "⚖️ Compare" },
   { href: "/guide", label: "Guide" },
 ];
 

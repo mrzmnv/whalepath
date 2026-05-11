@@ -83,10 +83,20 @@ export default function WhaleTable({
     label: string,
     category?: string,
     isCustom?: boolean,
+    score?: number,
   ) => {
     const recent = isRecent(address);
     const cat = category ? catColors[category] : null;
     const isHovered = hoveredAddress === address;
+
+    const scoreColor =
+      score === undefined
+        ? "var(--text-3)"
+        : score >= 70
+        ? "var(--amber)"
+        : score >= 40
+        ? "var(--green)"
+        : "var(--text-3)";
 
     return (
       <div
@@ -147,6 +157,7 @@ export default function WhaleTable({
 
         {/* Badge cell */}
         <div style={{ display: "table-cell", padding: "12px 8px", verticalAlign: "middle", borderBottom: "1px solid var(--border)" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
           {isCustom ? (
              <span
              className="mono"
@@ -180,6 +191,24 @@ export default function WhaleTable({
               {category}
             </span>
           ) : null}
+          {!isCustom && score !== undefined && (
+            <span
+              className="mono"
+              title="Whale Score: based on volume, activity, and alert transactions"
+              style={{
+                padding: "2px 6px",
+                borderRadius: 4,
+                fontSize: 10,
+                fontWeight: 700,
+                backgroundColor: "transparent",
+                color: scoreColor,
+                border: `1px solid ${scoreColor}`,
+              }}
+            >
+              ★ {score}
+            </span>
+          )}
+          </div>
         </div>
 
         {/* Last seen cell */}
@@ -302,7 +331,7 @@ export default function WhaleTable({
           </div>
           
           {tab === "whales" ? (
-            whales.map((w) => renderRow(w.address, w.label, w.category, false))
+            whales.map((w) => renderRow(w.address, w.label, w.category, false, w.score))
           ) : watchlist.length === 0 ? (
             <div style={{ display: "table-row" }}>
               <div style={{ display: "table-cell",  padding: "40px", textAlign: "center" }}>

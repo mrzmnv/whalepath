@@ -39,7 +39,16 @@ export default function TransactionFeed({
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newSigs, setNewSigs] = useState<Set<string>>(new Set());
-  const [range, setRange] = useState<RangeOption>(RANGE_OPTIONS[4]); // All
+  const [range, setRange] = useState<RangeOption>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("wp_range_filter");
+      if (saved) {
+        const found = RANGE_OPTIONS.find((r) => r.label === saved);
+        if (found) return found;
+      }
+    }
+    return RANGE_OPTIONS[4]; // All
+  });
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMounted = useRef(true);
@@ -211,7 +220,10 @@ export default function TransactionFeed({
           {RANGE_OPTIONS.map((opt) => (
             <button
               key={opt.label}
-              onClick={() => setRange(opt)}
+              onClick={() => {
+                setRange(opt);
+                localStorage.setItem("wp_range_filter", opt.label);
+              }}
               style={{
                 padding: "4px 10px",
                 borderRadius: 6,

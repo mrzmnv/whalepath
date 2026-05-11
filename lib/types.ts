@@ -3,6 +3,7 @@ export interface WhaleWallet {
   label: string;
   category: string;
   tags: string[];
+  score?: number;
 }
 
 export interface Transaction {

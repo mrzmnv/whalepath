@@ -207,8 +207,12 @@ export default async function TokensPage() {
           const whales = uniqueMap[row.tokenSymbol] || 0;
 
           return (
-            <div
+            <Link
               key={row.tokenSymbol}
+              href={`/tokens/${encodeURIComponent(row.tokenSymbol)}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+            <div
               className="token-row"
               style={{
                 display: "grid",
@@ -217,6 +221,7 @@ export default async function TokensPage() {
                 padding: "14px 20px",
                 borderBottom: "1px solid var(--border)",
                 alignItems: "center",
+                cursor: "pointer",
               }}
             >
               {/* Rank */}
@@ -328,6 +333,7 @@ export default async function TokensPage() {
                 🐋 {whales}
               </span>
             </div>
+            </Link>
           );
         })}
       </div>

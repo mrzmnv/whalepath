@@ -57,7 +57,24 @@ export default function Header() {
         </div>
 
         {/* Right: Auth */}
-        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 12 }}>
+          <Link
+            href="/tokens"
+            className="mono hide-on-mobile heatmap-nav-link"
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: "var(--text-3)",
+              textDecoration: "none",
+              letterSpacing: "0.06em",
+              padding: "4px 8px",
+              borderRadius: 4,
+              border: "1px solid transparent",
+              transition: "all 0.15s",
+            }}
+          >
+            🔥 HEAT MAP
+          </Link>
           <AuthNav />
         </div>
       </div>

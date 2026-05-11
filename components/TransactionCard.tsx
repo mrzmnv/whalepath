@@ -89,6 +89,17 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
   const [explanation, setExplanation] = useState<string | null>(tx.explanation ?? null);
   const [explanationSource, setExplanationSource] = useState<"anthropic" | "local" | "unknown">("unknown");
   const [loading, setLoading] = useState(false);
+  const [blinkCopied, setBlinkCopied] = useState(false);
+
+  const handleShareBlink = useCallback(() => {
+    const base = process.env.NEXT_PUBLIC_BASE_URL || window.location.origin;
+    const actionUrl = `solana-action:${base}/api/actions/whale/${tx.walletAddress}`;
+    const blinkUrl = `https://dial.to/?action=${encodeURIComponent(actionUrl)}`;
+    navigator.clipboard.writeText(blinkUrl).then(() => {
+      setBlinkCopied(true);
+      setTimeout(() => setBlinkCopied(false), 2000);
+    });
+  }, [tx.walletAddress]);
 
   const cfg = typeConfig[tx.type] ?? typeConfig.unknown;
   const TypeIcon = cfg.Icon;
@@ -222,6 +233,23 @@ export default function TransactionCard({ tx, isNew }: TransactionCardProps) {
           >
             <IconExternal /> Solscan
           </a>
+
+          {(tx.type === "buy" || tx.type === "sell") && (
+            <button
+              onClick={handleShareBlink}
+              title="Share this whale signal as a Solana Blink — anyone can mirror the trade"
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 4,
+                fontSize: 11, fontWeight: 700, color: blinkCopied ? "var(--green)" : "var(--purple, #9333ea)",
+                padding: "4px 8px", borderRadius: 4,
+                backgroundColor: blinkCopied ? "var(--green-bg)" : "rgba(147,51,234,0.08)",
+                border: `1px solid ${blinkCopied ? "var(--green)" : "rgba(147,51,234,0.3)"}`,
+                cursor: "pointer", transition: "all 0.2s", letterSpacing: "0.05em",
+              }}
+            >
+              ⚡ {blinkCopied ? "COPIED!" : "BLINK"}
+            </button>
+          )}
 
           <div style={{ flex: 1 }} />
 

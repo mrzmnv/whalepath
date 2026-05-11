@@ -187,3 +187,44 @@ export async function resetWhalesToDefaults() {
   revalidatePath("/admin/whales");
   revalidatePath("/");
 }
+
+export async function deleteAllWhales() {
+  await requireAdmin();
+  await prisma.whale.deleteMany({});
+  revalidatePath("/admin/whales");
+  revalidatePath("/");
+}
+
+export async function bulkAddWhalesJson(formData: FormData) {
+  await requireAdmin();
+
+  const raw = formData.get("json") as string;
+  if (!raw?.trim()) throw new Error("Empty JSON input");
+
+  let entries: Array<{ address: string; label: string; category?: string; tags?: string[] }>;
+  try {
+    const parsed = JSON.parse(raw);
+    entries = Array.isArray(parsed) ? parsed : [parsed];
+  } catch {
+    throw new Error("Invalid JSON — must be an array of objects");
+  }
+
+  const valid = entries.filter(
+    (e) => typeof e.address === "string" && typeof e.label === "string" && e.address.length > 0
+  );
+  if (valid.length === 0)
+    throw new Error("No valid entries found. Each object must have 'address' and 'label' fields.");
+
+  await prisma.$transaction(
+    valid.map((e) =>
+      prisma.whale.upsert({
+        where: { address: e.address },
+        update: { label: e.label, category: e.category ?? "", tags: e.tags ?? [] },
+        create: { address: e.address, label: e.label, category: e.category ?? "", tags: e.tags ?? [] },
+      })
+    )
+  );
+
+  revalidatePath("/admin/whales");
+  revalidatePath("/");
+}

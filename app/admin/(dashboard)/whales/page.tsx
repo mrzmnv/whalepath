@@ -3,6 +3,7 @@ import {
   addWhale,
   deleteWhale,
   bulkAddWhales,
+  bulkAddWhalesJson,
 } from "../../actions/whale";
 import Link from "next/link";
 import WhaleActionButtons from "./WhaleActionButtons";
@@ -246,6 +247,73 @@ export default async function AdminWhales() {
               }}
             >
               Import All
+            </button>
+          </div>
+        </form>
+      </div>
+
+      {/* JSON Import */}
+      <div
+        style={{
+          backgroundColor: "var(--surface-2)",
+          padding: 24,
+          borderRadius: "var(--radius)",
+          border: "1px solid var(--border)",
+          marginBottom: 32,
+        }}
+      >
+        <h3
+          style={{
+            fontSize: 16,
+            fontWeight: 600,
+            color: "var(--text-1)",
+            marginBottom: 8,
+          }}
+        >
+          JSON Import
+        </h3>
+        <p style={{ fontSize: 13, color: "var(--text-3)", marginBottom: 16 }}>
+          Paste a JSON array. Each object must have{" "}
+          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>address</code> and{" "}
+          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>label</code>.
+          Optional fields:{" "}
+          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>category</code>,{" "}
+          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>tags</code>.
+          Existing addresses will be updated (upsert).
+        </p>
+        <form action={bulkAddWhalesJson} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+          <textarea
+            name="json"
+            rows={10}
+            required
+            placeholder={`[\n  { "address": "5xG...abc", "label": "Binance Hot Wallet", "category": "CEX", "tags": ["cex", "hot"] },\n  { "address": "7kP...xyz", "label": "Jump Trading", "category": "Whale", "tags": ["mm"] }\n]`}
+            style={{
+              width: "100%",
+              padding: "10px 14px",
+              borderRadius: 8,
+              border: "1px solid var(--border-strong)",
+              fontSize: 13,
+              fontFamily: "monospace",
+              backgroundColor: "var(--bg)",
+              color: "var(--text-1)",
+              resize: "vertical",
+              boxSizing: "border-box",
+            }}
+          />
+          <div>
+            <button
+              type="submit"
+              style={{
+                backgroundColor: "var(--accent)",
+                color: "white",
+                padding: "10px 24px",
+                borderRadius: 8,
+                fontWeight: 600,
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Import JSON
             </button>
           </div>
         </form>

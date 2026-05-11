@@ -28,36 +28,6 @@ export default function TransactionFeed({
   const [loading, setLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
   const [newSigs, setNewSigs] = useState<Set<string>>(new Set());
-  const [isDemo, setIsDemo] = useState(false);
-
-const fallbackMockData = [
-    {
-      signature: "mock_fail_1",
-      timestamp: Date.now() - 2 * 60 * 1000,
-      walletAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
-      walletLabel: "Jump Trading Fallback",
-      type: "buy",
-      tokenSymbol: "SOL",
-      tokenName: "Solana",
-      amount: 15000,
-      usdValue: 2250000,
-      isAlert: true,
-      source: "preloaded"
-    },
-    {
-      signature: "mock_fail_2",
-      timestamp: Date.now() - 8 * 60 * 1000,
-      walletAddress: "GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ",
-      walletLabel: "Wintermute Fallback",
-      type: "sell",
-      tokenSymbol: "JUP",
-      tokenName: "Jupiter",
-      amount: 4500000,
-      usdValue: 810000,
-      isAlert: true,
-      source: "preloaded"
-    }
-  ];
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMounted = useRef(true);
@@ -87,40 +57,25 @@ const fallbackMockData = [
         body: JSON.stringify({ wallets }),
       });
       if (!res.ok || !isMounted.current) {
-        if (!res.ok && transactions.length === 0) {
-            setIsDemo(true);
-            setTransactions(fallbackMockData as Transaction[]);
-        }
         return;
       }
 
       const payload: { transactions: Transaction[]; demo: boolean } =
         await res.json();
       const data = payload.transactions ?? [];
-      const isDemoResponse = payload.demo ?? false;
-      if (isMounted.current) setIsDemo(isDemoResponse);
 
       const seen = getSeenTxs();
-      const fresh = isDemoResponse
-        ? data
-        : data.filter((tx) => !seen.has(tx.signature));
+      const fresh = data.filter((tx) => !seen.has(tx.signature));
 
-      if (isDemoResponse) {
-        setTransactions(data);
-      } else {
-        if (fresh.length > 0) markTxsSeen(fresh.map((t) => t.signature));
-        setTransactions((prev) => {
-          if (prev.length === 0) return data;
-          const merged = [...fresh, ...prev];
-          return Array.from(
-            new Map(merged.map((t) => [t.signature, t])).values(),
-          ).slice(0, 100);
-        });
-      }
+      if (fresh.length > 0) markTxsSeen(fresh.map((t) => t.signature));
+      setTransactions((prev) => {
+        if (prev.length === 0) return data;
+        const merged = [...fresh, ...prev];
+        return Array.from(
+          new Map(merged.map((t) => [t.signature, t])).values(),
+        ).slice(0, 100);
+      });
 
-      // Always trigger stats setup if it's fresh or first load
-      // But only blink the new specific ones in fresh
-      // Bypass the entire state logic if it's the very first render and we have data
       if (transactions.length === 0 && data.length > 0) {
         setTransactions(data);
         if (onStatsUpdate) {
@@ -128,12 +83,9 @@ const fallbackMockData = [
               (m, t) => (t.usdValue > m.usdValue ? t : m),
               data[0],
             );
-            // On first load, we don't just pass the length, because the initial length could be
-            // huge, but passing length is fine for a 24h count mock.
             onStatsUpdate(data.length, biggest.usdValue, biggest.tokenSymbol, biggest.walletAddress, biggest.walletLabel);
         }
       } else if (fresh.length > 0) {
-        // Normal polling when already loaded
         const sigs = new Set(fresh.map((t) => t.signature));
         setNewSigs(sigs);
         setTimeout(() => {
@@ -150,14 +102,6 @@ const fallbackMockData = [
       }
     } catch (err) {
       console.error('fetchTransactions error:', err);
-      // Fallback to mock data if fetch fails entirely
-      if (transactions.length === 0) {
-        setIsDemo(true);
-        setTransactions(fallbackMockData as Transaction[]);
-        if (onStatsUpdate) {
-            onStatsUpdate(fallbackMockData.length, fallbackMockData[0].usdValue, fallbackMockData[0].tokenSymbol, fallbackMockData[0].walletAddress, fallbackMockData[0].walletLabel);
-        }
-      }
     } finally {
       if (isMounted.current) {
         setLoading(false);
@@ -218,22 +162,6 @@ const fallbackMockData = [
               }}
             >
               {transactions.length}
-            </span>
-          )}
-          {isDemo && (
-            <span
-              className="mono"
-              style={{
-                padding: "2px 6px",
-                borderRadius: 4,
-                fontSize: 10,
-                fontWeight: 600,
-                backgroundColor: "var(--amber-bg)",
-                color: "var(--amber)",
-                border: "1px solid var(--amber)",
-              }}
-            >
-              DEMO
             </span>
           )}
         </div>

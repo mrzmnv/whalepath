@@ -166,6 +166,14 @@ body {
   
   /* Reduce padding on mobile */
   .mobile-px { padding-left: 16px !important; padding-right: 16px !important; }
+
+  /* Header responsive */
+  .hide-on-mobile { display: none !important; }
+  .show-on-mobile { display: flex !important; }
+}
+
+@media (min-width: 641px) {
+  .show-on-mobile { display: none !important; }
 }
 
 @keyframes sonarWave {

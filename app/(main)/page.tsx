@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { WhaleWallet, WatchlistEntry, StatsData } from "@/lib/types";
-import whalesData from "../../public/whales.json";
 import {
   getWatchlist,
   addToWatchlist,
@@ -16,7 +15,7 @@ import AddWalletModal from "@/components/AddWalletModal";
 
 export default function Dashboard() {
   // User ID will be fetched client side later if needed
-  const [whales, setWhales] = useState<WhaleWallet[]>(whalesData as WhaleWallet[]);
+  const [whales, setWhales] = useState<WhaleWallet[]>([]);
   
   // Fetch dynamic whales from DB on mount
   useEffect(() => {
@@ -43,8 +42,6 @@ export default function Dashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    setStats((s) => ({ ...s, totalWhales: whalesData.length }));
-    
     reloadWatchlist();
   }, []);
 

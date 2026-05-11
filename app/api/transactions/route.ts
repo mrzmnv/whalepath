@@ -13,10 +13,19 @@ export async function POST(req: NextRequest) {
   try {
     const apiKey = process.env.HELIUS_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({
-        transactions: getMockTransactions(),
-        demo: true,
+      // No API key — return whatever is already in DB
+      const dbTxs = await prisma.transaction.findMany({
+        orderBy: { timestamp: 'desc' },
+        take: 100
       });
+      const parsed: Transaction[] = dbTxs.map(t => ({
+        ...t,
+        type: t.type as any,
+        source: t.source as any,
+        walletLabel: t.walletLabel || "",
+        timestamp: Number(t.timestamp)
+      }));
+      return NextResponse.json({ transactions: parsed, demo: false });
     }
 
     const { wallets } = (await req.json()) as { wallets: WalletInput[] };
@@ -81,127 +90,18 @@ export async function POST(req: NextRequest) {
     }));
 
     if (parsedTxs.length === 0) {
-      return NextResponse.json({ transactions: getMockTransactions(), demo: true });
+      return NextResponse.json({ transactions: [], demo: false });
     }
 
     return NextResponse.json({ transactions: parsedTxs, demo: false });
   } catch (error) {
     console.error("Transactions API CRITICAL ERROR:", error);
-    return NextResponse.json({
-      transactions: getMockTransactions(),
-      demo: true,
-    });
+    try {
+      const dbTxs = await prisma.transaction.findMany({ orderBy: { timestamp: 'desc' }, take: 100 });
+      const parsed: Transaction[] = dbTxs.map(t => ({ ...t, type: t.type as any, source: t.source as any, walletLabel: t.walletLabel || "", timestamp: Number(t.timestamp) }));
+      return NextResponse.json({ transactions: parsed, demo: false });
+    } catch {
+      return NextResponse.json({ transactions: [], demo: false });
+    }
   }
-}
-
-function getMockTransactions(): Transaction[] {
-  const now = Date.now();
-  const mock: Transaction[] = [
-    {
-      signature: "mock_sig_1",
-      timestamp: now - 2 * 60 * 1000,
-      walletAddress: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
-      walletLabel: "Jump Trading",
-      type: "buy",
-      tokenSymbol: "SOL",
-      tokenName: "Solana",
-      amount: 15000,
-      usdValue: 2_250_000,
-      isAlert: true,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_2",
-      timestamp: now - 8 * 60 * 1000,
-      walletAddress: "GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ",
-      walletLabel: "Wintermute Trading",
-      type: "sell",
-      tokenSymbol: "JUP",
-      tokenName: "Jupiter",
-      amount: 4_500_000,
-      usdValue: 810_000,
-      isAlert: true,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_3",
-      timestamp: now - 15 * 60 * 1000,
-      walletAddress: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
-      walletLabel: "Jupiter Aggregator",
-      type: "transfer",
-      tokenSymbol: "USDC",
-      tokenName: "USD Coin",
-      amount: 850_000,
-      usdValue: 850_000,
-      isAlert: true,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_4",
-      timestamp: now - 22 * 60 * 1000,
-      walletAddress: "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
-      walletLabel: "Coinbase Prime",
-      type: "buy",
-      tokenSymbol: "WIF",
-      tokenName: "dogwifhat",
-      amount: 3_200_000,
-      usdValue: 320_000,
-      isAlert: false,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_5",
-      timestamp: now - 35 * 60 * 1000,
-      walletAddress: "3yFwqXBfZY4jBVUafQ1YEXWtSh7RJBGG6FSayt3MZQMR",
-      walletLabel: "Multicoin Capital",
-      type: "buy",
-      tokenSymbol: "RAY",
-      tokenName: "Raydium",
-      amount: 250_000,
-      usdValue: 675_000,
-      isAlert: true,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_6",
-      timestamp: now - 48 * 60 * 1000,
-      walletAddress: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
-      walletLabel: "Binance Hot Wallet",
-      type: "transfer",
-      tokenSymbol: "SOL",
-      tokenName: "Solana",
-      amount: 8_500,
-      usdValue: 1_275_000,
-      isAlert: true,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_7",
-      timestamp: now - 62 * 60 * 1000,
-      walletAddress: "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2",
-      walletLabel: "Alameda Research (Legacy)",
-      type: "sell",
-      tokenSymbol: "BONK",
-      tokenName: "Bonk",
-      amount: 500_000_000,
-      usdValue: 75_000,
-      isAlert: false,
-      source: "preloaded",
-    },
-    {
-      signature: "mock_sig_8",
-      timestamp: now - 90 * 60 * 1000,
-      walletAddress: "4mVfHBiMn5dgr1FaAjSLJXXiJRTkEkRFPkTDFLmDo4aG",
-      walletLabel: "Galaxy Digital",
-      type: "buy",
-      tokenSymbol: "PYTH",
-      tokenName: "Pyth Network",
-      amount: 2_100_000,
-      usdValue: 420_000,
-      isAlert: false,
-      source: "preloaded",
-    },
-  ];
-
-  return mock;
 }

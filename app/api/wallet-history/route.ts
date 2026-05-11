@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/db";
+import { fetchWalletTransactionHistory } from "@/lib/helius";
 
 export async function POST(req: NextRequest) {
   try {
@@ -19,6 +20,45 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    const apiKey = process.env.HELIUS_API_KEY;
+
+    // Try Helius first if API key exists
+    if (apiKey) {
+      try {
+        const whale = await prisma.whale.findUnique({ where: { address } });
+        const label = whale?.label ?? address.slice(0, 8);
+        const hTxs = await fetchWalletTransactionHistory(address, label, apiKey, 50);
+
+        // Upsert new txs into DB
+        for (const tx of hTxs) {
+          try {
+            await prisma.transaction.upsert({
+              where: { signature: tx.signature },
+              update: {},
+              create: {
+                signature: tx.signature,
+                timestamp: BigInt(tx.timestamp),
+                walletAddress: tx.walletAddress,
+                walletLabel: tx.walletLabel,
+                type: tx.type,
+                tokenSymbol: tx.tokenSymbol,
+                tokenName: tx.tokenName,
+                amount: tx.amount,
+                usdValue: tx.usdValue,
+                isAlert: tx.isAlert,
+                source: tx.source,
+              },
+            });
+          } catch {
+            // ignore duplicate key errors
+          }
+        }
+      } catch (e) {
+        console.error("[wallet-history] Helius fetch failed:", e);
+      }
+    }
+
+    // Return from DB (includes freshly upserted data)
     const rows = await prisma.transaction.findMany({
       where: { walletAddress: address },
       orderBy: { timestamp: "desc" },

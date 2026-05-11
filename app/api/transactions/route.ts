@@ -31,7 +31,19 @@ export async function POST(req: NextRequest) {
     const { wallets } = (await req.json()) as { wallets: WalletInput[] };
 
     if (!Array.isArray(wallets) || wallets.length === 0) {
-      return NextResponse.json([]);
+      // Return latest DB transactions even when no wallet list provided
+      const dbTxs = await prisma.transaction.findMany({
+        orderBy: { timestamp: "desc" },
+        take: 100,
+      });
+      const parsed: Transaction[] = dbTxs.map((t) => ({
+        ...t,
+        type: t.type as any,
+        source: t.source as any,
+        walletLabel: t.walletLabel || "",
+        timestamp: Number(t.timestamp),
+      }));
+      return NextResponse.json({ transactions: parsed, demo: false });
     }
 
     // Fetch all wallets in parallel batches of 20 to avoid rate limits

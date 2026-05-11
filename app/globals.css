@@ -298,6 +298,64 @@ body {
   animation: textGlow 2s ease-in-out infinite;
 }
 
+/* ─── Whale Loader ──────────────────────────────────────────── */
+@keyframes whaleFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes whaleFadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes whaleSwim {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-12px); }
+}
+@keyframes whaleTailWag {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(20deg); }
+  75%       { transform: rotate(-20deg); }
+}
+@keyframes whaleSpoutPulse {
+  0%, 100% { opacity: 0.5; transform: scaleY(1); }
+  50%       { opacity: 1;   transform: scaleY(1.35); }
+}
+@keyframes whaleBubble {
+  0%   { transform: translateY(0);     opacity: 0.6; }
+  100% { transform: translateY(-46px); opacity: 0;   }
+}
+@keyframes whalePulseText {
+  0%, 100% { opacity: 0.5; }
+  50%       { opacity: 1;   }
+}
+
+.whale-swim {
+  animation: whaleSwim 1.8s ease-in-out infinite;
+}
+.whale-tail {
+  transform-origin: 30px 55px;
+  animation: whaleTailWag 1.1s ease-in-out infinite;
+}
+.whale-spout {
+  transform-origin: 142px 30px;
+  animation: whaleSpoutPulse 1.4s ease-in-out infinite;
+}
+.whale-spout-2 {
+  transform-origin: 148px 28px;
+  animation: whaleSpoutPulse 1.4s 0.2s ease-in-out infinite;
+}
+.whale-spout-3 {
+  transform-origin: 153px 30px;
+  animation: whaleSpoutPulse 1.4s 0.4s ease-in-out infinite;
+}
+.bubble {
+  animation: whaleBubble 2.2s ease-in infinite;
+}
+.bubble-1 { animation-delay: 0s;    }
+.bubble-2 { animation-delay: 0.75s; }
+.bubble-3 { animation-delay: 1.5s;  }
+
+
 .heatmap-nav-link:hover {
   color: var(--amber) !important;
   border-color: rgba(245, 158, 11, 0.3) !important;

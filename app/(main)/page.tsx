@@ -12,10 +12,12 @@ import StatsBar from "@/components/StatsBar";
 import TransactionFeed from "@/components/TransactionFeed";
 import WhaleTable from "@/components/WhaleTable";
 import AddWalletModal from "@/components/AddWalletModal";
+import WhaleLoader from "@/components/WhaleLoader";
 
 export default function Dashboard() {
   // User ID will be fetched client side later if needed
   const [whales, setWhales] = useState<WhaleWallet[]>([]);
+  const [pageReady, setPageReady] = useState(false);
 
   // Fetch dynamic whales from DB on mount
   useEffect(() => {
@@ -27,7 +29,8 @@ export default function Dashboard() {
           setStats((s) => ({ ...s, totalWhales: data.length }));
         }
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setPageReady(true));
   }, []);
   const [watchlist, setWatchlist] = useState<WatchlistEntry[]>([]);
   const [stats, setStats] = useState<StatsData>({
@@ -162,6 +165,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "var(--bg)" }}>
+      <WhaleLoader visible={!pageReady} />
       <main
         style={{ maxWidth: 1400, margin: "0 auto", padding: "24px 24px 48px" }}
       >

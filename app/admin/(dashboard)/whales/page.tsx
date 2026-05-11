@@ -11,9 +11,27 @@ import Link from "next/link";
 export const revalidate = 0;
 
 export default async function AdminWhales() {
-  const whales = await prisma.whale.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  let whales: Awaited<ReturnType<typeof prisma.whale.findMany>> = [];
+  let fetchError: string | null = null;
+
+  try {
+    whales = await prisma.whale.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+  } catch (e: any) {
+    fetchError = e?.message ?? String(e);
+  }
+
+  if (fetchError) {
+    return (
+      <div style={{ padding: 32 }}>
+        <h1 style={{ color: "var(--red)", marginBottom: 16 }}>⚠ Database Error</h1>
+        <pre style={{ backgroundColor: "var(--surface-2)", padding: 20, borderRadius: 8, color: "var(--red)", fontSize: 13, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+          {fetchError}
+        </pre>
+      </div>
+    );
+  }
 
   return (
     <div>

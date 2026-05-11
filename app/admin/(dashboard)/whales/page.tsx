@@ -3,10 +3,9 @@ import {
   addWhale,
   deleteWhale,
   bulkAddWhales,
-  clearAllTags,
-  resetWhalesToDefaults,
 } from "../../actions/whale";
 import Link from "next/link";
+import WhaleActionButtons from "./WhaleActionButtons";
 
 export const revalidate = 0;
 
@@ -55,56 +54,7 @@ export default async function AdminWhales() {
         >
           Manage Tracked Whales
         </h1>
-        <form action={clearAllTags}>
-          <button
-            type="submit"
-            style={{
-              backgroundColor: "var(--surface-2)",
-              color: "var(--amber)",
-              border: "1px solid rgba(245,158,11,0.3)",
-              padding: "8px 16px",
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: 13,
-              cursor: "pointer",
-            }}
-            onClick={(e) => {
-              if (
-                !confirm(
-                  "Clear ALL tags from ALL whales? This cannot be undone.",
-                )
-              )
-                e.preventDefault();
-            }}
-          >
-            🧹 Clear All Tags
-          </button>
-        </form>
-        <form action={resetWhalesToDefaults}>
-          <button
-            type="submit"
-            style={{
-              backgroundColor: "var(--surface-2)",
-              color: "var(--green)",
-              border: "1px solid rgba(0,255,128,0.3)",
-              padding: "8px 16px",
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: 13,
-              cursor: "pointer",
-            }}
-            onClick={(e) => {
-              if (
-                !confirm(
-                  "Reset known whales to correct labels/categories/tags? Only updates addresses that are in the default list.",
-                )
-              )
-                e.preventDefault();
-            }}
-          >
-            🔄 Reset to Defaults
-          </button>
-        </form>
+        <WhaleActionButtons />
       </div>
 
       <div

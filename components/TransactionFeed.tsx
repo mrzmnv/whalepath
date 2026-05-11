@@ -238,9 +238,6 @@ export default function TransactionFeed({
               second: "2-digit",
             })}
           </span>
-        )}
-      </div>
-        )}
       </div>
 
       {/* Body */}

@@ -40,3 +40,38 @@ export async function deleteWhale(address: string) {
   revalidatePath('/admin/whales');
   revalidatePath('/');
 }
+
+export async function bulkAddWhales(formData: FormData) {
+  await requireAdmin();
+
+  const raw = formData.get('bulk') as string;
+  const category = (formData.get('category') as string) || '';
+  const tagsStr = (formData.get('tags') as string) || '';
+  const tags = tagsStr.split(',').map(s => s.trim()).filter(Boolean);
+
+  const lines = raw.split('\n').map(l => l.trim()).filter(Boolean);
+
+  const entries: { address: string; label: string }[] = [];
+  for (const line of lines) {
+    // Support: "address label" or "address,label" or just "address"
+    const parts = line.includes(',') ? line.split(',') : line.split(/\s+/);
+    const address = parts[0]?.trim();
+    const label = parts.slice(1).join(' ').trim() || address.slice(0, 8) + '...';
+    if (address) entries.push({ address, label });
+  }
+
+  if (entries.length === 0) throw new Error('No valid entries found');
+
+  await prisma.$transaction(
+    entries.map(e =>
+      prisma.whale.upsert({
+        where: { address: e.address },
+        update: { label: e.label, category, tags },
+        create: { address: e.address, label: e.label, category, tags },
+      })
+    )
+  );
+
+  revalidatePath('/admin/whales');
+  revalidatePath('/');
+}

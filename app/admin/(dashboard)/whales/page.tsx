@@ -1,5 +1,5 @@
 import prisma from '@/lib/db';
-import { addWhale, deleteWhale } from '../../actions/whale';
+import { addWhale, deleteWhale, bulkAddWhales } from '../../actions/whale';
 import Link from 'next/link';
 
 export const revalidate = 0;
@@ -28,6 +28,35 @@ export default async function AdminWhales() {
           </select> 
           <input name="tags" placeholder="Tags (e.g. solana, memecoin, holder)" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
           <button type="submit" style={{ backgroundColor: 'var(--accent)', color: 'white', padding: '10px 24px', borderRadius: 8, fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'background 0.2s' }}>Add Whale</button>
+        </form>
+      </div>
+
+      {/* Bulk Import */}
+      <div style={{ backgroundColor: 'var(--surface-2)', padding: 24, borderRadius: 'var(--radius)', border: '1px solid var(--border)', marginBottom: 32 }}>
+        <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-1)', marginBottom: 8 }}>Bulk Import</h3>
+        <p style={{ fontSize: 13, color: 'var(--text-3)', marginBottom: 16 }}>
+          One entry per line. Format: <code style={{ backgroundColor: 'var(--surface-3)', padding: '2px 6px', borderRadius: 4 }}>ADDRESS LABEL</code> or <code style={{ backgroundColor: 'var(--surface-3)', padding: '2px 6px', borderRadius: 4 }}>ADDRESS,LABEL</code> — label is optional.
+        </p>
+        <form action={bulkAddWhales} style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <textarea
+            name="bulk"
+            rows={8}
+            required
+            placeholder={"5xG...abc Binance Hot Wallet\n7kP...xyz,Alameda Research\nDez...mnp"}
+            style={{ width: '100%', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 13, fontFamily: 'monospace', backgroundColor: 'var(--bg)', color: 'var(--text-1)', resize: 'vertical', boxSizing: 'border-box' }}
+          />
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+            <select name="category" style={{ flex: '1 1 150px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14, backgroundColor: 'var(--bg)' }}>
+              <option value="">Select Category</option>
+              <option value="DEX">DEX</option>
+              <option value="CEX">CEX</option>
+              <option value="Whale">Whale</option>
+              <option value="Fund">Fund/VC</option>
+              <option value="Bot">Bot/MEV</option>
+            </select>
+            <input name="tags" placeholder="Tags (e.g. solana, memecoin)" style={{ flex: '2 1 200px', padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border-strong)', fontSize: 14 }} />
+            <button type="submit" style={{ backgroundColor: 'var(--accent)', color: 'white', padding: '10px 24px', borderRadius: 8, fontWeight: 600, border: 'none', cursor: 'pointer' }}>Import All</button>
+          </div>
         </form>
       </div>
 

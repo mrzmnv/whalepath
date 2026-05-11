@@ -62,7 +62,7 @@ export default async function TokenDetailPage({ params }: Props) {
         sells: 0,
         buyVol: 0,
         sellVol: 0,
-        lastTs: tx.timestamp,
+        lastTs: Number(tx.timestamp),
       };
     }
     const entry = whaleMap[tx.walletAddress];
@@ -73,7 +73,7 @@ export default async function TokenDetailPage({ params }: Props) {
       entry.sells++;
       entry.sellVol += tx.usdValue;
     }
-    if (tx.timestamp > entry.lastTs) entry.lastTs = tx.timestamp;
+    if (Number(tx.timestamp) > entry.lastTs) entry.lastTs = Number(tx.timestamp);
   }
 
   const whaleSummary = Object.entries(whaleMap)
@@ -289,7 +289,7 @@ export default async function TokenDetailPage({ params }: Props) {
               {formatUSD(tx.usdValue)}
             </span>
             <span className="mono" style={{ fontSize: 11, color: "var(--text-3)" }}>
-              {timeAgo(tx.timestamp * 1000)}
+              {timeAgo(Number(tx.timestamp) * 1000)}
             </span>
           </div>
         ))}

@@ -136,7 +136,6 @@ export default function WhaleTable({
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
-              maxWidth: "200px"
             }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.color = "var(--accent)")
@@ -156,8 +155,8 @@ export default function WhaleTable({
         </div>
 
         {/* Badge cell */}
-        <div style={{ display: "table-cell", padding: "12px 8px", verticalAlign: "middle", borderBottom: "1px solid var(--border)" }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "flex-start" }}>
+        <div style={{ display: "table-cell", padding: "12px 8px", verticalAlign: "middle", borderBottom: "1px solid var(--border)", whiteSpace: "nowrap" }}>
+          <div style={{ display: "flex", flexDirection: "row", flexWrap: "wrap", gap: 4, alignItems: "center" }}>
           {isCustom ? (
              <span
              className="mono"
@@ -321,13 +320,13 @@ export default function WhaleTable({
           overflowY: "auto",
         }}
       >
-        <div style={{ display: "table", width: "100%", borderCollapse: "collapse" }}>
+        <div style={{ display: "table", width: "100%", borderCollapse: "collapse", tableLayout: "fixed", minWidth: 320 }}>
           {/* Column headers */}
           <div style={{ display: "table-row", borderBottom: "2px solid var(--border-strong)" }}>
-            <div style={{ display: "table-cell", padding: "0 0 8px 12px" }}></div>
+            <div style={{ display: "table-cell", padding: "0 0 8px 12px", width: 20 }}></div>
             <div className="mono" style={{ display: "table-cell", padding: "0 8px 8px", fontSize: 10, color: "var(--text-3)", fontWeight: 600, letterSpacing: "0.05em" }}>WALLET</div>
-            <div className="mono" style={{ display: "table-cell", padding: "0 8px 8px", fontSize: 10, color: "var(--text-3)", fontWeight: 600, letterSpacing: "0.05em" }}>TYPE</div>
-            <div className="mono" style={{ display: "table-cell", padding: "0 12px 8px 8px", fontSize: 10, color: "var(--text-3)", fontWeight: 600, letterSpacing: "0.05em", textAlign: "right" }}>LAST ACTIVE</div>
+            <div className="mono" style={{ display: "table-cell", padding: "0 8px 8px", fontSize: 10, color: "var(--text-3)", fontWeight: 600, letterSpacing: "0.05em", width: 110 }}>TYPE</div>
+            <div className="mono" style={{ display: "table-cell", padding: "0 12px 8px 8px", fontSize: 10, color: "var(--text-3)", fontWeight: 600, letterSpacing: "0.05em", textAlign: "right", width: 80 }}>LAST ACTIVE</div>
           </div>
           
           {tab === "whales" ? (

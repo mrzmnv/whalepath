@@ -19,6 +19,7 @@ export default function AddWalletModal({
 }: AddWalletModalProps) {
   const [address, setAddress] = useState("");
   const [label, setLabel] = useState("");
+  const [walletType, setWalletType] = useState<"personal" | "favorite">("personal");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,6 +28,7 @@ export default function AddWalletModal({
     if (open) {
       setAddress("");
       setLabel("");
+      setWalletType("personal");
       setError("");
       setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 60);
@@ -53,6 +55,7 @@ export default function AddWalletModal({
       address: trimmed,
       label: label.trim() || trimmed.slice(0, 8),
       addedAt: Date.now(),
+      type: walletType,
     });
     setLoading(false);
     onClose();
@@ -246,6 +249,52 @@ export default function AddWalletModal({
               }
               maxLength={50}
             />
+          </div>
+
+          <div>
+            <label
+              className="mono"
+              style={{
+                display: "block",
+                fontSize: 10,
+                fontWeight: 600,
+                color: "var(--text-2)",
+                marginBottom: 8,
+                letterSpacing: "0.05em",
+              }}
+            >
+              WALLET TYPE
+            </label>
+            <div style={{ display: "flex", gap: 8 }}>
+              {([
+                { value: "personal", label: "👤 My Wallet", desc: "Your own wallet" },
+                { value: "favorite", label: "🐋 Whale", desc: "Whale to track" },
+              ] as const).map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setWalletType(opt.value)}
+                  className="mono"
+                  style={{
+                    flex: 1,
+                    padding: "10px 8px",
+                    borderRadius: 4,
+                    border: `1px solid ${walletType === opt.value ? "var(--accent)" : "var(--border-strong)"}`,
+                    backgroundColor: walletType === opt.value ? "rgba(99,102,241,0.12)" : "transparent",
+                    color: walletType === opt.value ? "var(--accent)" : "var(--text-2)",
+                    cursor: "pointer",
+                    fontSize: 11,
+                    fontWeight: 700,
+                    letterSpacing: "0.03em",
+                    textAlign: "center",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  <div>{opt.label}</div>
+                  <div style={{ fontSize: 10, fontWeight: 400, color: "var(--text-3)", marginTop: 2 }}>{opt.desc}</div>
+                </button>
+              ))}
+            </div>
           </div>
 
           <div style={{ display: "flex", gap: 12, paddingTop: 8 }}>

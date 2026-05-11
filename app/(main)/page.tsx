@@ -118,7 +118,7 @@ export default function Dashboard() {
           body: JSON.stringify({
             address: entry.address,
             label: entry.label,
-            type: "personal",
+            type: entry.type || "personal",
           }),
         });
         if (res.ok) {

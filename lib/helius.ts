@@ -1,7 +1,7 @@
 import { Transaction } from "./types";
 
 const HELIUS_BASE = "https://api-mainnet.helius-rpc.com/v0";
-const THRESHOLD_USD = 5_000;
+const THRESHOLD_USD = 50;  // store txs ≥ $50 to match UI filter ranges
 const ALERT_THRESHOLD_USD = 100_000;
 
 interface HeliusTokenTransfer {
@@ -160,10 +160,14 @@ export async function fetchWalletTransactions(
 
   let raw: HeliusTransaction[] = [];
   try {
-    const res = await fetch(url, { next: { revalidate: 60 } });
-    if (!res.ok) return [];
+    const res = await fetch(url, { cache: "no-store" });
+    if (!res.ok) {
+      console.error(`[helius] ${walletAddress} HTTP ${res.status}`);
+      return [];
+    }
     raw = await res.json();
-  } catch {
+  } catch (e) {
+    console.error(`[helius] fetch error for ${walletAddress}:`, e);
     return [];
   }
 

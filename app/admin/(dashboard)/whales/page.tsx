@@ -1,5 +1,5 @@
 import prisma from '@/lib/db';
-import { addWhale, deleteWhale, bulkAddWhales } from '../../actions/whale';
+import { addWhale, deleteWhale, bulkAddWhales, clearAllTags } from '../../actions/whale';
 import Link from 'next/link';
 
 export const revalidate = 0;
@@ -11,7 +11,15 @@ export default async function AdminWhales() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)', marginBottom: 24 }}>Manage Tracked Whales</h1>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: 'var(--text-1)', margin: 0 }}>Manage Tracked Whales</h1>
+        <form action={clearAllTags}>
+          <button type="submit" style={{ backgroundColor: 'var(--surface-2)', color: 'var(--amber)', border: '1px solid rgba(245,158,11,0.3)', padding: '8px 16px', borderRadius: 8, fontWeight: 600, fontSize: 13, cursor: 'pointer' }}
+            onClick={(e) => { if (!confirm('Clear ALL tags from ALL whales? This cannot be undone.')) e.preventDefault(); }}>
+            🧹 Clear All Tags
+          </button>
+        </form>
+      </div>
       
       <div style={{ backgroundColor: 'var(--surface-2)', padding: 24, borderRadius: 'var(--radius)', border: '1px solid var(--border)', marginBottom: 32 }}>
         <h3 style={{ fontSize: 16, fontWeight: 600, color: 'var(--text-1)', marginBottom: 16 }}>Add New Whale</h3>

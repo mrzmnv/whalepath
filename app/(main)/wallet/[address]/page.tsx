@@ -5,7 +5,6 @@ import { Star } from "lucide-react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Transaction, WhaleWallet, WatchlistEntry } from "@/lib/types";
-import whalesData from "../../../../public/whales.json";
 import { truncateAddress, formatUSD, formatAmount, timeAgo } from "@/lib/format";
 import { getWatchlist, addToWatchlist, removeFromWatchlist } from "@/lib/storage";
 import TransactionCard from "@/components/TransactionCard";
@@ -58,18 +57,15 @@ export default function WalletDetailPage() {
 
   useEffect(() => {
     if (!address) return;
-    let whales = whalesData as WhaleWallet[];
     fetch('/api/whales')
       .then(res => res.ok ? res.json() : null)
       .then(data => {
         if (data && Array.isArray(data) && data.length > 0) {
-          const fetchedFound = data.find((w: any) => w.address === address);
-          if (fetchedFound) setWalletInfo(fetchedFound);
+          const found = data.find((w: any) => w.address === address);
+          if (found) setWalletInfo(found);
         }
       })
       .catch(() => {});
-    const found = whales.find((w) => w.address === address);
-    if (found) setWalletInfo(found);
     fetch('/api/watchlist').then(res => res.ok ? res.json() : null).then(data => {
       if(data?.authenticated) {
         setIsAuthenticated(true);

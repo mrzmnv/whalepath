@@ -62,16 +62,33 @@ export async function bulkAddWhales(formData: FormData) {
 
   if (entries.length === 0) throw new Error('No valid entries found');
 
-  await prisma.$transaction(
-    entries.map(e =>
-      prisma.whale.upsert({
-        where: { address: e.address },
-        update: { label: e.label, category, tags },
-        create: { address: e.address, label: e.label, category, tags },
-      })
-    )
-  );
+  revalidatePath('/admin/whales');
+  revalidatePath('/');
+}
 
+export async function updateWhale(formData: FormData) {
+  await requireAdmin();
+
+  const id = formData.get('id') as string;
+  const label = formData.get('label') as string;
+  const category = (formData.get('category') as string) || '';
+  const tagsStr = (formData.get('tags') as string) || '';
+  const tags = tagsStr.split(',').map(s => s.trim()).filter(Boolean);
+
+  if (!id || !label) throw new Error('Missing id or label');
+
+  await prisma.whale.update({
+    where: { id },
+    data: { label, category, tags },
+  });
+
+  revalidatePath('/admin/whales');
+  revalidatePath('/');
+}
+
+export async function clearAllTags() {
+  await requireAdmin();
+  await prisma.whale.updateMany({ data: { tags: [] } });
   revalidatePath('/admin/whales');
   revalidatePath('/');
 }

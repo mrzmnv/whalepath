@@ -190,7 +190,7 @@ body {
 /* Responsive Grid Systems */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: 1fr 442px;
   gap: 20px;
   height: calc(100vh - 240px);
   min-height: 600px;

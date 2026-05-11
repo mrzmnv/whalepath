@@ -43,10 +43,16 @@ export default function Header() {
         </div>
 
         {/* Center: Live Signal */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 8, padding: "6px 14px", backgroundColor: "var(--surface-3)", borderRadius: 99, border: "1px solid var(--border-strong)" }}>
-          <div className="pulse-green" style={{ width: 8, height: 8, backgroundColor: "var(--green)", borderRadius: "50%", boxShadow: "0 0 8px var(--green)" }} />
-          <span className="mono hide-on-mobile" style={{ fontSize: 11, color: "var(--green)", fontWeight: 700, letterSpacing: "0.05em", transform: "translateY(1px)" }}>
-            LIVE SIGNAL
+        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 12, padding: "6px 20px", backgroundColor: "rgba(0, 255, 128, 0.03)", borderRadius: 99, border: "1px solid rgba(0, 255, 128, 0.15)", backdropFilter: "blur(4px)" }}>
+          <div style={{ position: 'relative', width: 10, height: 10, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Core dot */}
+            <div style={{ width: 6, height: 6, backgroundColor: "var(--green)", borderRadius: "50%", zIndex: 2, boxShadow: "0 0 10px var(--green)" }} />
+            {/* Ripples */}
+            <div className="sonar-wave" style={{ position: 'absolute', width: '100%', height: '100%', borderRadius: "50%", zIndex: 1 }} />
+            <div className="sonar-wave" style={{ position: 'absolute', width: '100%', height: '100%', borderRadius: "50%", zIndex: 1, animationDelay: '0.75s' }} />
+          </div>
+          <span className="mono hide-on-mobile text-glow" style={{ fontSize: 11, color: "var(--green)", fontWeight: 800, letterSpacing: "0.15em", transform: "translateY(1px)" }}>
+            WHALE SONAR
           </span>
         </div>
 

@@ -167,3 +167,19 @@ body {
   /* Reduce padding on mobile */
   .mobile-px { padding-left: 16px !important; padding-right: 16px !important; }
 }
+
+@keyframes sonarWave {
+  0% { transform: scale(1); opacity: 1; border: 1px solid var(--green); background: rgba(0, 255, 128, 0.3); }
+  100% { transform: scale(3.5); opacity: 0; border: 1px solid var(--green); background: rgba(0, 255, 128, 0); }
+}
+.sonar-wave {
+  animation: sonarWave 1.5s cubic-bezier(0.1, 0.4, 0.3, 1) infinite;
+}
+@keyframes textGlow {
+  0% { text-shadow: 0 0 4px rgba(0,255,128,0.2); opacity: 0.8; }
+  50% { text-shadow: 0 0 12px rgba(0,255,128,0.8), 0 0 20px rgba(0,255,128,0.4); opacity: 1; }
+  100% { text-shadow: 0 0 4px rgba(0,255,128,0.2); opacity: 0.8; }
+}
+.text-glow {
+  animation: textGlow 2s ease-in-out infinite;
+}

@@ -66,7 +66,8 @@ export async function bulkAddWhales(formData: FormData) {
     .filter(Boolean);
 
   // Solana address: 32-44 base58 chars (no whitespace)
-  const isSolanaAddress = (s: string) => /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(s);
+  const isSolanaAddress = (s: string) =>
+    /^[1-9A-HJ-NP-Za-km-z]{32,44}$/.test(s);
 
   const entries: { address: string; label: string }[] = [];
   for (const line of lines) {
@@ -104,7 +105,10 @@ export async function bulkAddWhales(formData: FormData) {
     if (address) entries.push({ address, label });
   }
 
-  if (entries.length === 0) throw new Error("No valid Solana addresses found. Use format: ADDRESS Label  OR  Label Name ADDRESS");
+  if (entries.length === 0)
+    throw new Error(
+      "No valid Solana addresses found. Use format: ADDRESS Label  OR  Label Name ADDRESS",
+    );
 
   await prisma.$transaction(
     entries.map((e) =>
@@ -112,8 +116,8 @@ export async function bulkAddWhales(formData: FormData) {
         where: { address: e.address },
         update: { label: e.label, category, tags },
         create: { address: e.address, label: e.label, category, tags },
-      })
-    )
+      }),
+    ),
   );
 
   revalidatePath("/admin/whales");
@@ -155,23 +159,108 @@ export async function resetWhalesToDefaults() {
   await requireAdmin();
 
   // Read the default whale list bundled with the app
-  const defaults: Array<{ address: string; label: string; category: string; tags: string[] }> = [
-    { address: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", label: "Jump Trading", category: "market-maker", tags: ["mm", "institutional"] },
-    { address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1", label: "Raydium AMM v4", category: "protocol", tags: ["dex", "amm"] },
-    { address: "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2", label: "Alameda Research (Legacy)", category: "fund", tags: ["defunct", "historical"] },
-    { address: "GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ", label: "Wintermute Trading", category: "market-maker", tags: ["mm", "institutional"] },
-    { address: "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs", label: "Coinbase Prime", category: "exchange", tags: ["cex", "custody"] },
-    { address: "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5", label: "OKX Hot Wallet", category: "exchange", tags: ["cex", "high-volume"] },
-    { address: "3yFwqXBfZY4jBVUafQ1YEXWtSh7RJBGG6FSayt3MZQMR", label: "Multicoin Capital", category: "fund", tags: ["vc", "institutional"] },
-    { address: "8sLbNZoA1cfnvMJLPfp98ZLAnFSYCFApfJKMbiXNLwxj", label: "Solana Foundation", category: "foundation", tags: ["foundation", "staking"] },
-    { address: "2ojv9BAiHUrvsm9gxDe7fJSzbNZSJcxZvf8dqmWGHG8S", label: "Kraken Exchange", category: "exchange", tags: ["cex"] },
-    { address: "HVh6wHNBAsnt3zta29FHrouXFjPHoqCHMHcWBkzZnxHi", label: "DRW Cumberland", category: "market-maker", tags: ["mm", "otc"] },
-    { address: "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8", label: "Raydium AMM", category: "protocol", tags: ["dex", "amm"] },
-    { address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4", label: "Jupiter Aggregator v6", category: "protocol", tags: ["dex", "aggregator"] },
-    { address: "JUP4Fb2cqiRUcaTHdrPC8h2gNsA2ETXiPDD33WcGuJB", label: "Jupiter Aggregator v4", category: "protocol", tags: ["dex", "aggregator"] },
-    { address: "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc", label: "Orca Whirlpool", category: "protocol", tags: ["dex", "clmm"] },
-    { address: "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin", label: "OpenBook DEX v3", category: "protocol", tags: ["dex", "orderbook"] },
-    { address: "PhoeNiXZ8ByJGLkxNfZRnkUfjvmuYqLR89jjFHGqdXY", label: "Phoenix DEX", category: "protocol", tags: ["dex", "orderbook"] },
+  const defaults: Array<{
+    address: string;
+    label: string;
+    category: string;
+    tags: string[];
+  }> = [
+    {
+      address: "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM",
+      label: "Jump Trading",
+      category: "market-maker",
+      tags: ["mm", "institutional"],
+    },
+    {
+      address: "5Q544fKrFoe6tsEbD7S8EmxGTJYAKtTVhAW5Q5pge4j1",
+      label: "Raydium AMM v4",
+      category: "protocol",
+      tags: ["dex", "amm"],
+    },
+    {
+      address: "AC5RDfQFmDS1deWZos921JfqscXdByf8BKHs5ACWjtW2",
+      label: "Alameda Research (Legacy)",
+      category: "fund",
+      tags: ["defunct", "historical"],
+    },
+    {
+      address: "GThUX1Atko4tqhN2NaiTazWSeFWMuiUvfFnyJyUghFMJ",
+      label: "Wintermute Trading",
+      category: "market-maker",
+      tags: ["mm", "institutional"],
+    },
+    {
+      address: "7vfCXTUXx5WJV5JADk17DUJ4ksgau7utNKj4b963voxs",
+      label: "Coinbase Prime",
+      category: "exchange",
+      tags: ["cex", "custody"],
+    },
+    {
+      address: "FWznbcNXWQuHTawe9RxvQ2LdCENssh12dsznf4RiouN5",
+      label: "OKX Hot Wallet",
+      category: "exchange",
+      tags: ["cex", "high-volume"],
+    },
+    {
+      address: "3yFwqXBfZY4jBVUafQ1YEXWtSh7RJBGG6FSayt3MZQMR",
+      label: "Multicoin Capital",
+      category: "fund",
+      tags: ["vc", "institutional"],
+    },
+    {
+      address: "8sLbNZoA1cfnvMJLPfp98ZLAnFSYCFApfJKMbiXNLwxj",
+      label: "Solana Foundation",
+      category: "foundation",
+      tags: ["foundation", "staking"],
+    },
+    {
+      address: "2ojv9BAiHUrvsm9gxDe7fJSzbNZSJcxZvf8dqmWGHG8S",
+      label: "Kraken Exchange",
+      category: "exchange",
+      tags: ["cex"],
+    },
+    {
+      address: "HVh6wHNBAsnt3zta29FHrouXFjPHoqCHMHcWBkzZnxHi",
+      label: "DRW Cumberland",
+      category: "market-maker",
+      tags: ["mm", "otc"],
+    },
+    {
+      address: "675kPX9MHTjS2zt1qfr1NYHuzeLXfQM9H24wFSUt1Mp8",
+      label: "Raydium AMM",
+      category: "protocol",
+      tags: ["dex", "amm"],
+    },
+    {
+      address: "JUP6LkbZbjS1jKKwapdHNy74zcZ3tLUZoi5QNyVTaV4",
+      label: "Jupiter Aggregator v6",
+      category: "protocol",
+      tags: ["dex", "aggregator"],
+    },
+    {
+      address: "JUP4Fb2cqiRUcaTHdrPC8h2gNsA2ETXiPDD33WcGuJB",
+      label: "Jupiter Aggregator v4",
+      category: "protocol",
+      tags: ["dex", "aggregator"],
+    },
+    {
+      address: "whirLbMiicVdio4qvUfM5KAg6Ct8VwpYzGff3uctyCc",
+      label: "Orca Whirlpool",
+      category: "protocol",
+      tags: ["dex", "clmm"],
+    },
+    {
+      address: "9xQeWvG816bUx9EPjHmaT23yvVM2ZWbrrpZb9PusVFin",
+      label: "OpenBook DEX v3",
+      category: "protocol",
+      tags: ["dex", "orderbook"],
+    },
+    {
+      address: "PhoeNiXZ8ByJGLkxNfZRnkUfjvmuYqLR89jjFHGqdXY",
+      label: "Phoenix DEX",
+      category: "protocol",
+      tags: ["dex", "orderbook"],
+    },
   ];
 
   await prisma.$transaction(
@@ -180,8 +269,8 @@ export async function resetWhalesToDefaults() {
         where: { address: w.address },
         update: { label: w.label, category: w.category, tags: w.tags },
         create: w,
-      })
-    )
+      }),
+    ),
   );
 
   revalidatePath("/admin/whales");
@@ -201,7 +290,12 @@ export async function bulkAddWhalesJson(formData: FormData) {
   const raw = formData.get("json") as string;
   if (!raw?.trim()) throw new Error("Empty JSON input");
 
-  let entries: Array<{ address: string; label: string; category?: string; tags?: string[] }>;
+  let entries: Array<{
+    address: string;
+    label: string;
+    category?: string;
+    tags?: string[];
+  }>;
   try {
     const parsed = JSON.parse(raw);
     entries = Array.isArray(parsed) ? parsed : [parsed];
@@ -210,19 +304,33 @@ export async function bulkAddWhalesJson(formData: FormData) {
   }
 
   const valid = entries.filter(
-    (e) => typeof e.address === "string" && typeof e.label === "string" && e.address.length > 0
+    (e) =>
+      typeof e.address === "string" &&
+      typeof e.label === "string" &&
+      e.address.length > 0,
   );
   if (valid.length === 0)
-    throw new Error("No valid entries found. Each object must have 'address' and 'label' fields.");
+    throw new Error(
+      "No valid entries found. Each object must have 'address' and 'label' fields.",
+    );
 
   await prisma.$transaction(
     valid.map((e) =>
       prisma.whale.upsert({
         where: { address: e.address },
-        update: { label: e.label, category: e.category ?? "", tags: e.tags ?? [] },
-        create: { address: e.address, label: e.label, category: e.category ?? "", tags: e.tags ?? [] },
-      })
-    )
+        update: {
+          label: e.label,
+          category: e.category ?? "",
+          tags: e.tags ?? [],
+        },
+        create: {
+          address: e.address,
+          label: e.label,
+          category: e.category ?? "",
+          tags: e.tags ?? [],
+        },
+      }),
+    ),
   );
 
   revalidatePath("/admin/whales");

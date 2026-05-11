@@ -109,24 +109,31 @@ export default function Dashboard() {
     [isAuthenticated, reloadWatchlist],
   );
 
-  const handleAddWallet = useCallback(async (entry: WatchlistEntry) => {
-    try {
-      const res = await fetch("/api/watchlist/toggle", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ address: entry.address, label: entry.label, type: "personal" }),
-      });
-      if (res.ok) {
-        reloadWatchlist();
-      } else if (res.status === 401) {
-        setPlanModal("login");
-      } else if (res.status === 403) {
-        setPlanModal("upgrade");
+  const handleAddWallet = useCallback(
+    async (entry: WatchlistEntry) => {
+      try {
+        const res = await fetch("/api/watchlist/toggle", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            address: entry.address,
+            label: entry.label,
+            type: "personal",
+          }),
+        });
+        if (res.ok) {
+          reloadWatchlist();
+        } else if (res.status === 401) {
+          setPlanModal("login");
+        } else if (res.status === 403) {
+          setPlanModal("upgrade");
+        }
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }, [reloadWatchlist]);
+    },
+    [reloadWatchlist],
+  );
 
   const handleRemoveWatchlist = useCallback((address: string) => {
     setWatchlist(removeFromWatchlist(address));
@@ -217,7 +224,10 @@ export default function Dashboard() {
               whales={whales}
               watchlist={watchlist}
               onAddWallet={() => {
-                if (!isAuthenticated) { setPlanModal("login"); return; }
+                if (!isAuthenticated) {
+                  setPlanModal("login");
+                  return;
+                }
                 setModalOpen(true);
               }}
               onRemoveWatchlist={handleRemoveWatchlist}
@@ -254,9 +264,13 @@ export default function Dashboard() {
       {planModal === "login" && (
         <div
           style={{
-            position: "fixed", inset: 0, zIndex: 9999,
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
             backgroundColor: "rgba(0,0,0,0.6)",
-            display: "flex", alignItems: "center", justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           onClick={() => setPlanModal(null)}
         >
@@ -269,26 +283,49 @@ export default function Dashboard() {
               maxWidth: 360,
               width: "90%",
               boxShadow: "var(--shadow)",
-              display: "flex", flexDirection: "column", gap: 16,
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="mono" style={{ fontSize: 12, color: "var(--text-3)", letterSpacing: "0.08em" }}>
+            <p
+              className="mono"
+              style={{
+                fontSize: 12,
+                color: "var(--text-3)",
+                letterSpacing: "0.08em",
+              }}
+            >
               SIGN IN REQUIRED
             </p>
-            <p style={{ fontSize: 15, fontWeight: 600, color: "var(--text-1)", margin: 0 }}>
+            <p
+              style={{
+                fontSize: 15,
+                fontWeight: 600,
+                color: "var(--text-1)",
+                margin: 0,
+              }}
+            >
               Create a free account to track wallets
             </p>
             <p style={{ fontSize: 13, color: "var(--text-3)", margin: 0 }}>
-              Log in to add wallets to your watchlist and get personalized alerts.
+              Log in to add wallets to your watchlist and get personalized
+              alerts.
             </p>
             <div style={{ display: "flex", gap: 10 }}>
               <a
                 href="/login"
                 style={{
-                  flex: 1, textAlign: "center", padding: "10px 0",
-                  backgroundColor: "var(--accent)", borderRadius: 8,
-                  color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 600,
+                  flex: 1,
+                  textAlign: "center",
+                  padding: "10px 0",
+                  backgroundColor: "var(--accent)",
+                  borderRadius: 8,
+                  color: "#fff",
+                  textDecoration: "none",
+                  fontSize: 13,
+                  fontWeight: 600,
                 }}
               >
                 Log in
@@ -296,9 +333,15 @@ export default function Dashboard() {
               <a
                 href="/register"
                 style={{
-                  flex: 1, textAlign: "center", padding: "10px 0",
-                  border: "1px solid var(--border)", borderRadius: 8,
-                  color: "var(--text-1)", textDecoration: "none", fontSize: 13, fontWeight: 600,
+                  flex: 1,
+                  textAlign: "center",
+                  padding: "10px 0",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  color: "var(--text-1)",
+                  textDecoration: "none",
+                  fontSize: 13,
+                  fontWeight: 600,
                 }}
               >
                 Register
@@ -312,9 +355,13 @@ export default function Dashboard() {
       {planModal === "upgrade" && (
         <div
           style={{
-            position: "fixed", inset: 0, zIndex: 9999,
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
             backgroundColor: "rgba(0,0,0,0.6)",
-            display: "flex", alignItems: "center", justifyContent: "center",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
           onClick={() => setPlanModal(null)}
         >
@@ -327,25 +374,49 @@ export default function Dashboard() {
               maxWidth: 380,
               width: "90%",
               boxShadow: "0 0 0 1px var(--accent), var(--shadow)",
-              display: "flex", flexDirection: "column", gap: 16,
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <p className="mono" style={{ fontSize: 12, color: "var(--accent)", letterSpacing: "0.08em" }}>
+            <p
+              className="mono"
+              style={{
+                fontSize: 12,
+                color: "var(--accent)",
+                letterSpacing: "0.08em",
+              }}
+            >
               PLAN LIMIT REACHED
             </p>
-            <p style={{ fontSize: 15, fontWeight: 600, color: "var(--text-1)", margin: 0 }}>
-              {userPlan === "free" ? "Free plan: 5 wallet limit" : "Pro plan: 25 wallet limit"}
+            <p
+              style={{
+                fontSize: 15,
+                fontWeight: 600,
+                color: "var(--text-1)",
+                margin: 0,
+              }}
+            >
+              {userPlan === "free"
+                ? "Free plan: 5 wallet limit"
+                : "Pro plan: 25 wallet limit"}
             </p>
             <p style={{ fontSize: 13, color: "var(--text-3)", margin: 0 }}>
-              Upgrade to track more wallets and unlock advanced features like Telegram alerts.
+              Upgrade to track more wallets and unlock advanced features like
+              Telegram alerts.
             </p>
             <a
               href="/plans"
               style={{
-                textAlign: "center", padding: "10px 0",
-                backgroundColor: "var(--accent)", borderRadius: 8,
-                color: "#fff", textDecoration: "none", fontSize: 13, fontWeight: 600,
+                textAlign: "center",
+                padding: "10px 0",
+                backgroundColor: "var(--accent)",
+                borderRadius: 8,
+                color: "#fff",
+                textDecoration: "none",
+                fontSize: 13,
+                fontWeight: 600,
               }}
             >
               View plans

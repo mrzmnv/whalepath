@@ -7,13 +7,26 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export async function registerUser(formData: FormData) {
-  const username = formData.get("username") as string;
+  const username = (formData.get("username") as string)?.trim();
   const password = formData.get("password") as string;
 
-  if (!username || !password || password.length < 6) {
-    return {
-      error: "Please enter a username and a password of at least 6 characters.",
-    };
+  if (!username || username.length < 3 || username.length > 20) {
+    return { error: "Username must be 3–20 characters." };
+  }
+  if (!/^[a-zA-Z0-9_]+$/.test(username)) {
+    return { error: "Username can only contain letters, numbers and underscores." };
+  }
+  if (!password || password.length < 8) {
+    return { error: "Password must be at least 8 characters." };
+  }
+  if (!/[A-Z]/.test(password)) {
+    return { error: "Password must contain at least one uppercase letter." };
+  }
+  if (!/[a-z]/.test(password)) {
+    return { error: "Password must contain at least one lowercase letter." };
+  }
+  if (!/[0-9]/.test(password)) {
+    return { error: "Password must contain at least one number." };
   }
 
   const existing = await prisma.user.findUnique({ where: { username } });
@@ -55,6 +68,7 @@ async function createSession(user: any) {
   cookieStore.set("session", session, {
     expires,
     httpOnly: true,
+    path: "/",
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
   });

@@ -1,14 +1,19 @@
 "use client";
 
 import { loginUser } from "@/app/actions/userAuth";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { LogIn } from "lucide-react";
 
 export default function LoginPage() {
   const [error, setError] = useState("");
-  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/user/plan")
+      .then((r) => r.json())
+      .then((d) => { if (d?.authenticated) window.location.href = "/"; })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,8 +21,7 @@ export default function LoginPage() {
     const res = await loginUser(formData);
     if (res?.error) setError(res.error);
     else if (res?.success) {
-      router.refresh();
-      router.push("/");
+      window.location.href = "/";
     }
   };
 

@@ -19,11 +19,17 @@ export async function POST(req: Request) {
     const cookieStore = await cookies();
     const sessionCookie = cookieStore.get("session")?.value;
     if (!sessionCookie)
-      return NextResponse.json({ error: "Unauthorized", requireLogin: true }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized", requireLogin: true },
+        { status: 401 },
+      );
 
     const session = await decrypt(sessionCookie);
     if (!session?.userId)
-      return NextResponse.json({ error: "Unauthorized", requireLogin: true }, { status: 401 });
+      return NextResponse.json(
+        { error: "Unauthorized", requireLogin: true },
+        { status: 401 },
+      );
 
     const userId = session.userId as string;
 
@@ -69,4 +75,3 @@ export async function POST(req: Request) {
     );
   }
 }
-

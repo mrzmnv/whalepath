@@ -10,12 +10,22 @@ export async function GET() {
     const sessionCookie = cookieStore.get("session")?.value;
 
     if (!sessionCookie) {
-      return NextResponse.json({ authenticated: false, plan: "free", limit: 5, count: 0 });
+      return NextResponse.json({
+        authenticated: false,
+        plan: "free",
+        limit: 5,
+        count: 0,
+      });
     }
 
     const session = await decrypt(sessionCookie);
     if (!session?.userId) {
-      return NextResponse.json({ authenticated: false, plan: "free", limit: 5, count: 0 });
+      return NextResponse.json({
+        authenticated: false,
+        plan: "free",
+        limit: 5,
+        count: 0,
+      });
     }
 
     const userId = session.userId as string;
@@ -37,6 +47,11 @@ export async function GET() {
       count,
     });
   } catch {
-    return NextResponse.json({ authenticated: false, plan: "free", limit: 5, count: 0 });
+    return NextResponse.json({
+      authenticated: false,
+      plan: "free",
+      limit: 5,
+      count: 0,
+    });
   }
 }

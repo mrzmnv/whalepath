@@ -11,7 +11,12 @@ interface AddWalletModalProps {
   existingAddresses: string[];
 }
 
-export default function AddWalletModal({ open, onClose, onAdd, existingAddresses }: AddWalletModalProps) {
+export default function AddWalletModal({
+  open,
+  onClose,
+  onAdd,
+  existingAddresses,
+}: AddWalletModalProps) {
   const [address, setAddress] = useState("");
   const [label, setLabel] = useState("");
   const [error, setError] = useState("");
@@ -20,7 +25,10 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
 
   useEffect(() => {
     if (open) {
-      setAddress(""); setLabel(""); setError(""); setLoading(false);
+      setAddress("");
+      setLabel("");
+      setError("");
+      setLoading(false);
       setTimeout(() => inputRef.current?.focus(), 60);
     }
   }, [open]);
@@ -28,11 +36,24 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const trimmed = address.trim();
-    if (!trimmed) { setError("PLEASE ENTER A WALLET ADDRESS"); return; }
-    if (!isValidSolanaAddress(trimmed)) { setError("INVALID SOLANA ADDRESS FORMAT"); return; }
-    if (existingAddresses.includes(trimmed)) { setError("WALLET ALREADY IN WATCHLIST"); return; }
+    if (!trimmed) {
+      setError("PLEASE ENTER A WALLET ADDRESS");
+      return;
+    }
+    if (!isValidSolanaAddress(trimmed)) {
+      setError("INVALID SOLANA ADDRESS FORMAT");
+      return;
+    }
+    if (existingAddresses.includes(trimmed)) {
+      setError("WALLET ALREADY IN WATCHLIST");
+      return;
+    }
     setLoading(true);
-    await onAdd({ address: trimmed, label: label.trim() || trimmed.slice(0, 8), addedAt: Date.now() });
+    await onAdd({
+      address: trimmed,
+      label: label.trim() || trimmed.slice(0, 8),
+      addedAt: Date.now(),
+    });
     setLoading(false);
     onClose();
   };
@@ -53,7 +74,9 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
         backdropFilter: "blur(4px)",
         WebkitBackdropFilter: "blur(4px)",
       }}
-      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+      onClick={(e) => {
+        if (e.target === e.currentTarget) onClose();
+      }}
     >
       <div
         className="fade-up"
@@ -68,9 +91,25 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
         }}
       >
         {/* Header */}
-        <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 24 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            marginBottom: 24,
+          }}
+        >
           <div>
-            <h2 className="mono" style={{ fontSize: 14, fontWeight: 700, color: "var(--text-1)", marginBottom: 4, letterSpacing: "0.05em" }}>
+            <h2
+              className="mono"
+              style={{
+                fontSize: 14,
+                fontWeight: 700,
+                color: "var(--text-1)",
+                marginBottom: 4,
+                letterSpacing: "0.05em",
+              }}
+            >
               ADD WALLET
             </h2>
             <p style={{ fontSize: 13, color: "var(--text-3)" }}>
@@ -98,16 +137,32 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: 16 }}
+        >
           <div>
-            <label className="mono" style={{ display: "block", fontSize: 10, fontWeight: 600, color: "var(--text-2)", marginBottom: 8, letterSpacing: "0.05em" }}>
+            <label
+              className="mono"
+              style={{
+                display: "block",
+                fontSize: 10,
+                fontWeight: 600,
+                color: "var(--text-2)",
+                marginBottom: 8,
+                letterSpacing: "0.05em",
+              }}
+            >
               WALLET ADDRESS
             </label>
             <input
               ref={inputRef}
               type="text"
               value={address}
-              onChange={(e) => { setAddress(e.target.value); setError(""); }}
+              onChange={(e) => {
+                setAddress(e.target.value);
+                setError("");
+              }}
               placeholder="e.g. 9WzDXw..."
               className="mono"
               style={{
@@ -121,19 +176,50 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
                 outline: "none",
                 transition: "border-color 0.15s",
               }}
-              onFocus={(e) => (e.target.style.borderColor = error ? "var(--red)" : "var(--border-focus)")}
-              onBlur={(e) => (e.target.style.borderColor = error ? "var(--red)" : "var(--border-strong)")}
+              onFocus={(e) =>
+                (e.target.style.borderColor = error
+                  ? "var(--red)"
+                  : "var(--border-focus)")
+              }
+              onBlur={(e) =>
+                (e.target.style.borderColor = error
+                  ? "var(--red)"
+                  : "var(--border-strong)")
+              }
               spellCheck={false}
               autoComplete="off"
             />
             {error && (
-              <p className="mono" style={{ fontSize: 10, fontWeight: 600, color: "var(--red)", marginTop: 8 }}>{error}</p>
+              <p
+                className="mono"
+                style={{
+                  fontSize: 10,
+                  fontWeight: 600,
+                  color: "var(--red)",
+                  marginTop: 8,
+                }}
+              >
+                {error}
+              </p>
             )}
           </div>
 
           <div>
-            <label className="mono" style={{ display: "block", fontSize: 10, fontWeight: 600, color: "var(--text-2)", marginBottom: 8, letterSpacing: "0.05em" }}>
-              LABEL <span style={{ color: "var(--text-3)", fontWeight: 400 }}>(OPTIONAL)</span>
+            <label
+              className="mono"
+              style={{
+                display: "block",
+                fontSize: 10,
+                fontWeight: 600,
+                color: "var(--text-2)",
+                marginBottom: 8,
+                letterSpacing: "0.05em",
+              }}
+            >
+              LABEL{" "}
+              <span style={{ color: "var(--text-3)", fontWeight: 400 }}>
+                (OPTIONAL)
+              </span>
             </label>
             <input
               type="text"
@@ -152,8 +238,12 @@ export default function AddWalletModal({ open, onClose, onAdd, existingAddresses
                 outline: "none",
                 transition: "border-color 0.15s",
               }}
-              onFocus={(e) => (e.target.style.borderColor = "var(--border-focus)")}
-              onBlur={(e) => (e.target.style.borderColor = "var(--border-strong)")}
+              onFocus={(e) =>
+                (e.target.style.borderColor = "var(--border-focus)")
+              }
+              onBlur={(e) =>
+                (e.target.style.borderColor = "var(--border-strong)")
+              }
               maxLength={50}
             />
           </div>

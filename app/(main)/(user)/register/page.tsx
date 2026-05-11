@@ -1,14 +1,19 @@
 "use client";
 
 import { registerUser } from "@/app/actions/userAuth";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { UserPlus } from "lucide-react";
 
 export default function RegisterPage() {
   const [error, setError] = useState("");
-  const router = useRouter();
+
+  useEffect(() => {
+    fetch("/api/user/plan")
+      .then((r) => r.json())
+      .then((d) => { if (d?.authenticated) window.location.href = "/"; })
+      .catch(() => {});
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,8 +21,7 @@ export default function RegisterPage() {
     const res = await registerUser(formData);
     if (res?.error) setError(res.error);
     else if (res?.success) {
-      router.refresh();
-      router.push("/");
+      window.location.href = "/";
     }
   };
 
@@ -110,8 +114,11 @@ export default function RegisterPage() {
               fontSize: 14,
             }}
             required
-            minLength={6}
+            minLength={8}
           />
+          <p style={{ fontSize: 12, color: "var(--text-3)", marginTop: 6 }}>
+            Min 8 characters · uppercase · lowercase · number
+          </p>
         </div>
 
         <button

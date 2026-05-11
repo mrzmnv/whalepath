@@ -33,7 +33,12 @@ export async function POST(req: NextRequest) {
       try {
         const whale = await prisma.whale.findUnique({ where: { address } });
         const label = whale?.label ?? address.slice(0, 8);
-        const hTxs = await fetchWalletTransactionHistory(address, label, apiKey, 20);
+        const hTxs = await fetchWalletTransactionHistory(
+          address,
+          label,
+          apiKey,
+          20,
+        );
 
         // Upsert new txs into DB
         for (const tx of hTxs) {

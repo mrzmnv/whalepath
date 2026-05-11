@@ -4,7 +4,10 @@ export async function GET() {
   const apiKey = process.env.HELIUS_API_KEY;
 
   if (!apiKey) {
-    return NextResponse.json({ error: "HELIUS_API_KEY not set" }, { status: 500 });
+    return NextResponse.json(
+      { error: "HELIUS_API_KEY not set" },
+      { status: 500 },
+    );
   }
 
   // Test with a known active Solana wallet (Raydium AMM)
@@ -17,7 +20,11 @@ export async function GET() {
     const text = await res.text();
 
     let parsed: unknown = null;
-    try { parsed = JSON.parse(text); } catch { parsed = text; }
+    try {
+      parsed = JSON.parse(text);
+    } catch {
+      parsed = text;
+    }
 
     return NextResponse.json({
       helius_status: status,
@@ -28,9 +35,12 @@ export async function GET() {
         : parsed,
     });
   } catch (e) {
-    return NextResponse.json({
-      error: "fetch threw exception",
-      message: (e as Error).message,
-    }, { status: 500 });
+    return NextResponse.json(
+      {
+        error: "fetch threw exception",
+        message: (e as Error).message,
+      },
+      { status: 500 },
+    );
   }
 }

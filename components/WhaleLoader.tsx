@@ -108,9 +108,30 @@ export default function WhaleLoader({ visible = true }: WhaleLoaderProps) {
           />
 
           {/* Bubbles */}
-          <circle className="bubble bubble-1" cx="82" cy="75" r="3.5" fill="#e76f51" opacity="0.35" />
-          <circle className="bubble bubble-2" cx="68" cy="80" r="2.5" fill="#f4a261" opacity="0.3" />
-          <circle className="bubble bubble-3" cx="58" cy="76" r="3" fill="#e76f51" opacity="0.3" />
+          <circle
+            className="bubble bubble-1"
+            cx="82"
+            cy="75"
+            r="3.5"
+            fill="#e76f51"
+            opacity="0.35"
+          />
+          <circle
+            className="bubble bubble-2"
+            cx="68"
+            cy="80"
+            r="2.5"
+            fill="#f4a261"
+            opacity="0.3"
+          />
+          <circle
+            className="bubble bubble-3"
+            cx="58"
+            cy="76"
+            r="3"
+            fill="#e76f51"
+            opacity="0.3"
+          />
 
           {/* Water surface */}
           <path

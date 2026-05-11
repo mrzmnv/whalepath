@@ -1,6 +1,10 @@
 "use client";
 
-import { clearAllTags, resetWhalesToDefaults, deleteAllWhales } from "../../actions/whale";
+import {
+  clearAllTags,
+  resetWhalesToDefaults,
+  deleteAllWhales,
+} from "../../actions/whale";
 
 export default function WhaleActionButtons() {
   return (
@@ -8,7 +12,9 @@ export default function WhaleActionButtons() {
       <form
         action={clearAllTags}
         onSubmit={(e) => {
-          if (!confirm("Clear ALL tags from ALL whales? This cannot be undone."))
+          if (
+            !confirm("Clear ALL tags from ALL whales? This cannot be undone.")
+          )
             e.preventDefault();
         }}
       >

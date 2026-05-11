@@ -25,8 +25,20 @@ export default async function AdminWhales() {
   if (fetchError) {
     return (
       <div style={{ padding: 32 }}>
-        <h1 style={{ color: "var(--red)", marginBottom: 16 }}>⚠ Database Error</h1>
-        <pre style={{ backgroundColor: "var(--surface-2)", padding: 20, borderRadius: 8, color: "var(--red)", fontSize: 13, whiteSpace: "pre-wrap", wordBreak: "break-all" }}>
+        <h1 style={{ color: "var(--red)", marginBottom: 16 }}>
+          ⚠ Database Error
+        </h1>
+        <pre
+          style={{
+            backgroundColor: "var(--surface-2)",
+            padding: 20,
+            borderRadius: 8,
+            color: "var(--red)",
+            fontSize: 13,
+            whiteSpace: "pre-wrap",
+            wordBreak: "break-all",
+          }}
+        >
           {fetchError}
         </pre>
       </div>
@@ -175,9 +187,25 @@ export default async function AdminWhales() {
         </h3>
         <p style={{ fontSize: 13, color: "var(--text-3)", marginBottom: 16 }}>
           One entry per line. Supports both formats:{" "}
-          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>ADDRESS Label</code>{" "}
+          <code
+            style={{
+              backgroundColor: "var(--surface-3)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            ADDRESS Label
+          </code>{" "}
           or Solscan style{" "}
-          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>Label Name ADDRESS</code>{" "}
+          <code
+            style={{
+              backgroundColor: "var(--surface-3)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            Label Name ADDRESS
+          </code>{" "}
           — the Solana address is auto-detected.
         </p>
         <form
@@ -274,14 +302,51 @@ export default async function AdminWhales() {
         </h3>
         <p style={{ fontSize: 13, color: "var(--text-3)", marginBottom: 16 }}>
           Paste a JSON array. Each object must have{" "}
-          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>address</code> and{" "}
-          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>label</code>.
-          Optional fields:{" "}
-          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>category</code>,{" "}
-          <code style={{ backgroundColor: "var(--surface-3)", padding: "2px 6px", borderRadius: 4 }}>tags</code>.
-          Existing addresses will be updated (upsert).
+          <code
+            style={{
+              backgroundColor: "var(--surface-3)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            address
+          </code>{" "}
+          and{" "}
+          <code
+            style={{
+              backgroundColor: "var(--surface-3)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            label
+          </code>
+          . Optional fields:{" "}
+          <code
+            style={{
+              backgroundColor: "var(--surface-3)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            category
+          </code>
+          ,{" "}
+          <code
+            style={{
+              backgroundColor: "var(--surface-3)",
+              padding: "2px 6px",
+              borderRadius: 4,
+            }}
+          >
+            tags
+          </code>
+          . Existing addresses will be updated (upsert).
         </p>
-        <form action={bulkAddWhalesJson} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <form
+          action={bulkAddWhalesJson}
+          style={{ display: "flex", flexDirection: "column", gap: 12 }}
+        >
           <textarea
             name="json"
             rows={10}

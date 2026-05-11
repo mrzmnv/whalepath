@@ -4,7 +4,13 @@ import { PLANS } from "@/lib/plans";
 function CheckIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M3 8l3.5 3.5L13 4.5" stroke="var(--green)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M3 8l3.5 3.5L13 4.5"
+        stroke="var(--green)"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -12,7 +18,12 @@ function CheckIcon() {
 function XIcon() {
   return (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <path d="M4 4l8 8M12 4l-8 8" stroke="var(--text-3)" strokeWidth="1.5" strokeLinecap="round" />
+      <path
+        d="M4 4l8 8M12 4l-8 8"
+        stroke="var(--text-3)"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -26,13 +37,25 @@ export default function PlansPage() {
       <div style={{ textAlign: "center", marginBottom: 48 }}>
         <Link
           href="/"
-          style={{ color: "var(--text-3)", textDecoration: "none", fontSize: 13, display: "inline-block", marginBottom: 24 }}
+          style={{
+            color: "var(--text-3)",
+            textDecoration: "none",
+            fontSize: 13,
+            display: "inline-block",
+            marginBottom: 24,
+          }}
         >
           ← Back
         </Link>
         <h1
           className="mono"
-          style={{ fontSize: 28, fontWeight: 700, color: "var(--text-1)", letterSpacing: "0.04em", margin: 0 }}
+          style={{
+            fontSize: 28,
+            fontWeight: 700,
+            color: "var(--text-1)",
+            letterSpacing: "0.04em",
+            margin: 0,
+          }}
         >
           PLANS
         </h1>
@@ -64,7 +87,9 @@ export default function PlansPage() {
                 flexDirection: "column",
                 gap: 20,
                 position: "relative",
-                boxShadow: isPopular ? "0 0 0 1px var(--accent), var(--shadow)" : "var(--shadow)",
+                boxShadow: isPopular
+                  ? "0 0 0 1px var(--accent), var(--shadow)"
+                  : "var(--shadow)",
               }}
             >
               {isPopular && (
@@ -93,16 +118,31 @@ export default function PlansPage() {
               <div>
                 <p
                   className="mono"
-                  style={{ fontSize: 11, color: "var(--text-3)", letterSpacing: "0.1em", marginBottom: 6 }}
+                  style={{
+                    fontSize: 11,
+                    color: "var(--text-3)",
+                    letterSpacing: "0.1em",
+                    marginBottom: 6,
+                  }}
                 >
                   {plan.name.toUpperCase()}
                 </p>
-                <div style={{ display: "flex", alignItems: "baseline", gap: 4 }}>
-                  <span style={{ fontSize: 36, fontWeight: 700, color: "var(--text-1)" }}>
+                <div
+                  style={{ display: "flex", alignItems: "baseline", gap: 4 }}
+                >
+                  <span
+                    style={{
+                      fontSize: 36,
+                      fontWeight: 700,
+                      color: "var(--text-1)",
+                    }}
+                  >
                     {plan.price === 0 ? "Free" : `$${plan.price}`}
                   </span>
                   {plan.price > 0 && (
-                    <span style={{ fontSize: 13, color: "var(--text-3)" }}>/mo</span>
+                    <span style={{ fontSize: 13, color: "var(--text-3)" }}>
+                      /mo
+                    </span>
                   )}
                 </div>
               </div>
@@ -119,24 +159,48 @@ export default function PlansPage() {
                   gap: 8,
                 }}
               >
-                <span style={{ fontSize: 22, fontWeight: 700, color: isEnterprise ? "var(--accent)" : "var(--text-1)" }}>
+                <span
+                  style={{
+                    fontSize: 22,
+                    fontWeight: 700,
+                    color: isEnterprise ? "var(--accent)" : "var(--text-1)",
+                  }}
+                >
                   {plan.watchlistLimit === Infinity ? "∞" : plan.watchlistLimit}
                 </span>
-                <span style={{ fontSize: 13, color: "var(--text-2)" }}>wallet watchlist</span>
+                <span style={{ fontSize: 13, color: "var(--text-2)" }}>
+                  wallet watchlist
+                </span>
               </div>
 
               {/* Features */}
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10 }}>
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 10,
+                }}
+              >
                 {plan.features.map((f) => (
-                  <li key={f} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <li
+                    key={f}
+                    style={{ display: "flex", alignItems: "center", gap: 8 }}
+                  >
                     <CheckIcon />
-                    <span style={{ fontSize: 13, color: "var(--text-2)" }}>{f}</span>
+                    <span style={{ fontSize: 13, color: "var(--text-2)" }}>
+                      {f}
+                    </span>
                   </li>
                 ))}
                 {!plan.telegramAlerts && (
                   <li style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <XIcon />
-                    <span style={{ fontSize: 13, color: "var(--text-3)" }}>Telegram alerts</span>
+                    <span style={{ fontSize: 13, color: "var(--text-3)" }}>
+                      Telegram alerts
+                    </span>
                   </li>
                 )}
               </ul>
@@ -168,7 +232,9 @@ export default function PlansPage() {
                       textAlign: "center",
                       padding: "10px 0",
                       borderRadius: 8,
-                      backgroundColor: isPopular ? "var(--accent)" : "var(--surface-3)",
+                      backgroundColor: isPopular
+                        ? "var(--accent)"
+                        : "var(--surface-3)",
                       border: `1px solid ${isPopular ? "var(--accent)" : "var(--border)"}`,
                       color: isPopular ? "#fff" : "var(--text-1)",
                       textDecoration: "none",
@@ -186,9 +252,19 @@ export default function PlansPage() {
       </div>
 
       {/* FAQ note */}
-      <p style={{ textAlign: "center", color: "var(--text-3)", fontSize: 13, marginTop: 40 }}>
+      <p
+        style={{
+          textAlign: "center",
+          color: "var(--text-3)",
+          fontSize: 13,
+          marginTop: 40,
+        }}
+      >
         To upgrade your plan, contact{" "}
-        <a href="mailto:contact@whalepath.online" style={{ color: "var(--accent)" }}>
+        <a
+          href="mailto:contact@whalepath.online"
+          style={{ color: "var(--accent)" }}
+        >
           contact@whalepath.online
         </a>
       </p>

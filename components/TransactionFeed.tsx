@@ -18,7 +18,7 @@ interface TransactionFeedProps {
 }
 
 const POLL_INTERVAL = 15 * 60_000; // 15 minutes — preserve Helius quota
-const WALLETS_PER_POLL = 5;       // rotate 5 wallets per poll
+const WALLETS_PER_POLL = 5; // rotate 5 wallets per poll
 
 const RANGE_OPTIONS = [
   { label: "$50 – $5K", min: 50, max: 5_000 },
@@ -219,9 +219,14 @@ export default function TransactionFeed({
                 fontWeight: 600,
                 cursor: "pointer",
                 border: "1px solid",
-                borderColor: range.label === opt.label ? "var(--accent)" : "var(--border)",
-                backgroundColor: range.label === opt.label ? "rgba(99,102,241,0.15)" : "var(--surface-2)",
-                color: range.label === opt.label ? "var(--accent)" : "var(--text-3)",
+                borderColor:
+                  range.label === opt.label ? "var(--accent)" : "var(--border)",
+                backgroundColor:
+                  range.label === opt.label
+                    ? "rgba(99,102,241,0.15)"
+                    : "var(--surface-2)",
+                color:
+                  range.label === opt.label ? "var(--accent)" : "var(--text-3)",
                 transition: "all 0.15s ease",
               }}
             >

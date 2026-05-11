@@ -38,6 +38,7 @@ model User {
   username  String   @unique
   password  String
   role      String   @default("user")
+  plan      String   @default("free")  // free | pro | enterprise
   watchlists Watchlist[]
   createdAt DateTime @default(now())
 }

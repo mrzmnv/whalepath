@@ -155,7 +155,7 @@ export async function fetchWalletTransactions(
   source: "preloaded" | "watchlist",
   apiKey: string,
 ): Promise<Transaction[]> {
-  const url = `${HELIUS_BASE}/addresses/${walletAddress}/transactions?api-key=${apiKey}&limit=20`;
+  const url = `${HELIUS_BASE}/addresses/${walletAddress}/transactions?api-key=${apiKey}&limit=5`;
   const solPrice = await getSolPrice();
 
   let raw: HeliusTransaction[] = [];
@@ -246,7 +246,7 @@ export async function fetchWalletTransactionHistory(
   walletAddress: string,
   walletLabel: string,
   apiKey: string,
-  limit = 50,
+  limit = 20,
 ): Promise<Transaction[]> {
   const url = `${HELIUS_BASE}/addresses/${walletAddress}/transactions?api-key=${apiKey}&limit=${limit}`;
   const solPrice = await getSolPrice();

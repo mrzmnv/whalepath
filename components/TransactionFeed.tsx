@@ -17,8 +17,8 @@ interface TransactionFeedProps {
   ) => void;
 }
 
-const POLL_INTERVAL = 5 * 60_000; // 5 minutes — preserve Helius quota
-const WALLETS_PER_POLL = 10;    // rotate through whales instead of all at once
+const POLL_INTERVAL = 15 * 60_000; // 15 minutes — preserve Helius quota
+const WALLETS_PER_POLL = 5;       // rotate 5 wallets per poll
 
 const RANGE_OPTIONS = [
   { label: "$50 – $5K", min: 50, max: 5_000 },

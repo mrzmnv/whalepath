@@ -52,6 +52,7 @@ export default function TransactionFeed({
 
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMounted = useRef(true);
+  const initializedRef = useRef(false);
 
   const filtered = transactions.filter(
     (tx) => tx.usdValue >= range.min && tx.usdValue < range.max,
@@ -86,6 +87,7 @@ export default function TransactionFeed({
       const res = await fetch("/api/transactions", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        cache: "no-store",
         body: JSON.stringify({ wallets }),
       });
       if (!res.ok || !isMounted.current) {
@@ -108,8 +110,8 @@ export default function TransactionFeed({
         ).slice(0, 100);
       });
 
-      if (transactions.length === 0 && data.length > 0) {
-        setTransactions(data);
+      if (!initializedRef.current && data.length > 0) {
+        initializedRef.current = true;
         if (onStatsUpdate) {
           const biggest = data.reduce(
             (m, t) => (t.usdValue > m.usdValue ? t : m),

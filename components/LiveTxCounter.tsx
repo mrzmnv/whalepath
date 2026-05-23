@@ -10,7 +10,7 @@ export default function LiveTxCounter({ counterOnly }: { counterOnly?: boolean }
   useEffect(() => {
     const fetchCount = async () => {
       try {
-        const res = await fetch("/api/tx-count");
+        const res = await fetch("/api/tx-count", { cache: "no-store" });
         if (!res.ok) return;
         const { count: c } = await res.json();
         if (prevCount.current !== null && c !== prevCount.current) {

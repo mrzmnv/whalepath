@@ -21,7 +21,7 @@ export default function Dashboard() {
 
   // Fetch dynamic whales from DB on mount
   useEffect(() => {
-    fetch("/api/whales")
+    fetch("/api/whales", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data && Array.isArray(data) && data.length > 0) {
@@ -51,7 +51,7 @@ export default function Dashboard() {
   }, []);
 
   const reloadWatchlist = useCallback(() => {
-    fetch("/api/watchlist")
+    fetch("/api/watchlist", { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.authenticated && data?.items) {
@@ -72,7 +72,7 @@ export default function Dashboard() {
         setWatchlist(getWatchlist());
       });
     // Also fetch user plan
-    fetch("/api/user/plan")
+    fetch("/api/user/plan", { cache: "no-store" })
       .then((r) => (r.ok ? r.json() : null))
       .then((d) => {
         if (d?.authenticated) {

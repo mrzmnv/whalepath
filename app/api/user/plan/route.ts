@@ -4,6 +4,9 @@ import { decrypt } from "@/lib/session";
 import prisma from "@/lib/db";
 import { PLANS, getPlanLimit } from "@/lib/plans";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export async function GET() {
   try {
     const cookieStore = await cookies();
@@ -38,14 +41,17 @@ export async function GET() {
     const limit = getPlanLimit(plan);
     const count = await prisma.watchlist.count({ where: { userId } });
 
-    return NextResponse.json({
-      authenticated: true,
-      username: user?.username,
-      plan,
-      planInfo: PLANS[plan as keyof typeof PLANS],
-      limit,
-      count,
-    });
+    return NextResponse.json(
+      {
+        authenticated: true,
+        username: user?.username,
+        plan,
+        planInfo: PLANS[plan as keyof typeof PLANS],
+        limit,
+        count,
+      },
+      { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } },
+    );
   } catch {
     return NextResponse.json({
       authenticated: false,
